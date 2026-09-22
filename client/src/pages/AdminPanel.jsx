@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/posts'
+const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api/posts' : 'http://localhost:5000/api/posts')
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-IN', {
