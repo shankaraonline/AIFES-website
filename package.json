@@ -2,9 +2,13 @@
   "name": "iit-hyderabad-aifes",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "client": "cd client && npm run dev",
     "server": "cd server && node index.js",
     "dev": "npm run client"
+  },
+  "dependencies": {
+    "mongoose": "^8.8.2"
   }
 }
