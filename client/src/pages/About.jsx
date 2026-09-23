@@ -21,20 +21,6 @@ const people = [
   },
 ]
 
-const communityCards = [
-  {
-    title: 'AIFES Dialogues',
-    desc: 'Monthly talks spanning Finance, Economies, and Society. All sessions recorded with slides and code artefacts published openly.',
-  },
-  {
-    title: 'Research Presentations',
-    desc: 'Monthly research presentations, weekly reading groups, and cross-theme hack nights every semester.',
-  },
-  {
-    title: 'Quant & Algo Club',
-    desc: 'Student club focused on quantitative finance, algorithmic trading, and strategy development with real market data.',
-  },
-]
 
 const outputs = [
   {
@@ -42,18 +28,17 @@ const outputs = [
     title: 'Open Datasets & Benchmarks',
     desc: 'Curated datasets for Indian and global use cases across markets, DeFi, climate, and RegTech — with rigorous documentation and reproducibility standards.',
     tags: ['Markets', 'DeFi', 'Climate', 'RegTech'],
+    img: '/output-datasets.jpg',
   },
   {
     num: '02',
     title: 'Research Publications',
     desc: 'Peer-reviewed papers, policy briefs, and industry reports — with translational prototypes that bring research findings into applied settings.',
     tags: ['Journals', 'Policy', 'Industry'],
+    img: '/output-publications.jpg',
   },
 ]
 
-const industryPartners = ['Exchanges', 'Brokers', 'Banks', 'Fintechs', 'Ratings Agencies', 'Data Vendors']
-const publicPartners   = ['Central Agencies', 'State Agencies', 'Standards Bodies', 'Regulators']
-const infra            = ['GPU/CPU Cluster', 'Role-Based Data Lake', 'Model Registry', 'Market Data & Simulators', '20-Seat Trading Lab']
 
 const objectives = [
   {
@@ -213,8 +198,7 @@ export default function About() {
           <p className="section-label">People &amp; Governance</p>
           <h2 className="section-title">Leadership &amp; Advisory Panel</h2>
           <p className="section-sub">
-            Balanced representation from academia, industry, and regulators — with clear terms and
-            engagement cadence.
+            Balanced representation from academia, industry, and regulators with clear terms and engagement cadence.
           </p>
           <div className="people-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 460px))', justifyContent: 'center' }}>
             {people.map(({ name, role, href, img, alt, desc }) => (
@@ -235,41 +219,26 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── Community ── */}
-      <section id="about-community" style={{ background: 'var(--bg-1)' }}>
-        <div className="section-inner">
-          <p className="section-label">Community &amp; Outreach</p>
-          <h2 className="section-title">AIFES Dialogues &amp; Open Tech Days</h2>
-          <p className="section-sub">
-            Monthly events, weekly reading groups, and semester hack nights — open to students,
-            researchers, and practitioners.
-          </p>
-          <div className="community-grid">
-            {communityCards.map(({ title, desc }) => (
-              <div className="comm-card" key={title}>
-                <div className="comm-title">{title}</div>
-                <div className="comm-desc">{desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── Outputs ── */}
+      {/* ── 5th Section: Flagship Outputs (2 Columns with Images) ── */}
       <section id="about-outputs">
         <div className="section-inner">
           <p className="section-label">Flagship Outputs</p>
           <h2 className="section-title">What AIFES Delivers</h2>
           <p className="section-sub">
-            Every output is designed for real-world use — open, reproducible, and deployable.
+            Every output is designed for real-world use open, reproducible, and deployable.
           </p>
-          <div className="outputs-grid">
-            {outputs.map(({ num, title, desc, tags }) => (
-              <div className="output-card" key={num}>
-                <div className="output-num">{num}</div>
-                <div className="output-body">
-                  <div className="output-title">{title}</div>
-                  <div className="output-desc">{desc}</div>
+
+          <div className="about-outputs-grid">
+            {outputs.map(({ num, title, desc, tags, img }) => (
+              <div className="about-output-card" key={num}>
+                <div className="about-output-img-wrap">
+                  <img src={img} alt={title} className="about-output-img" />
+                  <span className="about-output-num">{num}</span>
+                </div>
+                <div className="about-output-body">
+                  <h3 className="about-output-title">{title}</h3>
+                  <p className="about-output-desc">{desc}</p>
                   <div className="output-tags">
                     {tags.map(tag => (
                       <span className="tag" key={tag}>{tag}</span>
@@ -282,37 +251,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── Partners & Infrastructure ── */}
-      <section id="about-partners" style={{ background: 'var(--bg-1)' }}>
-        <div className="section-inner">
-          <p className="section-label">Partners &amp; Infrastructure</p>
-          <h2 className="section-title">Built for Scale &amp; Real-World Impact</h2>
-          <p className="section-sub">
-            Deep industry connections and research-grade infrastructure from day one.
-          </p>
-          <div className="partner-categories">
-            <div className="partner-cat">
-              <div className="partner-cat-title">Industry Partners</div>
-              <div className="partner-items">
-                {industryPartners.map(p => <span className="partner-chip" key={p}>{p}</span>)}
-              </div>
-            </div>
-            <div className="partner-cat">
-              <div className="partner-cat-title">Public &amp; Regulatory Partners</div>
-              <div className="partner-items">
-                {publicPartners.map(p => <span className="partner-chip" key={p}>{p}</span>)}
-              </div>
-            </div>
-          </div>
-          <div className="infra-grid" style={{ marginTop: '2rem' }}>
-            {infra.map(item => (
-              <div className="infra-item" key={item}>
-                <span className="infra-label">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
     </div>
   )
