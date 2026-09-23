@@ -2,13 +2,13 @@ const outputs = [
   {
     num: '01',
     title: 'Open Datasets & Benchmarks',
-    desc: 'Curated datasets for Indian and global use cases across markets, DeFi, climate, and RegTech — with rigorous documentation and reproducibility standards.',
+    desc: 'Curated datasets for Indian and global use cases across markets, DeFi, climate, and RegTech with rigorous documentation and reproducibility standards.',
     tags: ['Markets', 'DeFi', 'Climate', 'RegTech'],
   },
   {
     num: '02',
     title: 'Research Publications',
-    desc: 'Peer-reviewed papers, policy briefs, and industry reports — with translational prototypes that bring research findings into applied settings.',
+    desc: 'Peer-reviewed papers, policy briefs, and industry reports with translational prototypes that bring research findings into applied settings.',
     tags: ['Journals', 'Policy', 'Industry'],
   },
 ]

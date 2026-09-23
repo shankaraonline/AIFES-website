@@ -100,15 +100,15 @@ export default function Home() {
           {/* ── Section header (full-width) ── */}
           <p className="section-label">About the Lab</p>
           <h2 className="section-title" id="about-heading">A New Kind of Finance Research Lab</h2>
+          <p className="section-sub about-home-sub">
+            Where rigorous academic research meets deployable applied technology built at IIT Hyderabad.
+          </p>
 
           {/* ── 1 + 1 + 1 grid ── */}
           <div className="about-triptych">
 
             {/* Left — Lab information */}
             <div className="about-info">
-              <p className="about-info-sub">
-                Where rigorous academic research meets deployable applied technology built at IIT Hyderabad.
-              </p>
               <div className="about-info-body">
                 <p>
                   <strong>AIFES</strong> is a research laboratory at <strong>IIT Hyderabad</strong> dedicated

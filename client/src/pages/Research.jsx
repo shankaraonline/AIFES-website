@@ -74,48 +74,57 @@ export default function Research() {
     }
   }, [])
   return (
-    <section id="themes" className="page-offset">
-      <div className="section-inner">
-        <p className="section-label">Research Themes</p>
-        <h2 className="section-title">Four Interlocking Research Pillars</h2>
-        <p className="section-sub research-sub">
-          Each theme stands alone but amplifies the others Finance informs Economy models; Economy models shape Society impact analysis.
-        </p>
-      </div>
+    <div className="page-offset research-page">
+      {/* ── 1st Section: Hero Banner with IIT Hyderabad Background ── */}
+      <section className="research-hero-banner" aria-labelledby="research-heading">
+        <div className="research-hero-overlay" />
+        <div className="research-hero-inner">
+          <p className="research-hero-label">Research Themes</p>
+          <h1 className="research-hero-title" id="research-heading">
+            Four Interlocking Research Pillars
+          </h1>
+          <p className="research-hero-sub">
+            Each theme stands alone but amplifies the others. Finance informs Economy models, and Economy models shape Society impact analysis.
+          </p>
+        </div>
+      </section>
 
-      <div className="research-rows">
-        {themes.map(({ id, letter, name, img, imgAlt, items }, idx) => {
-          const isEven = idx % 2 === 1
-          const infoBlock = (
-            <div className="rr-info">
-              <span className="rr-letter">{letter}</span>
-              <h3 className="rr-name">{name}</h3>
-              <ul className="rr-items">
-                {items.map(({ title, desc }) => (
-                  <li key={title} className="rr-item">
-                    <div className="rr-item-title">{title}</div>
-                    <div className="rr-item-desc">{desc}</div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )
-          const imageBlock = (
-            <div className="rr-img-wrap">
-              <img src={img} alt={imgAlt} className="rr-img" />
-              <div className="rr-img-overlay" />
-            </div>
-          )
-
-          return (
-            <div id={id} className={`rr-row${isEven ? ' rr-row-reverse' : ''}`} key={letter}>
-              <div className="rr-inner">
-                {isEven ? <>{imageBlock}{infoBlock}</> : <>{infoBlock}{imageBlock}</>}
+      {/* ── Research Themes Pillars ── */}
+      <section id="themes" className="research-themes-section">
+        <div className="research-rows">
+          {themes.map(({ id, letter, name, img, imgAlt, items }, idx) => {
+            const isEven = idx % 2 === 1
+            const infoBlock = (
+              <div className="rr-info">
+                <span className="rr-letter">{letter}</span>
+                <h3 className="rr-name">{name}</h3>
+                <ul className="rr-items">
+                  {items.map(({ title, desc }) => (
+                    <li key={title} className="rr-item">
+                      <div className="rr-item-title">{title}</div>
+                      <div className="rr-item-desc">{desc}</div>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          )
-        })}
-      </div>
-    </section>
+            )
+            const imageBlock = (
+              <div className="rr-img-wrap">
+                <img src={img} alt={imgAlt} className="rr-img" />
+                <div className="rr-img-overlay" />
+              </div>
+            )
+
+            return (
+              <div id={id} className={`rr-row${isEven ? ' rr-row-reverse' : ''}`} key={letter}>
+                <div className="rr-inner">
+                  {isEven ? <>{imageBlock}{infoBlock}</> : <>{infoBlock}{imageBlock}</>}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    </div>
   )
 }

@@ -2,20 +2,24 @@ import { Link } from 'react-router-dom'
 
 export default function Contact() {
   return (
-    <section id="contact" className="page-offset">
-      <div className="section-inner">
-        {/* Header */}
-        <div className="contact-hero">
-          <p className="section-label" style={{ justifyContent: 'center' }}>Get in Touch</p>
-          <h1 className="section-title">Contact AIFES Lab</h1>
-          <p className="section-sub" style={{ margin: '0 auto' }}>
+    <div className="page-offset contact-page">
+      {/* Contact Hero Banner with IIT Hyderabad Image */}
+      <div className="contact-hero-banner">
+        <div className="contact-hero-overlay" />
+        <div className="contact-hero-inner">
+          <p className="contact-hero-label">Get in Touch</p>
+          <h1 className="contact-hero-title">Contact AIFES Lab</h1>
+          <p className="contact-hero-sub">
             Whether you are an academic researcher, industry collaborator, prospective student,
-            or funding partner — we welcome dialogue, research inquiries, and mutual initiatives.
+            or funding partner we welcome dialogue, research inquiries, and mutual initiatives.
           </p>
         </div>
+      </div>
 
-        {/* 3 Pillars / Info cards */}
-        <div className="contact-cards-grid">
+      <section id="contact-content">
+        <div className="section-inner">
+          {/* 3 Pillars / Info cards */}
+          <div className="contact-cards-grid">
           {/* Card 1: Email */}
           <div className="contact-card">
             <div className="contact-card-icon">
@@ -29,7 +33,7 @@ export default function Contact() {
               For academic collaborations, internship applications, seminar invites, and general lab correspondence.
             </p>
             <a href="mailto:aifeslab@gmail.com" className="contact-card-link">
-              aifeslab@gmail.com &rarr;
+              Email Us &rarr;
             </a>
           </div>
 
@@ -41,7 +45,7 @@ export default function Contact() {
                 <circle cx="12" cy="10" r="3" />
               </svg>
             </div>
-            <h3 className="contact-card-title">Lab Location</h3>
+            <h3 className="contact-card-title">Locate Us</h3>
             <p className="contact-card-desc">
               Department of Artificial Intelligence<br />
               Indian Institute of Technology Hyderabad<br />
@@ -85,7 +89,7 @@ export default function Contact() {
           </p>
           <div className="contact-ctas">
             <a href="mailto:aifeslab@gmail.com" className="btn-primary">
-              Send an Email
+              Email Us
             </a>
             <Link to="/research" className="btn-outline">
               Explore Our Research
@@ -94,5 +98,6 @@ export default function Contact() {
         </div>
       </div>
     </section>
-  )
+  </div>
+)
 }

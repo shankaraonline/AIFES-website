@@ -26,14 +26,14 @@ const outputs = [
   {
     num: '01',
     title: 'Open Datasets & Benchmarks',
-    desc: 'Curated datasets for Indian and global use cases across markets, DeFi, climate, and RegTech — with rigorous documentation and reproducibility standards.',
+    desc: 'Curated datasets for Indian and global use cases across markets, DeFi, climate, and RegTech with rigorous documentation and reproducibility standards.',
     tags: ['Markets', 'DeFi', 'Climate', 'RegTech'],
     img: '/output-datasets.jpg',
   },
   {
     num: '02',
     title: 'Research Publications',
-    desc: 'Peer-reviewed papers, policy briefs, and industry reports — with translational prototypes that bring research findings into applied settings.',
+    desc: 'Peer-reviewed papers, policy briefs, and industry reports with translational prototypes that bring research findings into applied settings.',
     tags: ['Journals', 'Policy', 'Industry'],
     img: '/output-publications.jpg',
   },
@@ -87,18 +87,26 @@ export default function About() {
   return (
     <div className="page-offset">
 
-      {/* ── 1st Section: About the Lab (Left: Info, Right: Image) ── */}
+      {/* ── 1st Section: Hero Banner with Untitled-design-17.jpg Background ── */}
       <section id="about-hero" aria-labelledby="about-page-heading">
-        <div className="section-inner">
-          <p className="section-label">About the Lab</p>
-          <h1 className="section-title" id="about-page-heading">A New Kind of Finance Research Lab</h1>
+        <div className="about-hero-overlay" />
+        <div className="about-hero-inner">
+          <p className="about-hero-label">About the Lab</p>
+          <h1 className="about-hero-title" id="about-page-heading">
+            A New Kind of Finance Research Lab
+          </h1>
+          <p className="about-hero-sub">
+            Where rigorous academic research meets deployable applied technology, built at IIT Hyderabad.
+          </p>
+        </div>
+      </section>
 
-          <div className="about-lab-split">
+      {/* ── Detail Overview: Lab Mission & Campus Split ── */}
+      <section id="about-overview">
+        <div className="section-inner" style={{ paddingTop: '64px', paddingBottom: '72px' }}>
+          <div className="about-lab-split" style={{ marginTop: 0 }}>
             {/* Left — info */}
             <div className="about-info">
-              <p className="about-info-sub">
-                Where rigorous academic research meets deployable applied technology, built at IIT Hyderabad.
-              </p>
               <div className="about-info-body">
                 <p>
                   <strong>AIFES</strong> is a research laboratory at <strong>IIT Hyderabad</strong> dedicated
@@ -157,8 +165,8 @@ export default function About() {
       {/* ── 3rd Section: About the Department of AI (Left: Image, Right: Information) ── */}
       <section id="about-dept" aria-labelledby="dept-heading">
         <div className="section-inner">
-          <p className="section-label">Department of Artificial Intelligence</p>
-          <h2 className="section-title" id="dept-heading">About the Department of AI</h2>
+          <p className="section-label">Department of Artificial Intelligence, IIT Hyderabad</p>
+          <h2 className="section-title" id="dept-heading">About the Department of AI, IIT Hyderabad</h2>
 
           <div className="dept-split">
             {/* Left — Image */}
@@ -173,7 +181,7 @@ export default function About() {
             {/* Right — Information */}
             <div className="dept-info">
               <div className="dept-block">
-                <h3 className="dept-block-heading">About Us</h3>
+                {/* <h3 className="dept-block-heading">About Us</h3> */}
                 <p className="dept-block-text">
                   The Department of Artificial Intelligence (AI) at IIT Hyderabad, founded in 2019, is dedicated to providing cutting-edge academic programs that equip students with a deep understanding of AI theory and practical applications. With a strong focus on fostering innovation and research, the department aims to build a comprehensive ecosystem that nurtures future leaders and pioneers in the field of Artificial Intelligence.
                 </p>
