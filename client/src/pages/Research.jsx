@@ -1,93 +1,41 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import PageHero from '../components/PageHero'
 
-const themes = [
-  {
-    id: 'finance',
-    letter: 'Theme A',
-    name: 'Finance',
-    img: '/research_finance.jpg',
-    imgAlt: 'Financial charts and algorithmic trading',
-    items: [
-      { title: 'Financial Analytics', desc: 'Time-series & factor research, portfolio analytics, nowcasting, alternative-data fusion.' },
-      { title: 'Algorithmic Trading', desc: 'Strategy discovery, adaptive execution, order-book analytics, market impact.' },
-      { title: 'Risk Management', desc: 'Market, credit, liquidity & operational risk; ML-assisted early warning; explainable scores.' },
-      { title: 'AI in Finance', desc: 'Document intelligence, graph-based entity linking, retrieval pipelines.' },
-    ],
-  },
-  {
-    id: 'economies',
-    letter: 'Theme B',
-    name: 'Economies',
-    img: '/research_economies.jpg',
-    imgAlt: 'Blockchain and DeFi global network',
-    items: [
-      { title: 'FinTech & DeFi', desc: 'CBDC/DeFi analytics, payments & lending, financial inclusion, KYC/AML.' },
-      { title: 'Token Economy & Market Design', desc: 'Mechanism & incentive alignment, governance, reputation systems.' },
-      { title: 'Climate Finance & Energy', desc: 'Transition/physical risk, carbon markets, green bonds, ESG assurance, power-market analytics.' },
-    ],
-  },
-  {
-    id: 'society',
-    letter: 'Theme C',
-    name: 'Society',
-    img: '/research_society.jpg',
-    imgAlt: 'Society, AI fairness and regulatory compliance',
-    items: [
-      { title: 'RegTech & SupTech', desc: 'Model-risk management, compliance automation, audit trails, standards mapping.' },
-      { title: 'Computational Game Theory', desc: 'Strategic behaviour, auctions, credit-rating games, platform policies.' },
-      { title: "AI's Impact on Economy & Society", desc: 'Productivity & jobs, fairness & safety, alignment, policy simulation.' },
-    ],
-  },
-  {
-    id: 'math-finance',
-    letter: 'Theme D',
-    name: 'Mathematical Finance',
-    img: '/research_math_finance.jpg',
-    imgAlt: 'Stochastic calculus and derivative pricing equations',
-    items: [
-      { title: 'Stochastic Calculus', desc: 'Brownian motion, Itô processes, stochastic differential equations.' },
-      { title: 'Derivative Pricing', desc: 'Option pricing theory, Black–Scholes models, arbitrage-free pricing.' },
-      { title: 'Financial Mathematics', desc: 'Martingale methods, risk-neutral measures, portfolio optimization.' },
-      { title: 'Quantitative Methods', desc: 'Mathematical modeling of financial markets and economic systems.' },
-    ],
-  },
-]
+import { researchThemes as themes } from '../data/researchThemes'
 
 export default function Research() {
+  const location = useLocation()
+
   useEffect(() => {
-    // Stop the browser from restoring its own scroll position
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual'
     }
 
-    // Always start from the very top
-    window.scrollTo({ top: 0, behavior: 'instant' })
-
-    const hash = window.location.hash
-    if (hash) {
-      const el = document.querySelector(hash)
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '')
+      const el = document.getElementById(targetId)
       if (el) {
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }, 200)
+        }, 120)
+        return () => clearTimeout(timer)
       }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }
-  }, [])
+  }, [location.pathname, location.hash])
   return (
     <div className="page-offset research-page">
       {/* ── 1st Section: Hero Banner with IIT Hyderabad Background ── */}
-      <section className="research-hero-banner" aria-labelledby="research-heading">
-        <div className="research-hero-overlay" />
-        <div className="research-hero-inner">
-          <p className="research-hero-label">Research Themes</p>
-          <h1 className="research-hero-title" id="research-heading">
-            Four Interlocking Research Pillars
-          </h1>
-          <p className="research-hero-sub">
-            Each theme stands alone but amplifies the others. Finance informs Economy models, and Economy models shape Society impact analysis.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        label="Research Themes"
+        title="Four Interlocking Research Pillars"
+        subtitle="Each theme stands alone but amplifies the others. Finance informs Economy models, and Economy models shape Society impact analysis."
+        bgImage="/LYD03460-2048x1365.jpg"
+        bgPosition="center 42%"
+        titleId="research-heading"
+      />
 
       {/* ── Research Themes Pillars ── */}
       <section id="themes" className="research-themes-section">

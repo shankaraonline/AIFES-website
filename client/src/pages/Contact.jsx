@@ -1,20 +1,17 @@
 import { Link } from 'react-router-dom'
+import PageHero from '../components/PageHero'
 
 export default function Contact() {
   return (
     <div className="page-offset contact-page">
       {/* Contact Hero Banner with IIT Hyderabad Image */}
-      <div className="contact-hero-banner">
-        <div className="contact-hero-overlay" />
-        <div className="contact-hero-inner">
-          <p className="contact-hero-label">Get in Touch</p>
-          <h1 className="contact-hero-title">Contact AIFES Lab</h1>
-          <p className="contact-hero-sub">
-            Whether you are an academic researcher, industry collaborator, prospective student,
-            or funding partner we welcome dialogue, research inquiries, and mutual initiatives.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        label="Get in Touch"
+        title="Contact AIFES Lab"
+        subtitle="Whether you are an academic researcher, industry collaborator, prospective student, or funding partner we welcome dialogue, research inquiries, and mutual initiatives."
+        bgImage="/indian-institute-of-technology-hyderabad-239587.jpg"
+        bgPosition="center 40%"
+      />
 
       <section id="contact-content">
         <div className="section-inner">

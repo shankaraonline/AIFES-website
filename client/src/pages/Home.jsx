@@ -2,36 +2,7 @@ import { Link } from 'react-router-dom'
 import HeroCanvas from '../components/HeroCanvas'
 import EventsNewsSection from '../components/EventsNewsSection'
 
-const researchAreas = [
-  {
-    id: 'finance',
-    theme: 'Theme A',
-    name: 'Finance',
-    desc: 'Algorithmic trading, financial analytics, risk management and AI-driven document intelligence across capital markets.',
-    img: '/research_finance.jpg',
-  },
-  {
-    id: 'economies',
-    theme: 'Theme B',
-    name: 'Economies',
-    desc: 'FinTech, DeFi, CBDC analytics, climate finance, carbon markets and token economy mechanism design.',
-    img: '/research_economies.jpg',
-  },
-  {
-    id: 'society',
-    theme: 'Theme C',
-    name: 'Society',
-    desc: 'RegTech compliance, computational game theory, and AI\'s impact on labour markets, fairness and societal systems.',
-    img: '/research_society.jpg',
-  },
-  {
-    id: 'math-finance',
-    theme: 'Theme D',
-    name: 'Mathematical Finance',
-    desc: 'Stochastic calculus, derivative pricing, martingale methods and quantitative modelling of financial markets.',
-    img: '/research_math_finance.jpg',
-  },
-]
+import { researchThemes as researchAreas } from '../data/researchThemes'
 
 
 export default function Home() {

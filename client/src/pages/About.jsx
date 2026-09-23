@@ -1,3 +1,4 @@
+import PageHero from '../components/PageHero'
 
 /* ── Data ───────────────────────────────────────────────────────── */
 const BASE = 'https://ai-iith-web.github.io/AIFES'
@@ -88,18 +89,14 @@ export default function About() {
     <div className="page-offset">
 
       {/* ── 1st Section: Hero Banner with Untitled-design-17.jpg Background ── */}
-      <section id="about-hero" aria-labelledby="about-page-heading">
-        <div className="about-hero-overlay" />
-        <div className="about-hero-inner">
-          <p className="about-hero-label">About the Lab</p>
-          <h1 className="about-hero-title" id="about-page-heading">
-            A New Kind of Finance Research Lab
-          </h1>
-          <p className="about-hero-sub">
-            Where rigorous academic research meets deployable applied technology, built at IIT Hyderabad.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        label="About the Lab"
+        title="A New Kind of Finance Research Lab"
+        subtitle="Where rigorous academic research meets deployable applied technology, built at IIT Hyderabad."
+        bgImage="/Untitled-design-17.jpg"
+        bgPosition="center 35%"
+        titleId="about-page-heading"
+      />
 
       {/* ── Detail Overview: Lab Mission & Campus Split ── */}
       <section id="about-overview">
