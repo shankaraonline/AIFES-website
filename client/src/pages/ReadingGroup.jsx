@@ -34,7 +34,11 @@ export default function ReadingGroup() {
       <PageHero
         label="Research Community"
         title="AIFES Research Reading Group"
-        subtitle="A collaborative forum where faculty and students explore the mathematical foundations and research directions in AI for Finance, Economies, and Society."
+        subtitle={(
+          <>
+            A collaborative forum where faculty and students explore the mathematical foundations and research directions in AI for Finance, Economies, and Society.
+          </>
+        )}
         bgImage="/reading_group_hero.jpg"
         bgPosition="center 30%"
         titleId="reading-group-heading"

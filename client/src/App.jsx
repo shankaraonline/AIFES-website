@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -12,9 +12,12 @@ import Contact from './pages/Contact'
 import AdminPanel from './pages/AdminPanel'
 
 export default function App() {
+  const location = useLocation()
+  const isAdmin = location.pathname.startsWith('/admin')
+
   return (
     <>
-      <Navbar />
+      {!isAdmin && <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -35,7 +38,7 @@ export default function App() {
           <Route path="/roadmap" element={<Navigate to="/about" replace />} />
         </Routes>
       </main>
-      <Footer />
+      {!isAdmin && <Footer />}
     </>
   )
 }
