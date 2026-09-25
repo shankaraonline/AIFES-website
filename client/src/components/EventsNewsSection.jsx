@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api/posts' : 'http://localhost:5000/api/posts')
 
@@ -79,10 +80,10 @@ export default function EventsNewsSection({ isPage = false }) {
         <div className="en-grid">
           {/* ── Events Column ── */}
           <div className="en-col">
-            <div className="en-col-head">
+            <Link to="/events" className="en-col-head" title="View all Events">
               <span className="en-col-dot en-dot-event" />
               Events
-            </div>
+            </Link>
 
             {!fetched ? (
               <p className="en-loading">Loading…</p>
@@ -90,20 +91,25 @@ export default function EventsNewsSection({ isPage = false }) {
               <p className="en-empty">No upcoming events.</p>
             ) : (
               events.map((p) => (
-                <div className="en-card" key={p.id}>
+                <Link
+                  to={`/events#event-${p.id}`}
+                  className="en-card"
+                  key={p.id}
+                  title={`View event: ${p.title}`}
+                >
                   <div className="en-card-title">{p.title}</div>
                   <div className="en-card-date">{formatDate(p.date)}</div>
-                </div>
+                </Link>
               ))
             )}
           </div>
 
           {/* ── News & Updates Column ── */}
           <div className="en-col">
-            <div className="en-col-head">
+            <Link to="/news" className="en-col-head" title="View all News & Updates">
               <span className="en-col-dot en-dot-news" />
               News &amp; Updates
-            </div>
+            </Link>
 
             {!fetched ? (
               <p className="en-loading">Loading…</p>
@@ -111,10 +117,15 @@ export default function EventsNewsSection({ isPage = false }) {
               <p className="en-empty">No news yet.</p>
             ) : (
               news.map((p) => (
-                <div className="en-card" key={p.id}>
+                <Link
+                  to={`/news#news-${p.id}`}
+                  className="en-card"
+                  key={p.id}
+                  title={`View news: ${p.title}`}
+                >
                   <div className="en-card-title">{p.title}</div>
                   <div className="en-card-date">{formatDate(p.date)}</div>
-                </div>
+                </Link>
               ))
             )}
           </div>

@@ -19,9 +19,9 @@ export default function Home() {
         <div className="hero-inner hero-centered">
           <p className="hero-tag">AI for Finance, Economies &amp; Society Lab</p>
           <h1 className="hero-title">
-            <span className="line-gold">Trustworthy</span><br />
-            <span>AI for</span><br />
-            <span>Finance, Economies &amp; Society</span>
+            <span className="line-gold">Trustworthy AI</span><br />
+            <span>for Finance,</span><br />
+            <span>Economies &amp; Society</span>
           </h1>
           <p className="hero-desc">
             AIFES advances <strong>reproducible, responsible AI</strong> across algorithmic trading,

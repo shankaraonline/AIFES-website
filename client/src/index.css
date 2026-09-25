@@ -1933,6 +1933,13 @@ ul {
   margin-bottom: 1.25rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.en-col-head:hover {
+  color: var(--gold);
 }
 
 .en-col-dot {
@@ -1952,12 +1959,16 @@ ul {
 }
 
 .en-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
   padding: 1rem 1.1rem;
   background: #f8fafc;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   margin-bottom: 0.65rem;
-  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition), transform var(--transition);
 }
 
 .en-card:last-child {
@@ -1967,7 +1978,12 @@ ul {
 .en-card:hover {
   border-color: var(--gold-border);
   background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.en-card:hover .en-card-title {
+  color: var(--gold-dark, #b45309);
 }
 
 .en-card-badge {
@@ -2017,6 +2033,91 @@ ul {
   font-size: 0.85rem;
   color: var(--text-3);
   padding: 1rem 0;
+}
+
+/* ── Outreach Pages (Events & News) ── */
+.outreach-page-section {
+  background: var(--bg-0);
+}
+
+.outreach-listing-header {
+  max-width: 780px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.outreach-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.outreach-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.outreach-card:hover {
+  border-color: var(--gold-border);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+  transform: translateY(-3px);
+}
+
+.outreach-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.outreach-card-date {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-3);
+}
+
+.outreach-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.4;
+  margin-bottom: 0.65rem;
+}
+
+.outreach-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Hash anchor highlight effect */
+.highlight-item,
+.outreach-card:target {
+  outline: 2px solid var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
+  animation: pulse-glow 1.8s ease-out;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 24px rgba(245, 158, 11, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+  }
+  100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
 }
 
 /* ── Admin Panel ───────────────────────────────────────────────── */
@@ -2561,6 +2662,79 @@ ul {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
 }
 
+.education-hero .page-hero-inner {
+  max-width: 1080px;
+}
+
+@media (min-width: 992px) {
+  .education-hero .page-hero-sub {
+    white-space: nowrap;
+  }
+}
+
+.events-hero .page-hero-inner,
+.news-hero .page-hero-inner {
+  max-width: 1100px;
+}
+
+@media (min-width: 992px) {
+  .events-hero .page-hero-sub,
+  .news-hero .page-hero-sub {
+    white-space: nowrap;
+    max-width: 100%;
+  }
+}
+
+/* ── Reading Group Page Hero & Layout ── */
+.reading-group-hero .page-hero-inner {
+  max-width: 1440px;
+}
+
+@media (min-width: 1100px) {
+  .reading-group-hero .page-hero-sub {
+    white-space: nowrap;
+    max-width: 100%;
+  }
+}
+
+.reading-group-intro {
+  max-width: 920px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.reading-group-intro-text {
+  font-size: clamp(1.05rem, 1.6vw, 1.18rem);
+  line-height: 1.85;
+  color: var(--text-2);
+  margin: 0;
+  text-align: center;
+  font-weight: 450;
+}
+
+.reading-group-table {
+  max-width: 860px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.reading-group-overview {
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.reading-group-overview p {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: var(--text-2);
+  margin: 0;
+  text-align: center;
+}
+
 .contact-hero {
   text-align: center;
   max-width: 780px;
@@ -2892,6 +3066,59 @@ ul {
 
 @media (max-width: 992px) {
   .dept-split {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* ── About: S&P Global Partnership Section ───────────────────── */
+#about-spglobal {
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+}
+
+.spglobal-split {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.spglobal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.spglobal-img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 3.5rem 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.spglobal-img-wrap:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  border-color: var(--gold-border);
+}
+
+.spglobal-img {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .spglobal-split {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }

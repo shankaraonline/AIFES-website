@@ -197,6 +197,49 @@ export default function About() {
         </div>
       </section>
 
+      {/* ── 4th Section: S&P Global Partnership (Left: Information, Right: Image) ── */}
+      <section id="about-spglobal" aria-labelledby="spglobal-heading">
+        <div className="section-inner">
+          <p className="section-label">Industry Collaboration</p>
+          <h2 className="section-title" id="spglobal-heading">S&amp;P Global &amp; IIT Hyderabad Partnership</h2>
+
+          <div className="spglobal-split">
+            {/* Left — Information */}
+            <div className="spglobal-info">
+              <div className="dept-block">
+                <p className="dept-block-text">
+                  <strong>S&amp;P Global</strong> is a premier worldwide provider of financial data, independent credit ratings, and iconic market benchmarks like the <strong>S&amp;P 500</strong>. The company formed a strategic tie-up with the <strong>Indian Institute of Technology, Hyderabad</strong> to bridge the gap between academic learning and financial technology industry needs.
+                </p>
+              </div>
+
+              <div className="dept-block">
+                <h3 className="dept-block-heading">StepForward Initiative</h3>
+                <div className="dept-mission-box">
+                  <p className="dept-mission-text">
+                    This partnership is powered by <strong>S&amp;P Global’s StepForward Initiative</strong>, a major global corporate social responsibility framework focused on workforce readiness.
+                  </p>
+                </div>
+              </div>
+
+              <div className="dept-block">
+                <p className="dept-block-text">
+                  The collaboration specifically delivers specialised training to students in <strong>Artificial Intelligence, Machine Learning, and advanced digital skills</strong>. The initiative leverages S&amp;P Global’s massive technology hub in Hyderabad to help transform the region into a core center for global data operations.
+                </p>
+              </div>
+            </div>
+
+            {/* Right — Image */}
+            <div className="spglobal-img-wrap">
+              <img
+                src="/SP_Global_Logo.jpg"
+                alt="S&P Global Logo"
+                className="spglobal-img"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── People & Leadership ── */}
       <section id="about-people">
         <div className="section-inner">

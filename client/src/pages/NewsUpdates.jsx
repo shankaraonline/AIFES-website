@@ -4,20 +4,20 @@ import PageHero from '../components/PageHero'
 
 const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api/posts' : 'http://localhost:5000/api/posts')
 
-const DEFAULT_EVENTS = [
+const DEFAULT_NEWS = [
   {
-    id: '1',
-    title: 'AIFES Annual Symposium 2026',
-    tag: 'event',
-    date: '2026-09-15',
-    summary: 'A premier gathering of industry leaders, quantitative researchers, and academicians exploring the frontier of AI in capital markets.',
+    id: '2',
+    title: 'New Paper Published in Nature Finance',
+    tag: 'news',
+    date: '2026-09-10',
+    summary: 'AIFES researchers publish landmark findings on AI-driven financial market microstructure and systemic risk modelling.',
   },
   {
-    id: '3',
-    title: 'Workshop: AI in Regulatory Compliance',
-    tag: 'event',
-    date: '2026-09-05',
-    summary: 'Hands-on technical workshop on building deployable RegTech pipelines and algorithmic monitoring tools.',
+    id: '4',
+    title: 'Dr. Sharma receives Best Research Award',
+    tag: 'news',
+    date: '2026-08-28',
+    summary: 'Recognized for pioneering contributions to trustworthy AI and algorithmic fairness in Indian credit markets.',
   },
 ]
 
@@ -30,8 +30,8 @@ function formatDate(iso) {
   })
 }
 
-export default function Events() {
-  const [events, setEvents] = useState([])
+export default function NewsUpdates() {
+  const [news, setNews] = useState([])
   const [fetched, setFetched] = useState(false)
   const location = useLocation()
 
@@ -43,15 +43,15 @@ export default function Events() {
       })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          const filtered = data.filter((p) => p.tag === 'event')
-          setEvents(filtered.length > 0 ? filtered : DEFAULT_EVENTS)
+          const filtered = data.filter((p) => p.tag === 'news')
+          setNews(filtered.length > 0 ? filtered : DEFAULT_NEWS)
         } else {
-          setEvents(DEFAULT_EVENTS)
+          setNews(DEFAULT_NEWS)
         }
         setFetched(true)
       })
       .catch(() => {
-        setEvents(DEFAULT_EVENTS)
+        setNews(DEFAULT_NEWS)
         setFetched(true)
       })
   }, [])
@@ -70,40 +70,40 @@ export default function Events() {
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' })
     }
-  }, [location.pathname, location.hash, events])
+  }, [location.pathname, location.hash, news])
 
   return (
-    <div className="page-offset events-page">
+    <div className="page-offset news-page">
       <PageHero
         label="Outreach"
-        title="Events & Workshops"
-        subtitle="Symposia, seminars, industry panels, and academic workshops hosted by AIFES Lab at IIT Hyderabad."
-        bgImage="/events_hero.jpg"
+        title="News & Updates"
+        subtitle="Research breakthroughs, announcements, media coverage, and lab achievements from AIFES."
+        bgImage="/news_hero.jpg"
         bgPosition="center 30%"
-        titleId="events-heading"
-        className="events-hero"
+        titleId="news-heading"
+        className="news-hero"
       />
 
-      <section id="events-section" className="outreach-page-section">
+      <section id="news-section" className="outreach-page-section">
         <div className="section-inner" style={{ paddingTop: '56px', paddingBottom: '72px' }}>
           <div className="outreach-listing-header">
-            <p className="section-label" style={{ justifyContent: 'center' }}>Academic &amp; Industry</p>
-            <h2 className="section-title" style={{ textAlign: 'center' }}>Upcoming &amp; Past Events</h2>
+            <p className="section-label" style={{ justifyContent: 'center' }}>Lab Announcements</p>
+            <h2 className="section-title" style={{ textAlign: 'center' }}>Latest News &amp; Updates</h2>
             <p className="section-sub" style={{ textAlign: 'center', margin: '0 auto 40px' }}>
-              Explore our scheduled symposia, specialized masterclasses, and interactive panel sessions.
+              Follow our latest research publications, awards, collaborations, and official lab announcements.
             </p>
           </div>
 
           <div className="outreach-items-grid">
             {!fetched ? (
-              <p className="en-loading" style={{ textAlign: 'center' }}>Loading events…</p>
-            ) : events.length === 0 ? (
-              <p className="en-empty" style={{ textAlign: 'center' }}>No upcoming events scheduled right now.</p>
+              <p className="en-loading" style={{ textAlign: 'center' }}>Loading news…</p>
+            ) : news.length === 0 ? (
+              <p className="en-empty" style={{ textAlign: 'center' }}>No news updates published yet.</p>
             ) : (
-              events.map((item) => (
-                <article className="outreach-card" id={`event-${item.id}`} key={item.id}>
+              news.map((item) => (
+                <article className="outreach-card" id={`news-${item.id}`} key={item.id}>
                   <div className="outreach-card-top">
-                    <span className="en-card-badge en-badge-event">Event</span>
+                    <span className="en-card-badge en-badge-news">News</span>
                     <span className="outreach-card-date">{formatDate(item.date)}</span>
                   </div>
                   <h3 className="outreach-card-title">{item.title}</h3>

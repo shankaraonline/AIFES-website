@@ -6,6 +6,7 @@ import Research from './pages/Research'
 import Education from './pages/Education'
 import ReadingGroup from './pages/ReadingGroup'
 import Events from './pages/Events'
+import NewsUpdates from './pages/NewsUpdates'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import AdminPanel from './pages/AdminPanel'
@@ -21,6 +22,9 @@ export default function App() {
           <Route path="/education" element={<Education />} />
           <Route path="/reading-group" element={<ReadingGroup />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/news" element={<NewsUpdates />} />
+          <Route path="/news-updates" element={<Navigate to="/news" replace />} />
+          <Route path="/outreach" element={<Navigate to="/events" replace />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<AdminPanel />} />

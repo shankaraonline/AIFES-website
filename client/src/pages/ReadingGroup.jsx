@@ -1,3 +1,5 @@
+import PageHero from '../components/PageHero'
+
 const BASE = 'https://ai-iith-web.github.io/AIFES'
 
 const faculty = [
@@ -28,46 +30,52 @@ const materials = [
 
 export default function ReadingGroup() {
   return (
-    <section id="reading-group" className="page-offset">
-      <div className="section-inner">
-        <p className="section-label">Research Community</p>
-        <h2 className="section-title">AIFES Research Reading Group</h2>
-        <p className="section-sub">
-          A collaborative forum where faculty and students explore the mathematical foundations and
-          research directions in AI for Finance, Economies, and Society.
-        </p>
+    <div className="page-offset reading-group-page">
+      <PageHero
+        label="Research Community"
+        title="AIFES Research Reading Group"
+        subtitle="A collaborative forum where faculty and students explore the mathematical foundations and research directions in AI for Finance, Economies, and Society."
+        bgImage="/reading_group_hero.jpg"
+        bgPosition="center 30%"
+        titleId="reading-group-heading"
+        className="reading-group-hero"
+      />
 
-        <div className="about-body">
-          <p>
-            The AIFES Reading Group brings together faculty members and students interested in research
-            at the intersection of artificial intelligence, financial markets, economic systems, and
-            societal impact.
-          </p>
-        </div>
+      <section id="reading-group" className="reading-group-content-section">
+        <div className="section-inner" style={{ paddingTop: '56px', paddingBottom: '72px' }}>
+          {/* Centered Second Definition / Lead Intro */}
+          <div className="reading-group-intro">
+            <p className="reading-group-intro-text">
+              The AIFES Reading Group brings together faculty members and students interested in research
+              at the intersection of artificial intelligence, financial markets, economic systems, and
+              societal impact.
+            </p>
+          </div>
 
-        {/* Faculty */}
-        <div style={{ marginTop: '40px' }}>
-          <p className="section-label" style={{ justifyContent: 'center', textAlign: 'center' }}>Faculty</p>
-          <div className="people-grid" style={{ marginTop: '20px', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-            {faculty.map(({ name, role, href, img, alt }) => (
-              <div className="person-card" key={name}>
-                <div className="person-avatar">
-                  <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          {/* Faculty */}
+          <div className="reading-group-section-block" style={{ marginTop: '50px' }}>
+            <p className="section-label" style={{ justifyContent: 'center', textAlign: 'center' }}>Faculty</p>
+            <div className="people-grid" style={{ marginTop: '24px', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+              {faculty.map(({ name, role, href, img, alt }) => (
+                <div className="person-card" key={name}>
+                  <div className="person-avatar">
+                    <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div className="person-name">
+                    <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {name}
+                    </a>
+                  </div>
+                  <div className="person-role">{role}</div>
                 </div>
-                <div className="person-name">
-                  <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {name}
-                  </a>
-                </div>
-                <div className="person-role">{role}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Students */}
-          <div style={{ marginTop: '60px' }}>
+          <div className="reading-group-section-block" style={{ marginTop: '64px' }}>
             <p className="section-label" style={{ justifyContent: 'center', textAlign: 'center' }}>Students</p>
-            <div className="schedule-table-wrap" style={{ marginTop: '20px' }}>
+            <div className="schedule-table-wrap reading-group-table" style={{ marginTop: '24px' }}>
               <table className="schedule-table">
                 <thead>
                   <tr>
@@ -86,55 +94,56 @@ export default function ReadingGroup() {
               </table>
             </div>
           </div>
-        </div>
 
-        <div className="about-body" style={{ marginTop: '40px' }}>
-          <p>
-            The group meets regularly and is structured around presentations delivered by a designated
-            presenter for each session. These sessions provide an opportunity to study foundational
-            concepts, discuss important ideas in quantitative finance and economic systems, and develop
-            a deeper understanding of the mathematical and computational tools required for research in
-            this area.
-          </p>
-          <p>
-            The discussions focus on core topics such as probability theory, stochastic processes, and
-            stochastic calculus, along with their applications in financial modeling and market analysis.
-          </p>
-          <p>
-            Through collaborative discussions and presentations, the reading group aims to cultivate a
-            strong research culture and prepare participants to engage with contemporary research problems
-            and contribute to the broader research agenda in AI for Finance, Economies, and Society.
-          </p>
-        </div>
+          {/* Discussion & Overview */}
+          <div className="reading-group-overview" style={{ marginTop: '56px' }}>
+            <p>
+              The group meets regularly and is structured around presentations delivered by a designated
+              presenter for each session. These sessions provide an opportunity to study foundational
+              concepts, discuss important ideas in quantitative finance and economic systems, and develop
+              a deeper understanding of the mathematical and computational tools required for research in
+              this area.
+            </p>
+            <p>
+              The discussions focus on core topics such as probability theory, stochastic processes, and
+              stochastic calculus, along with their applications in financial modeling and market analysis.
+            </p>
+            <p>
+              Through collaborative discussions and presentations, the reading group aims to cultivate a
+              strong research culture and prepare participants to engage with contemporary research problems
+              and contribute to the broader research agenda in AI for Finance, Economies, and Society.
+            </p>
+          </div>
 
-        {/* Materials */}
-        <div style={{ marginTop: '60px' }}>
-          <p className="section-label" style={{ justifyContent: 'center', textAlign: 'center' }}>Materials</p>
-          <p className="section-sub" style={{ marginTop: '12px', textAlign: 'center' }}>
-            Papers, notes, and slides shared during sessions.
-          </p>
-          <div className="schedule-table-wrap" style={{ marginTop: '20px' }}>
-            <table className="schedule-table">
-              <thead>
-                <tr>
-                  <th>Session</th>
-                  <th>Material</th>
-                </tr>
-              </thead>
-              <tbody>
-                {materials.map(({ session, href }) => (
-                  <tr key={session}>
-                    <td>{session}</td>
-                    <td>
-                      <a href={href} target="_blank" rel="noopener noreferrer">Slides</a>
-                    </td>
+          {/* Materials */}
+          <div className="reading-group-section-block" style={{ marginTop: '64px' }}>
+            <p className="section-label" style={{ justifyContent: 'center', textAlign: 'center' }}>Materials</p>
+            <p className="section-sub" style={{ marginTop: '12px', textAlign: 'center', margin: '12px auto 0' }}>
+              Papers, notes, and slides shared during sessions.
+            </p>
+            <div className="schedule-table-wrap reading-group-table" style={{ marginTop: '24px' }}>
+              <table className="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Session</th>
+                    <th>Material</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {materials.map(({ session, href }) => (
+                    <tr key={session}>
+                      <td>{session}</td>
+                      <td>
+                        <a href={href} target="_blank" rel="noopener noreferrer">Slides</a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   )
 }

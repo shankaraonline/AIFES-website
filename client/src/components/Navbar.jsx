@@ -5,17 +5,24 @@ const links = [
   { to: '/research',      label: 'Research' },
   { to: '/education',     label: 'Education' },
   { to: '/reading-group', label: 'Reading Group' },
-  { to: '/events',        label: 'Events & Updates' },
+  { to: '/outreach',      label: 'Outreach' },
   { to: '/about',         label: 'About Us' },
   { to: '/contact',       label: 'Contact Us' },
 ]
 
 import { researchThemes as researchSections } from '../data/researchThemes'
 
+const outreachSections = [
+  { name: 'Events', to: '/events' },
+  { name: 'News & Updates', to: '/news' },
+]
+
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [outreachDropdownOpen, setOutreachDropdownOpen] = useState(false)
   const [mobileSubOpen, setMobileSubOpen] = useState(true)
+  const [mobileOutreachOpen, setMobileOutreachOpen] = useState(true)
   const location = useLocation()
 
   const handleThemeClick = (id) => {
@@ -110,6 +117,79 @@ export default function Navbar() {
                 )
               }
 
+              if (to === '/outreach') {
+                const isOutreachActive =
+                  location.pathname === '/events' ||
+                  location.pathname === '/news' ||
+                  location.pathname === '/news-updates' ||
+                  location.pathname === '/outreach'
+
+                return (
+                  <li
+                    key={to}
+                    className="nav-dropdown"
+                    onMouseEnter={() => setOutreachDropdownOpen(true)}
+                    onMouseLeave={() => setOutreachDropdownOpen(false)}
+                    onFocus={() => setOutreachDropdownOpen(true)}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget)) {
+                        setOutreachDropdownOpen(false)
+                      }
+                    }}
+                  >
+                    <NavLink
+                      to="/events"
+                      className={`nav-link-with-caret${isOutreachActive ? ' active' : ''}`}
+                      onClick={() => {
+                        setOutreachDropdownOpen(false)
+                        setOpen(false)
+                        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                          document.activeElement.blur()
+                        }
+                      }}
+                    >
+                      <span>{label}</span>
+                      <svg
+                        className={`nav-dropdown-caret${outreachDropdownOpen ? ' open' : ''}`}
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        width="14"
+                        height="14"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </NavLink>
+
+                    <div className={`nav-dropdown-menu${outreachDropdownOpen ? ' visible' : ''}`}>
+                      <ul className="nav-dropdown-list">
+                        {outreachSections.map(section => (
+                          <li key={section.to}>
+                            <Link
+                              to={section.to}
+                              className="nav-dropdown-item"
+                              onClick={() => {
+                                setOutreachDropdownOpen(false)
+                                setOpen(false)
+                                if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                                  document.activeElement.blur()
+                                }
+                              }}
+                            >
+                              {section.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                )
+              }
+
               return (
                 <li key={to}>
                   <NavLink
@@ -182,6 +262,59 @@ export default function Navbar() {
                         to={`/research#${section.id}`}
                         className="navbar-mobile-subitem"
                         onClick={() => handleThemeClick(section.id)}
+                      >
+                        {section.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          }
+
+          if (to === '/outreach') {
+            const isOutreachActive =
+              location.pathname === '/events' ||
+              location.pathname === '/news' ||
+              location.pathname === '/news-updates' ||
+              location.pathname === '/outreach'
+
+            return (
+              <div key={to} className="navbar-mobile-item-group">
+                <div className="navbar-mobile-row">
+                  <NavLink
+                    to="/events"
+                    className={isOutreachActive ? 'active' : ''}
+                    onClick={() => setOpen(false)}
+                  >
+                    {label}
+                  </NavLink>
+                  <button
+                    type="button"
+                    className={`navbar-mobile-caret-btn${mobileOutreachOpen ? ' open' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setMobileOutreachOpen(v => !v)
+                    }}
+                    aria-label="Toggle Outreach sub-items"
+                  >
+                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {mobileOutreachOpen && (
+                  <div className="navbar-mobile-submenu">
+                    {outreachSections.map(section => (
+                      <Link
+                        key={section.to}
+                        to={section.to}
+                        className="navbar-mobile-subitem"
+                        onClick={() => setOpen(false)}
                       >
                         {section.name}
                       </Link>
