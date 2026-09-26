@@ -51,7 +51,8 @@ export default function EventsNewsSection({ isPage = false }) {
       })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setPosts(data)
+          const filtered = data.filter((p) => p.published !== false)
+          setPosts(filtered.length > 0 ? filtered : DEFAULT_POSTS)
         } else {
           setPosts(DEFAULT_POSTS)
         }
@@ -96,9 +97,32 @@ export default function EventsNewsSection({ isPage = false }) {
                   className="en-card"
                   key={p.id}
                   title={`View event: ${p.title}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '14px',
+                  }}
                 >
-                  <div className="en-card-title">{p.title}</div>
-                  <div className="en-card-date">{formatDate(p.date)}</div>
+                  <div className="en-card-title" style={{ margin: 0, flex: 1 }}>{p.title}</div>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      padding: '3px 10px',
+                      background: 'rgba(217, 119, 6, 0.1)',
+                      color: 'var(--accent)',
+                      border: '1px solid rgba(217, 119, 6, 0.25)',
+                      borderRadius: '99px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                    }}
+                  >
+                    📅 {formatDate(p.date)}
+                  </span>
                 </Link>
               ))
             )}
@@ -122,9 +146,32 @@ export default function EventsNewsSection({ isPage = false }) {
                   className="en-card"
                   key={p.id}
                   title={`View news: ${p.title}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '14px',
+                  }}
                 >
-                  <div className="en-card-title">{p.title}</div>
-                  <div className="en-card-date">{formatDate(p.date)}</div>
+                  <div className="en-card-title" style={{ margin: 0, flex: 1 }}>{p.title}</div>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      padding: '3px 10px',
+                      background: 'rgba(217, 119, 6, 0.1)',
+                      color: 'var(--accent)',
+                      border: '1px solid rgba(217, 119, 6, 0.25)',
+                      borderRadius: '99px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                    }}
+                  >
+                    📅 {formatDate(p.date)}
+                  </span>
                 </Link>
               ))
             )}

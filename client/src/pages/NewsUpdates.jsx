@@ -43,7 +43,7 @@ export default function NewsUpdates() {
       })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          const filtered = data.filter((p) => p.tag === 'news')
+          const filtered = data.filter((p) => p.tag === 'news' && p.published !== false)
           setNews(filtered.length > 0 ? filtered : DEFAULT_NEWS)
         } else {
           setNews(DEFAULT_NEWS)
@@ -102,12 +102,51 @@ export default function NewsUpdates() {
             ) : (
               news.map((item) => (
                 <article className="outreach-card" id={`news-${item.id}`} key={item.id}>
-                  <div className="outreach-card-top">
-                    <span className="en-card-badge en-badge-news">News</span>
-                    <span className="outreach-card-date">{formatDate(item.date)}</span>
+                  {/* Highlighted Date badge like in Events (No redundant 'News' tag) */}
+                  <div style={{ marginBottom: '14px' }}>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '4px 12px',
+                        background: 'rgba(217, 119, 6, 0.1)',
+                        color: 'var(--accent)',
+                        border: '1px solid rgba(217, 119, 6, 0.25)',
+                        borderRadius: '99px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      📅 {formatDate(item.date)}
+                    </span>
                   </div>
+
                   <h3 className="outreach-card-title">{item.title}</h3>
-                  {item.summary && <p className="outreach-card-desc">{item.summary}</p>}
+                  {(item.description || item.summary) && (
+                    <p className="outreach-card-desc">{item.description || item.summary}</p>
+                  )}
+
+                  {item.link && (
+                    <div style={{ marginTop: '14px' }}>
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          fontSize: '12px',
+                          color: 'var(--accent)',
+                          fontWeight: 600,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        🔗 View Reference / Link ↗
+                      </a>
+                    </div>
+                  )}
                 </article>
               ))
             )}

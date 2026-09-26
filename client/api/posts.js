@@ -78,7 +78,16 @@ export default async function handler(req, res) {
     // ── GET: Return all posts ──
     if (req.method === 'GET') {
       if (isDbConnected) {
-        const posts = await Post.find({}).sort({ date: -1 })
+        let posts = await Post.find({}).sort({ date: -1 })
+        if (posts.length === 0) {
+          try {
+            posts = await Post.insertMany(
+              memoryPosts.map(({ title, tag, date }) => ({ title, tag, date }))
+            )
+          } catch (seedErr) {
+            console.error('Initial seed error:', seedErr)
+          }
+        }
         return res.status(200).json(
           posts.map((p) => ({
             id: String(p._id),
