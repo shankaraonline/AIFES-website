@@ -55,7 +55,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar-inner">
           <NavLink to="/" className="navbar-brand" onClick={() => setOpen(false)}>
-            <img src="/AIFES_logo.png" alt="AIFES Logo" className="navbar-logo" />
+            <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
           </NavLink>
 
           <ul className="navbar-links">
@@ -204,6 +204,12 @@ export default function Navbar() {
             })}
           </ul>
 
+          <div className="navbar-right-brand">
+            <div className="navbar-sp-wrap">
+              <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
+            </div>
+          </div>
+
           <button
             className={`navbar-hamburger${open ? ' open' : ''}`}
             aria-label="Toggle menu"
@@ -218,8 +224,10 @@ export default function Navbar() {
 
       <div className={`navbar-mobile${open ? ' open' : ''}`}>
         <div className="navbar-mobile-brand">
-          <img src="/AIFES_logo.png" alt="AIFES Logo" className="navbar-logo" />
-          <span style={{ fontWeight: 700 }}>AIFES · IIT Hyderabad</span>
+          <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
+          <div className="navbar-sp-wrap">
+            <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
+          </div>
         </div>
         {links.map(({ to, label }) => {
           if (to === '/research') {

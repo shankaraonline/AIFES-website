@@ -10,23 +10,21 @@ export default function Home() {
     <>
       {/* Hero */}
       <section id="hero">
-        {/* Background image overlay commented out so 3D model is fully visible */}
-        {/* <div className="hero-overlay" /> */}
-
-        {/* Three.js animated 3D cyber boxes & particles */}
+        {/* Three.js animated world map + stock charts */}
         <HeroCanvas />
+
+        {/* Dark overlay for text readability */}
+        <div className="hero-overlay" />
 
         <div className="hero-inner hero-centered">
           <p className="hero-tag">AI Innovation Lab</p>
           <h1 className="hero-title">
-            <span className="hero-brand-line">
-              <span className="brand-sp">S&amp;P Global</span>{' '}
-              <span className="brand-iit">&amp; IIT Hyderabad</span>
-            </span>
-            <span className="hero-sub-title">
-              Pioneering Trustworthy AI for Finance, Economies &amp; Society.
-            </span>
+            <span className="brand-sp">S&amp;P Global</span>{' '}
+            <span className="brand-iit">&amp; IIT Hyderabad</span>
           </h1>
+          <h4 className="hero-sub-title">
+            Trustworthy AI for Finance, Economies &amp; Society
+          </h4>
           <p className="hero-desc">
             AIFES advances <strong>reproducible, responsible AI</strong> across algorithmic trading,
             market microstructure, risk management, FinTech/DeFi, climate finance, RegTech, and
@@ -151,10 +149,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* S&P Global */}
+      {/* ── About S&P Global Section ── */}
       <section id="home-spglobal" aria-labelledby="home-spglobal-heading">
         <div className="section-inner">
-          <p className="section-label">Industry Collaboration</p>
+          <p className="section-label">Industry Partner</p>
           <h2 className="section-title" id="home-spglobal-heading">About S&amp;P Global</h2>
 
           <div className="spglobal-split">
@@ -162,7 +160,19 @@ export default function Home() {
             <div className="spglobal-info">
               <div className="dept-block">
                 <p className="dept-block-text">
-                  <strong>S&amp;P Global</strong> is a premier worldwide provider of financial data, independent credit ratings, and iconic market benchmarks like the <strong>S&amp;P 500</strong>. The company formed a strategic tie-up with the <strong>Indian Institute of Technology, Hyderabad</strong> to bridge the gap between academic learning and financial technology industry needs.
+                  <strong>S&amp;P Global</strong> is a premier worldwide provider of transparent and independent financial ratings, iconic market benchmarks, financial data, and research across capital, commodity, and automotive markets.
+                </p>
+              </div>
+
+              <div className="dept-block">
+                <p className="dept-block-text">
+                  Known globally for foundational financial infrastructure such as the <strong>S&amp;P 500®</strong>, S&amp;P Global provides essential intelligence, credit ratings, risk solutions, and sustainable finance insights that empower companies, governments, and individuals to make decisions with conviction.
+                </p>
+              </div>
+
+              <div className="dept-block">
+                <p className="dept-block-text">
+                  With major technological hubs and dedicated divisions in data science and artificial intelligence, S&amp;P Global continually pioneers data-centric engineering, market analytics, and next-generation FinTech innovation worldwide.
                 </p>
               </div>
             </div>

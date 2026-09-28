@@ -129,25 +129,71 @@ ul {
 
 .navbar-brand {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
   color: #ffffff;
   flex-shrink: 0;
   text-decoration: none;
 }
 
 .navbar-logo {
-  height: 70px;
+  height: 68px;
   width: auto;
+  max-width: 360px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.35));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
   transition: filter var(--transition), transform var(--transition);
 }
 
-.navbar-brand:hover .navbar-logo {
-  filter: drop-shadow(0 0 10px rgba(212, 28, 48, 0.6));
+.navbar-iith-logo {
+  height: 68px;
+  width: auto;
+  max-width: 360px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.navbar-brand:hover .navbar-iith-logo {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.45));
+}
+
+.navbar-right-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 1.25rem;
+}
+
+.navbar-sp-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navbar-sp-wrap:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(212, 28, 48, 0.25);
+}
+
+.navbar-sp-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .navbar-right-brand {
+    display: none;
+  }
 }
 
 .brand-name {
@@ -166,12 +212,24 @@ ul {
 .navbar-mobile-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  margin-bottom: 4px;
-  color: #ffffff;
-  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.navbar-mobile-brand .navbar-iith-logo {
+  height: 48px;
+  max-width: 240px;
+}
+
+.navbar-mobile-brand .navbar-sp-wrap {
+  padding: 4px 10px;
+}
+
+.navbar-mobile-brand .navbar-sp-logo {
+  height: 22px;
 }
 
 .navbar-links {
@@ -570,17 +628,27 @@ ul {
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: #020713;
-  /* background: #020713 url('/home_hero_cyber.jpg') no-repeat center center; */
-  /* background-size: cover; */
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 45%, rgba(14, 30, 60, 0.45) 0%, rgba(2, 7, 19, 0.95) 75%, #020713 100%),
+    #020713;
+}
+
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 75% 65% at 50% 45%, rgba(2, 7, 19, 0.5) 0%, rgba(2, 7, 19, 0.82) 100%),
-    linear-gradient(180deg, rgba(2, 7, 19, 0.75) 0%, rgba(2, 7, 19, 0.2) 45%, rgba(2, 7, 19, 0.25) 65%, rgba(2, 7, 19, 0.9) 100%);
+  background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(2, 7, 19, 0.65) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -595,7 +663,7 @@ ul {
 
 .hero-inner {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: calc(var(--nav-h) + 60px) clamp(1.25rem, 2.5vw, 2.5rem) 80px;
@@ -652,7 +720,7 @@ ul {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #d41c30;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .hero-tag::before {
@@ -677,21 +745,20 @@ ul {
 }
 
 .hero-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.75rem;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
-}
-
-.hero-brand-line {
-  display: block;
-  font-size: clamp(2rem, 4.4vw, 3.5rem);
+  font-size: clamp(2.1rem, 4.6vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.18;
-  text-align: center;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 0.9rem;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    white-space: normal;
+  }
 }
 
 .brand-sp {
@@ -703,32 +770,21 @@ ul {
 }
 
 .hero-sub-title {
-  display: block;
-  font-size: clamp(1.15rem, 2.1vw, 1.75rem);
+  font-size: clamp(1.15rem, 2.2vw, 1.7rem);
   font-weight: 600;
-  color: #f1f5f9;
+  color: #ffffff;
   letter-spacing: -0.01em;
   line-height: 1.35;
-  text-align: center;
-  max-width: 860px;
-}
-
-.line-gold {
-  color: var(--gold);
-}
-
-.line-dim {
-  color: var(--text-2);
+  margin-bottom: 1.6rem;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
 .hero-desc {
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.98rem, 1.6vw, 1.12rem);
   color: #e2e8f0;
-  width: 80%;
-  max-width: 880px;
+  max-width: 740px;
   line-height: 1.8;
-  margin: 0.5rem auto 2.5rem;
-  text-align: center;
+  margin-bottom: 2.2rem;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
@@ -1817,18 +1873,23 @@ ul {
 
 .footer-links {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
   list-style: none;
 }
 
 .footer-links a {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-3);
+  text-decoration: none;
   transition: color var(--transition);
 }
 
 .footer-links a:hover {
-  color: var(--gold);
+  color: #d41c30;
 }
 
 .footer-copy {
@@ -3408,7 +3469,7 @@ ul {
   }
 }
 
-/* ── About: S&P Global Partnership Section ───────────────────── */
+/* ── About & Home: S&P Global Partnership Section ───────────────────── */
 #about-spglobal,
 #home-spglobal {
   background: #ffffff;
