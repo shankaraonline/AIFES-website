@@ -10,18 +10,22 @@ export default function Home() {
     <>
       {/* Hero */}
       <section id="hero">
-        {/* Three.js animated world map + stock charts */}
+        {/* Background image overlay commented out so 3D model is fully visible */}
+        {/* <div className="hero-overlay" /> */}
+
+        {/* Three.js animated 3D cyber boxes & particles */}
         <HeroCanvas />
 
-        {/* Dark overlay for text readability */}
-        <div className="hero-overlay" />
-
         <div className="hero-inner hero-centered">
-          <p className="hero-tag">AI for Finance, Economies &amp; Society Lab</p>
+          <p className="hero-tag">AI Innovation Lab</p>
           <h1 className="hero-title">
-            <span className="line-gold">Trustworthy AI</span><br />
-            <span>for Finance,</span><br />
-            <span>Economies &amp; Society</span>
+            <span className="hero-brand-line">
+              <span className="brand-sp">S&amp;P Global</span>{' '}
+              <span className="brand-iit">&amp; IIT Hyderabad</span>
+            </span>
+            <span className="hero-sub-title">
+              Pioneering Trustworthy AI for Finance, Economies &amp; Society.
+            </span>
           </h1>
           <p className="hero-desc">
             AIFES advances <strong>reproducible, responsible AI</strong> across algorithmic trading,
@@ -144,6 +148,34 @@ export default function Home() {
 
           </div>
 
+        </div>
+      </section>
+
+      {/* S&P Global */}
+      <section id="home-spglobal" aria-labelledby="home-spglobal-heading">
+        <div className="section-inner">
+          <p className="section-label">Industry Collaboration</p>
+          <h2 className="section-title" id="home-spglobal-heading">About S&amp;P Global</h2>
+
+          <div className="spglobal-split">
+            {/* Left — Information */}
+            <div className="spglobal-info">
+              <div className="dept-block">
+                <p className="dept-block-text">
+                  <strong>S&amp;P Global</strong> is a premier worldwide provider of financial data, independent credit ratings, and iconic market benchmarks like the <strong>S&amp;P 500</strong>. The company formed a strategic tie-up with the <strong>Indian Institute of Technology, Hyderabad</strong> to bridge the gap between academic learning and financial technology industry needs.
+                </p>
+              </div>
+            </div>
+
+            {/* Right — Image */}
+            <div className="spglobal-img-wrap">
+              <img
+                src="/SP_Global_Logo.jpg"
+                alt="S&P Global Logo"
+                className="spglobal-img"
+              />
+            </div>
+          </div>
         </div>
       </section>
     </>

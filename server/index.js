@@ -1,4 +1,4 @@
-// server/index.js
+// server/index.js - Connected to MongoDB Atlas
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 require('dotenv').config()
