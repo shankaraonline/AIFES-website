@@ -1,6 +1,6 @@
 export const BASE_API = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL.replace(/\/posts\/?$/, '')
-  : (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api')
+  : '/api'
 
 export const POSTS_API = `${BASE_API}/posts`
 export const READING_API = `${BASE_API}/reading-materials`

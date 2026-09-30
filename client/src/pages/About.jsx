@@ -248,7 +248,7 @@ export default function About() {
           <p className="section-sub">
             Balanced representation from academia, industry, and regulators with clear terms and engagement cadence.
           </p>
-          <div className="people-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 460px))', justifyContent: 'center' }}>
+          <div className="people-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 460px))', justifyContent: 'center' }}>
             {people.map(({ name, role, href, img, alt, desc }) => (
               <div className="person-card" key={name}>
                 <div className="person-avatar">

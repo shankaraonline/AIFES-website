@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api/posts' : 'http://localhost:5000/api/posts')
+const API = import.meta.env.VITE_API_URL || '/api/posts'
 
 const DEFAULT_POSTS = [
   {
@@ -94,33 +94,12 @@ export default function EventsNewsSection({ isPage = false }) {
               events.map((p) => (
                 <Link
                   to={`/events#event-${p.id}`}
-                  className="en-card"
+                  className="en-card en-card-item"
                   key={p.id}
                   title={`View event: ${p.title}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                    gap: '14px',
-                  }}
                 >
-                  <div className="en-card-title" style={{ margin: 0, flex: 1 }}>{p.title}</div>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      padding: '3px 10px',
-                      background: 'rgba(217, 119, 6, 0.1)',
-                      color: 'var(--accent)',
-                      border: '1px solid rgba(217, 119, 6, 0.25)',
-                      borderRadius: '99px',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                    }}
-                  >
+                  <div className="en-card-title">{p.title}</div>
+                  <span className="en-date-badge">
                     📅 {formatDate(p.date)}
                   </span>
                 </Link>
@@ -143,33 +122,12 @@ export default function EventsNewsSection({ isPage = false }) {
               news.map((p) => (
                 <Link
                   to={`/news#news-${p.id}`}
-                  className="en-card"
+                  className="en-card en-card-item"
                   key={p.id}
                   title={`View news: ${p.title}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                    gap: '14px',
-                  }}
                 >
-                  <div className="en-card-title" style={{ margin: 0, flex: 1 }}>{p.title}</div>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      padding: '3px 10px',
-                      background: 'rgba(217, 119, 6, 0.1)',
-                      color: 'var(--accent)',
-                      border: '1px solid rgba(217, 119, 6, 0.25)',
-                      borderRadius: '99px',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                    }}
-                  >
+                  <div className="en-card-title">{p.title}</div>
+                  <span className="en-date-badge">
                     📅 {formatDate(p.date)}
                   </span>
                 </Link>
