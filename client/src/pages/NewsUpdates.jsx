@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 
-const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api/posts' : 'http://localhost:5000/api/posts')
+const API = import.meta.env.VITE_API_URL || '/api/posts'
 
 const DEFAULT_NEWS = [
   {

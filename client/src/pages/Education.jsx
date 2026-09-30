@@ -3,7 +3,7 @@ import PageHero from '../components/PageHero'
 
 const BASE_API = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL.replace(/\/posts\/?$/, '')
-  : (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api')
+  : '/api'
 
 const COURSES_API = `${BASE_API}/courses`
 

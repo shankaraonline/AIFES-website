@@ -21,8 +21,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [outreachDropdownOpen, setOutreachDropdownOpen] = useState(false)
-  const [mobileSubOpen, setMobileSubOpen] = useState(true)
-  const [mobileOutreachOpen, setMobileOutreachOpen] = useState(true)
+  const [mobileSubOpen, setMobileSubOpen] = useState(false)
+  const [mobileOutreachOpen, setMobileOutreachOpen] = useState(false)
   const location = useLocation()
 
   const handleThemeClick = (id) => {
@@ -223,12 +223,6 @@ export default function Navbar() {
       </nav>
 
       <div className={`navbar-mobile${open ? ' open' : ''}`}>
-        <div className="navbar-mobile-brand">
-          <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
-          <div className="navbar-sp-wrap">
-            <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
-          </div>
-        </div>
         {links.map(({ to, label }) => {
           if (to === '/research') {
             return (
