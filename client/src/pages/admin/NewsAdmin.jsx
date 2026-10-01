@@ -30,7 +30,7 @@ export default function NewsAdmin({ onDataChange }) {
         }
       }
     } catch {
-      setError('Could not connect to news database.')
+      setError('Could not fetch news. Ensure server is running.')
     }
   }
 
@@ -156,8 +156,151 @@ export default function NewsAdmin({ onDataChange }) {
         </p>
       </div>
 
+      {/* News List (Top Section) */}
+      <div className="admin-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h3 className="admin-card-title" style={{ margin: 0 }}>
+            <span>All News &amp; Announcements</span>
+            <span className="admin-count">{news.length}</span>
+          </h3>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>
+            Click <strong>Publish</strong> to show on the website, or <strong>Unpublish</strong> to hide.
+          </p>
+        </div>
+
+        {news.length === 0 ? (
+          <p className="admin-empty">No news updates posted yet. Use the form below to add news.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {news.map((item) => {
+              const isPublished = item.published !== false
+
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    background: '#ffffff',
+                    border: '1px solid var(--border)',
+                    borderRadius: '10px',
+                    padding: '16px 20px',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '14px',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+                  }}
+                >
+                  <div style={{ flex: '1 1 340px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                      {isPublished ? (
+                        <span
+                          style={{
+                            background: '#dcfce7',
+                            color: '#15803d',
+                            border: '1px solid #86efac',
+                            padding: '2px 8px',
+                            borderRadius: '99px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                          }}
+                        >
+                          ● Published
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            background: '#fef3c7',
+                            color: '#b45309',
+                            border: '1px solid #fde68a',
+                            padding: '2px 8px',
+                            borderRadius: '99px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                          }}
+                        >
+                          ○ Draft (Hidden)
+                        </span>
+                      )}
+
+                      <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-1)', margin: 0 }}>
+                        {item.title}
+                      </h4>
+                    </div>
+
+                    <div style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>
+                      📅 {formatDate(item.date)}
+                    </div>
+
+                    {item.description && (
+                      <p style={{ fontSize: '13px', color: 'var(--text-2)', margin: '4px 0 0', lineHeight: 1.5 }}>
+                        {item.description}
+                      </p>
+                    )}
+
+                    {item.link && (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: '12px', color: 'var(--accent)', textDecoration: 'none', marginTop: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        🔗 {item.link} ↗
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    {/* Toggle Publish / Unpublish */}
+                    <button
+                      type="button"
+                      onClick={() => handleTogglePublishNews(item)}
+                      style={{
+                        background: isPublished ? '#f1f5f9' : '#16a34a',
+                        color: isPublished ? '#475569' : '#ffffff',
+                        border: isPublished ? '1px solid #cbd5e1' : 'none',
+                        padding: '6px 14px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      title={isPublished ? 'Unpublish and hide from website' : 'Publish and display on website'}
+                    >
+                      {isPublished ? 'Unpublish' : 'Publish'}
+                    </button>
+
+                    {/* Edit Button */}
+                    <button
+                      type="button"
+                      className="admin-btn-edit"
+                      onClick={() => handleEditNews(item)}
+                      title="Edit News Post"
+                    >
+                      Edit
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      type="button"
+                      className="admin-btn-delete"
+                      onClick={() => handleDeletePost(item.id)}
+                      title="Delete News Post"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
       {/* Form to Update the News and Announcements */}
-      <div className="admin-card" id="news-admin-card">
+      <div className="admin-card" id="news-admin-card" style={{ marginTop: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 className="admin-card-title" style={{ margin: 0 }}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -316,158 +459,6 @@ export default function NewsAdmin({ onDataChange }) {
             )}
           </div>
         </form>
-      </div>
-
-      {/* News List */}
-      <div className="admin-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 className="admin-card-title" style={{ margin: 0 }}>
-            <span>All News &amp; Announcements</span>
-            <span className="admin-count">{news.length}</span>
-          </h3>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>
-            Click <strong>Publish</strong> to show on the website, or <strong>Unpublish</strong> to hide.
-          </p>
-        </div>
-
-        {news.length === 0 ? (
-          <p className="admin-empty">No news updates posted yet.</p>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {news.map((item) => {
-              const isPublished = item.published !== false
-
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    background: '#ffffff',
-                    border: '1px solid var(--border)',
-                    borderRadius: '10px',
-                    padding: '16px 20px',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '14px',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                  }}
-                >
-                  <div style={{ flex: '1 1 340px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
-                      {isPublished ? (
-                        <span
-                          style={{
-                            background: '#dcfce7',
-                            color: '#15803d',
-                            border: '1px solid #86efac',
-                            padding: '2px 8px',
-                            borderRadius: '99px',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ● Published
-                        </span>
-                      ) : (
-                        <span
-                          style={{
-                            background: '#fef3c7',
-                            color: '#b45309',
-                            border: '1px solid #fde68a',
-                            padding: '2px 8px',
-                            borderRadius: '99px',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ○ Draft (Hidden)
-                        </span>
-                      )}
-
-                      <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-1)', margin: 0 }}>
-                        {item.title}
-                      </h4>
-                    </div>
-
-                    <div style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>
-                      📅 {formatDate(item.date)}
-                    </div>
-
-                    {item.description && (
-                      <p style={{ fontSize: '13px', color: 'var(--text-2)', margin: '4px 0 0', lineHeight: 1.5 }}>
-                        {item.description}
-                      </p>
-                    )}
-
-                    {item.link && (
-                      <a
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ fontSize: '12px', color: 'var(--accent)', textDecoration: 'none', marginTop: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        🔗 {item.link} ↗
-                      </a>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                    {/* Toggle Publish / Unpublish */}
-                    <button
-                      type="button"
-                      onClick={() => handleTogglePublishNews(item)}
-                      style={{
-                        background: isPublished ? '#f1f5f9' : '#16a34a',
-                        color: isPublished ? '#475569' : '#ffffff',
-                        border: isPublished ? '1px solid #cbd5e1' : 'none',
-                        padding: '6px 14px',
-                        borderRadius: '6px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                      title={isPublished ? 'Unpublish and hide from website' : 'Publish and display on website'}
-                    >
-                      {isPublished ? 'Unpublish' : 'Publish'}
-                    </button>
-
-                    {/* Edit Button */}
-                    <button
-                      type="button"
-                      onClick={() => handleEditNews(item)}
-                      style={{
-                        background: 'rgba(59, 130, 246, 0.12)',
-                        color: '#3b82f6',
-                        border: '1px solid rgba(59, 130, 246, 0.3)',
-                        borderRadius: '6px',
-                        padding: '6px 14px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    {/* Delete Button */}
-                    <button
-                      type="button"
-                      className="admin-delete"
-                      onClick={() => handleDeletePost(item.id)}
-                      title="Delete News Post"
-                      style={{ margin: 0 }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
       </div>
     </div>
   )

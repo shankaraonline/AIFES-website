@@ -10,6 +10,8 @@ import NewsUpdates from './pages/NewsUpdates'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import AdminPanel from './pages/AdminPanel'
+import AdminLogin from './pages/AdminLogin'
+import ProtectedRoute from './pages/ProtectedRoute'
 
 export default function App() {
   const location = useLocation()
@@ -30,7 +32,15 @@ export default function App() {
           <Route path="/outreach" element={<Navigate to="/events" replace />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminPanel />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/people" element={<Navigate to="/about" replace />} />
           <Route path="/community" element={<Navigate to="/about" replace />} />
           <Route path="/outputs" element={<Navigate to="/about" replace />} />
