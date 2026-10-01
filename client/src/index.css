@@ -764,9 +764,13 @@ ul {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(2, 7, 19, 0.65) 100%);
+  background:
+    radial-gradient(ellipse 75% 65% at 50% 50%, rgba(2, 7, 19, 0.58) 0%, rgba(2, 7, 19, 0.82) 100%),
+    linear-gradient(180deg, rgba(2, 7, 19, 0.65) 0%, rgba(2, 7, 19, 0.35) 45%, rgba(2, 7, 19, 0.65) 75%, rgba(2, 7, 19, 0.96) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .hero-glow {
@@ -3034,6 +3038,14 @@ ul {
 
   .hero-inner {
     padding: calc(var(--nav-h) + 24px) 1rem 48px;
+  }
+
+  .hero-overlay {
+    background:
+      radial-gradient(ellipse 90% 80% at 50% 50%, rgba(2, 7, 19, 0.68) 0%, rgba(2, 7, 19, 0.88) 100%),
+      linear-gradient(180deg, rgba(2, 7, 19, 0.75) 0%, rgba(2, 7, 19, 0.5) 45%, rgba(2, 7, 19, 0.78) 75%, rgba(2, 7, 19, 0.98) 100%);
+    backdrop-filter: blur(2.5px);
+    -webkit-backdrop-filter: blur(2.5px);
   }
 
   .hero-title {
