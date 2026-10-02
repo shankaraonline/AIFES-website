@@ -22,10 +22,15 @@ export default function AdminLogin() {
         body: JSON.stringify({ username, password }),
       })
 
-      const data = await res.json()
+      let data = {}
+      try {
+        data = await res.json()
+      } catch {
+        // Server returned non-JSON (e.g. 404/500 HTML or text)
+      }
 
       if (!res.ok) {
-        setError(data.error || 'Login failed. Please try again.')
+        setError(data.error || `Server error (${res.status}). Please check server configuration.`)
         return
       }
 
@@ -33,7 +38,7 @@ export default function AdminLogin() {
       setToken(data.token, false) // session-only by default
       navigate('/admin', { replace: true })
     } catch {
-      setError('Unable to connect to server. Please check your connection.')
+      setError('Unable to connect to server. Please check your network connection.')
     } finally {
       setLoading(false)
     }
