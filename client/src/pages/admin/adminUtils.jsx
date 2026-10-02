@@ -7,6 +7,39 @@ export const READING_API = `${BASE_API}/reading-materials`
 export const FACULTY_API = `${BASE_API}/reading-faculty`
 export const STUDENTS_API = `${BASE_API}/reading-students`
 export const COURSES_API = `${BASE_API}/courses`
+export const AUTH_API = `${BASE_API}/auth`
+
+// ── Token helpers (never logs credentials to console) ──────────
+const TOKEN_KEY = 'aifes_admin_tok'
+
+export function getToken() {
+  return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || null
+}
+
+export function setToken(token, persist = false) {
+  sessionStorage.setItem(TOKEN_KEY, token)
+  if (persist) localStorage.setItem(TOKEN_KEY, token)
+}
+
+export function clearToken() {
+  sessionStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(TOKEN_KEY)
+}
+
+// authFetch: wraps fetch to automatically attach the Bearer token
+// Credentials are never visible in React code or DevTools console
+export function authFetch(url, options = {}) {
+  const token = getToken()
+  const headers = {
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  }
+  // Remove Content-Type for FormData (let browser set boundary)
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json'
+  }
+  return fetch(url, { ...options, headers })
+}
 
 export function formatDate(iso) {
   if (!iso) return ''

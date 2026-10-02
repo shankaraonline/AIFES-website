@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   POSTS_API,
   READING_API,
   FACULTY_API,
   STUDENTS_API,
-  COURSES_API
+  COURSES_API,
+  clearToken,
+  authFetch,
 } from './admin/adminUtils'
 
 import EducationAdmin from './admin/EducationAdmin'
@@ -14,6 +16,7 @@ import EventsAdmin from './admin/EventsAdmin'
 import NewsAdmin from './admin/NewsAdmin'
 
 export default function AdminPanel() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('education') // 'education' | 'reading-group' | 'events' | 'news'
   const [counts, setCounts] = useState({
     education: 0,
@@ -25,11 +28,11 @@ export default function AdminPanel() {
   const fetchCounts = async () => {
     try {
       const [resPosts, resMat, resCourses, resFaculty, resStudents] = await Promise.all([
-        fetch(`${POSTS_API}?includeDrafts=true`).then(r => r.json()).catch(() => []),
-        fetch(READING_API).then(r => r.json()).catch(() => []),
-        fetch(COURSES_API).then(r => r.json()).catch(() => []),
-        fetch(FACULTY_API).then(r => r.json()).catch(() => []),
-        fetch(STUDENTS_API).then(r => r.json()).catch(() => []),
+        authFetch(`${POSTS_API}?includeDrafts=true`).then(r => r.json()).catch(() => []),
+        authFetch(READING_API).then(r => r.json()).catch(() => []),
+        authFetch(COURSES_API).then(r => r.json()).catch(() => []),
+        authFetch(FACULTY_API).then(r => r.json()).catch(() => []),
+        authFetch(STUDENTS_API).then(r => r.json()).catch(() => []),
       ])
 
       const posts = Array.isArray(resPosts) ? resPosts : []
@@ -63,28 +66,45 @@ export default function AdminPanel() {
     })
   }
 
+  const handleLogout = () => {
+    clearToken()
+    navigate('/admin-login', { replace: true })
+  }
+
   return (
     <div className="admin-dashboard-container">
       {/* ── Admin Top Navigation Bar ─────────────────────────────── */}
       <header className="admin-navbar">
-        <div className="admin-navbar-inner">
-          <div className="admin-nav-left">
-            <Link to="/admin" className="admin-nav-brand">
-              <img src="/AIFES_logo.png" alt="AIFES Lab" className="admin-nav-logo" />
-            </Link>
-          </div>
+        <div className="navbar-inner">
+          <Link to="/" className="navbar-brand">
+            <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
+          </Link>
 
-          <div className="admin-nav-center">
-            <h1 className="admin-nav-title">AIFES Lab</h1>
-          </div>
-
-          <div className="admin-nav-right">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
             <Link to="/" className="admin-nav-site-link">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               <span>Back to Website</span>
             </Link>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="admin-logout-btn"
+              title="Sign out"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Logout</span>
+            </button>
+            <div className="navbar-right-brand" style={{ margin: 0 }}>
+              <div className="navbar-sp-wrap">
+                <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -94,6 +114,19 @@ export default function AdminPanel() {
         {/* Left Sidebar */}
         <aside className="admin-sidebar">
           <div className="admin-sidebar-section">
+            <div
+              className="admin-sidebar-heading"
+              style={{
+                fontSize: '0.85rem',
+                fontWeight: 800,
+                color: 'var(--text-1)',
+                marginBottom: '1rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Dashboard
+            </div>
             <nav className="admin-sidebar-nav">
               {/* 1. Education */}
               <button

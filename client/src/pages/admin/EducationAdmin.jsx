@@ -46,7 +46,7 @@ export default function EducationAdmin({ onDataChange }) {
         }
       }
     } catch {
-      setError('Could not connect to courses database. Ensure backend is running.')
+      setError('Could not fetch courses. Ensure server is running.')
     }
   }
 
@@ -98,7 +98,8 @@ export default function EducationAdmin({ onDataChange }) {
         ? course.instructors.map(i => ({ name: i.name || '', designation: i.designation || '', image: i.image || '' }))
         : [{ name: '', designation: '', image: '' }]
     )
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    const el = document.getElementById('course-form-card')
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const handleCancelEditCourse = () => {
@@ -155,7 +156,7 @@ export default function EducationAdmin({ onDataChange }) {
         }
         const created = await res.json()
         handleCancelEditCourse()
-        notifySuccess(`Course "${payload.title}" published successfully to DB!`)
+        notifySuccess(`Course "${payload.title}" published successfully!`)
         if (created.id) setSelectedCourseId(created.id)
       }
       await fetchCourses()
@@ -170,7 +171,7 @@ export default function EducationAdmin({ onDataChange }) {
     if (!window.confirm('Are you sure you want to delete this course and all its materials?')) return
     try {
       await fetch(`${COURSES_API}/${courseId}`, { method: 'DELETE' })
-      notifySuccess('Course removed from database.')
+      notifySuccess('Course deleted successfully.')
       if (editingCourseId === courseId) handleCancelEditCourse()
       await fetchCourses()
     } catch {
@@ -330,9 +331,62 @@ export default function EducationAdmin({ onDataChange }) {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          PART 1: CREATE OR EDIT COURSE FORM
+          PART 1: ALL PUBLISHED COURSES (Top Section)
       ────────────────────────────────────────────────────────────── */}
       <div className="admin-card">
+        <h3 className="admin-card-title">
+          All Published Courses
+          <span className="admin-count">{courses.length}</span>
+        </h3>
+        {courses.length === 0 ? (
+          <p className="admin-empty">No courses found.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {courses.map(c => (
+              <div key={c.id} className="admin-post-row" style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 600, fontSize: '15px' }}>{c.title}</span>
+                    {c.courseId && (
+                      <span style={{ background: 'rgba(212,28,48,0.12)', color: '#d41c30', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 600 }}>
+                        {c.courseId}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
+                    <span><strong>Period:</strong> {c.startDate || '—'} to {c.endDate || '—'}</span>
+                    <span style={{ marginLeft: '16px' }}><strong>Instructors:</strong> {c.instructors?.length || 0}</span>
+                    <span style={{ marginLeft: '16px' }}><strong>Lectures:</strong> {c.materials?.length || 0}</span>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                  <button
+                    type="button"
+                    className="admin-btn-edit"
+                    onClick={() => handleEditCourseClick(c)}
+                    title="Edit Course"
+                  >
+                    Edit Course
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-btn-delete"
+                    onClick={() => handleDeleteCourse(c.id)}
+                    title="Delete Course"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ─────────────────────────────────────────────────────────────
+          PART 2: CREATE OR EDIT COURSE FORM
+      ────────────────────────────────────────────────────────────── */}
+      <div className="admin-card" id="course-form-card" style={{ marginTop: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <h3 className="admin-card-title" style={{ margin: 0 }}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -442,9 +496,9 @@ export default function EducationAdmin({ onDataChange }) {
                 type="button"
                 onClick={handleAddInstructor}
                 style={{
-                  background: 'rgba(217, 119, 6, 0.12)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(217, 119, 6, 0.3)',
+                  background: 'rgba(212, 28, 48, 0.12)',
+                  color: '#d41c30',
+                  border: '1px solid rgba(212, 28, 48, 0.3)',
                   borderRadius: '6px',
                   padding: '5px 12px',
                   fontSize: '13px',
@@ -501,30 +555,16 @@ export default function EducationAdmin({ onDataChange }) {
                   <label style={{ display: 'block', fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>
                     Image (Upload file or URL)
                   </label>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <div className="admin-input-upload-group">
                     <input
-                      className="admin-input"
+                      className="admin-input-upload-field"
                       type="text"
-                      placeholder="URL or Upload ->"
+                      placeholder="Upload image or image URL"
                       value={inst.image}
                       onChange={e => handleInstructorChange(idx, 'image', e.target.value)}
-                      style={{ flex: 1 }}
                     />
-                    <label
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        padding: '8px 12px',
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1px solid var(--border)',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        color: 'var(--text-primary)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      📁 File
+                    <label className="admin-input-upload-btn">
+                      Upload
                       <input
                         type="file"
                         accept="image/*"
@@ -651,28 +691,24 @@ export default function EducationAdmin({ onDataChange }) {
                       {m.resources && <span style={{ color: 'var(--accent)', marginLeft: '12px' }}>Resources: {m.resources}</span>}
                       {m.additionalInfo && <span style={{ color: 'var(--muted)', marginLeft: '12px' }}>Info: {m.additionalInfo}</span>}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleEditMaterialClick(m, mIdx)}
-                      style={{
-                        background: 'rgba(59, 130, 246, 0.12)',
-                        color: '#3b82f6',
-                        border: '1px solid rgba(59, 130, 246, 0.3)',
-                        borderRadius: '4px',
-                        padding: '4px 10px',
-                        fontSize: '12px',
-                        cursor: 'pointer',
-                      }}
-                      title="Edit Material"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-delete"
-                      onClick={() => handleDeleteMaterialFromCourse(currentSelectedCourse.id, mIdx)}
-                      title="Delete Material"
-                    >×</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                      <button
+                        type="button"
+                        className="admin-btn-edit admin-btn-sm"
+                        onClick={() => handleEditMaterialClick(m, mIdx)}
+                        title="Edit Material"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-btn-delete admin-btn-sm"
+                        onClick={() => handleDeleteMaterialFromCourse(currentSelectedCourse.id, mIdx)}
+                        title="Delete Material"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -691,9 +727,9 @@ export default function EducationAdmin({ onDataChange }) {
                 type="button"
                 onClick={handleAddMaterialRow}
                 style={{
-                  background: 'rgba(217, 119, 6, 0.12)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(217, 119, 6, 0.3)',
+                  background: 'rgba(212, 28, 48, 0.12)',
+                  color: '#d41c30',
+                  border: '1px solid rgba(212, 28, 48, 0.3)',
                   borderRadius: '6px',
                   padding: '5px 12px',
                   fontSize: '13px',
@@ -793,7 +829,7 @@ export default function EducationAdmin({ onDataChange }) {
                 type="button"
                 onClick={handleAddMaterialRow}
                 className="admin-submit"
-                style={{ background: 'transparent', border: '1px solid var(--accent)', color: 'var(--accent)' }}
+                style={{ background: 'transparent', border: '1px solid #d41c30', color: '#d41c30' }}
               >
                 Add More
               </button>
@@ -817,63 +853,6 @@ export default function EducationAdmin({ onDataChange }) {
         </form>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
-          PART 3: ALL PUBLISHED COURSES (with Edit & Delete)
-      ────────────────────────────────────────────────────────────── */}
-      <div className="admin-card" style={{ marginTop: '32px' }}>
-        <h3 className="admin-card-title">
-          All Published Courses in Database
-          <span className="admin-count">{courses.length}</span>
-        </h3>
-        {courses.length === 0 ? (
-          <p className="admin-empty">No courses found in database.</p>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {courses.map(c => (
-              <div key={c.id} className="admin-post-row" style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontWeight: 600, fontSize: '15px' }}>{c.title}</span>
-                    {c.courseId && (
-                      <span style={{ background: 'rgba(217,119,6,0.15)', color: 'var(--accent)', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 600 }}>
-                        {c.courseId}
-                      </span>
-                    )}
-                  </div>
-                  <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
-                    <span><strong>Period:</strong> {c.startDate || '—'} to {c.endDate || '—'}</span>
-                    <span style={{ marginLeft: '16px' }}><strong>Instructors:</strong> {c.instructors?.length || 0}</span>
-                    <span style={{ marginLeft: '16px' }}><strong>Lectures:</strong> {c.materials?.length || 0}</span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleEditCourseClick(c)}
-                  style={{
-                    background: 'rgba(59, 130, 246, 0.12)',
-                    color: '#3b82f6',
-                    border: '1px solid rgba(59, 130, 246, 0.3)',
-                    borderRadius: '6px',
-                    padding: '6px 14px',
-                    fontSize: '13px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                  }}
-                  title="Edit Course"
-                >
-                  Edit Course
-                </button>
-                <button
-                  type="button"
-                  className="admin-delete"
-                  onClick={() => handleDeleteCourse(c.id)}
-                  title="Delete Course"
-                >×</button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   )
 }

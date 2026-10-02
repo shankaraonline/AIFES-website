@@ -3,7 +3,8 @@ import {
   POSTS_API,
   formatDate,
   readFileAsBase64,
-  LinkedInIcon
+  LinkedInIcon,
+  authFetch
 } from './adminUtils'
 
 export default function EventsAdmin({ onDataChange }) {
@@ -46,7 +47,7 @@ export default function EventsAdmin({ onDataChange }) {
         }
       }
     } catch {
-      setError('Could not connect to events database.')
+      setError('Could not fetch events. Ensure server is running.')
     }
   }
 
@@ -195,7 +196,7 @@ export default function EventsAdmin({ onDataChange }) {
 
     try {
       if (editingPostId) {
-        const res = await fetch(`${POSTS_API}/${editingPostId}`, {
+        const res = await authFetch(`${POSTS_API}/${editingPostId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -208,7 +209,7 @@ export default function EventsAdmin({ onDataChange }) {
           `Event "${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
         )
       } else {
-        const res = await fetch(POSTS_API, {
+        const res = await authFetch(POSTS_API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -233,7 +234,7 @@ export default function EventsAdmin({ onDataChange }) {
   const handleTogglePublishPost = async (item) => {
     try {
       const newStatus = !item.published
-      const res = await fetch(`${POSTS_API}/${item.id}`, {
+      const res = await authFetch(`${POSTS_API}/${item.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ published: newStatus }),
@@ -251,7 +252,7 @@ export default function EventsAdmin({ onDataChange }) {
   const handleDeletePost = async (id) => {
     if (!window.confirm('Delete this event?')) return
     try {
-      await fetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
+      await authFetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
       notifySuccess('Event removed.')
       if (editingPostId === id) handleCancelEditEvent()
       await fetchEvents()
@@ -274,8 +275,188 @@ export default function EventsAdmin({ onDataChange }) {
         </p>
       </div>
 
+      {/* LIST OF EVENTS (Top Section) */}
+      <div className="admin-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h3 className="admin-card-title" style={{ margin: 0 }}>
+            <span>Listed Events</span>
+            <span className="admin-count">{events.length}</span>
+          </h3>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>
+            Click <strong>Publish</strong> to show on the website, or <strong>Unpublish</strong> to hide.
+          </p>
+        </div>
+
+        {events.length === 0 ? (
+          <p className="admin-empty">No events created yet. Use the form below to add an event.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {events.map((p) => {
+              const isPublished = p.published !== false
+              const schedules = Array.isArray(p.schedules) && p.schedules.length > 0
+                ? p.schedules
+                : [{ date: p.date, time: '' }]
+
+              return (
+                <div
+                  key={p.id}
+                  style={{
+                    background: '#ffffff',
+                    border: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    padding: '16px 20px',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '16px',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+                  }}
+                >
+                  <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flex: '1 1 340px' }}>
+                    {/* Banner Thumbnail */}
+                    {p.banner ? (
+                      <img
+                        src={p.banner}
+                        alt={p.title}
+                        style={{
+                          width: '90px',
+                          height: '54px',
+                          borderRadius: '6px',
+                          objectFit: 'cover',
+                          flexShrink: 0,
+                          border: '1px solid var(--border)',
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: '90px',
+                          height: '54px',
+                          borderRadius: '6px',
+                          background: '#f1f5f9',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '12px',
+                          color: 'var(--muted)',
+                          flexShrink: 0,
+                          border: '1px dashed #cbd5e1',
+                        }}
+                      >
+                        No Banner
+                      </div>
+                    )}
+
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                        {/* Status Badge */}
+                        {isPublished ? (
+                          <span
+                            style={{
+                              background: '#dcfce7',
+                              color: '#15803d',
+                              border: '1px solid #86efac',
+                              padding: '2px 8px',
+                              borderRadius: '99px',
+                              fontSize: '11px',
+                              fontWeight: 700,
+                            }}
+                          >
+                            ● Published
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              background: '#fce8ea',
+                              color: '#d41c30',
+                              border: '1px solid rgba(212, 28, 48, 0.3)',
+                              padding: '2px 8px',
+                              borderRadius: '99px',
+                              fontSize: '11px',
+                              fontWeight: 700,
+                            }}
+                          >
+                            ○ Draft (Hidden)
+                          </span>
+                        )}
+
+                        <h4
+                          style={{
+                            fontSize: '15px',
+                            fontWeight: 700,
+                            color: 'var(--text-1)',
+                            margin: 0,
+                          }}
+                        >
+                          {p.title}
+                        </h4>
+                      </div>
+
+                      {/* Schedule & Location */}
+                      <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                        <span>
+                          📅 {schedules.map(s => formatDate(s.date) + (s.time ? ` (${s.time})` : '')).join(' · ')}
+                        </span>
+                        {p.location && <span>📍 {p.location}</span>}
+                        {p.hasGuests && p.guests && p.guests.length > 0 && (
+                          <span>👥 {p.guests.length} Guest(s)</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    {/* Toggle Publish / Unpublish */}
+                    <button
+                      type="button"
+                      onClick={() => handleTogglePublishPost(p)}
+                      style={{
+                        background: isPublished ? '#f1f5f9' : '#16a34a',
+                        color: isPublished ? '#475569' : '#ffffff',
+                        border: isPublished ? '1px solid #cbd5e1' : 'none',
+                        padding: '6px 14px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      title={isPublished ? 'Unpublish and hide from website' : 'Publish and display on website'}
+                    >
+                      {isPublished ? 'Unpublish' : 'Publish'}
+                    </button>
+
+                    {/* Edit Button */}
+                    <button
+                      type="button"
+                      className="admin-btn-edit"
+                      onClick={() => handleEditEvent(p)}
+                      title="Edit Event"
+                    >
+                      Edit
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      type="button"
+                      className="admin-btn-delete"
+                      onClick={() => handleDeletePost(p.id)}
+                      title="Delete Event"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
       {/* FORM TO LIST EVENTS */}
-      <div className="admin-card" id="event-admin-card">
+      <div className="admin-card" id="event-admin-card" style={{ marginTop: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div>
             <h3 className="admin-card-title" style={{ margin: 0 }}>
@@ -318,9 +499,9 @@ export default function EventsAdmin({ onDataChange }) {
               <label className="admin-label" style={{ margin: 0 }}>Event Banner</label>
               <span
                 style={{
-                  background: 'rgba(217, 119, 6, 0.1)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(217, 119, 6, 0.25)',
+                  background: 'rgba(212, 28, 48, 0.1)',
+                  color: '#d41c30',
+                  border: '1px solid rgba(212, 28, 48, 0.25)',
                   padding: '2px 8px',
                   borderRadius: '4px',
                   fontSize: '11px',
@@ -643,65 +824,29 @@ export default function EventsAdmin({ onDataChange }) {
                         {/* Image */}
                         <div>
                           <label style={{ display: 'block', fontSize: '11px', color: 'var(--muted)', marginBottom: '3px' }}>
-                            Guest Image
+                            Guest Image (optional)
                           </label>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            {guest.image ? (
-                              <img
-                                src={guest.image}
-                                alt={guest.name || 'Guest'}
-                                style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }}
-                              />
-                            ) : (
-                              <div
-                                style={{
-                                  width: '38px',
-                                  height: '38px',
-                                  borderRadius: '50%',
-                                  background: '#f1f5f9',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  fontSize: '14px',
-                                  color: 'var(--muted)',
-                                }}
-                              >
-                                👤
-                              </div>
-                            )}
+                          <div className="admin-input-upload-group">
                             <input
-                              type="file"
-                              accept="image/*"
-                              id={`guest-img-${gIdx}`}
-                              style={{ display: 'none' }}
-                              onChange={(e) => {
-                                if (e.target.files && e.target.files[0]) {
-                                  handleGuestImageUpload(gIdx, e.target.files[0])
-                                }
-                              }}
-                            />
-                            <label
-                              htmlFor={`guest-img-${gIdx}`}
-                              style={{
-                                padding: '4px 10px',
-                                background: '#f8fafc',
-                                border: '1px solid var(--border)',
-                                borderRadius: '6px',
-                                fontSize: '12px',
-                                cursor: 'pointer',
-                                whiteSpace: 'nowrap',
-                              }}
-                            >
-                              Browse
-                            </label>
-                            <input
-                              className="admin-input"
+                              className="admin-input-upload-field"
                               type="text"
-                              style={{ fontSize: '12px', padding: '6px 10px' }}
-                              placeholder="Or paste URL"
+                              placeholder="Upload image or image URL"
                               value={guest.image}
                               onChange={(e) => handleGuestChange(gIdx, 'image', e.target.value)}
                             />
+                            <label className="admin-input-upload-btn">
+                              Upload
+                              <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={(e) => {
+                                  if (e.target.files && e.target.files[0]) {
+                                    handleGuestImageUpload(gIdx, e.target.files[0])
+                                  }
+                                }}
+                              />
+                            </label>
                           </div>
                         </div>
 
@@ -803,7 +948,7 @@ export default function EventsAdmin({ onDataChange }) {
               onClick={() => handleSaveEvent(true)}
               disabled={loading}
               style={{
-                background: 'var(--accent, #d97706)',
+                background: '#d41c30',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
@@ -814,7 +959,7 @@ export default function EventsAdmin({ onDataChange }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: '0 2px 8px rgba(217, 119, 6, 0.25)',
+                boxShadow: '0 2px 8px rgba(212, 28, 48, 0.25)',
               }}
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -843,195 +988,6 @@ export default function EventsAdmin({ onDataChange }) {
             )}
           </div>
         </form>
-      </div>
-
-      {/* LIST OF EVENTS */}
-      <div className="admin-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 className="admin-card-title" style={{ margin: 0 }}>
-            <span>Listed Events</span>
-            <span className="admin-count">{events.length}</span>
-          </h3>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>
-            Click <strong>Publish</strong> to show on the website, or <strong>Unpublish</strong> to hide.
-          </p>
-        </div>
-
-        {events.length === 0 ? (
-          <p className="admin-empty">No events created yet. Use the form above to add an event.</p>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {events.map((p) => {
-              const isPublished = p.published !== false
-              const schedules = Array.isArray(p.schedules) && p.schedules.length > 0
-                ? p.schedules
-                : [{ date: p.date, time: '' }]
-
-              return (
-                <div
-                  key={p.id}
-                  style={{
-                    background: '#ffffff',
-                    border: '1px solid var(--border)',
-                    borderRadius: '12px',
-                    padding: '16px 20px',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '16px',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                  }}
-                >
-                  <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flex: '1 1 340px' }}>
-                    {/* Banner Thumbnail */}
-                    {p.banner ? (
-                      <img
-                        src={p.banner}
-                        alt={p.title}
-                        style={{
-                          width: '90px',
-                          height: '54px',
-                          borderRadius: '6px',
-                          objectFit: 'cover',
-                          flexShrink: 0,
-                          border: '1px solid var(--border)',
-                        }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: '90px',
-                          height: '54px',
-                          borderRadius: '6px',
-                          background: '#f1f5f9',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '12px',
-                          color: 'var(--muted)',
-                          flexShrink: 0,
-                          border: '1px dashed #cbd5e1',
-                        }}
-                      >
-                        No Banner
-                      </div>
-                    )}
-
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
-                        {/* Status Badge */}
-                        {isPublished ? (
-                          <span
-                            style={{
-                              background: '#dcfce7',
-                              color: '#15803d',
-                              border: '1px solid #86efac',
-                              padding: '2px 8px',
-                              borderRadius: '99px',
-                              fontSize: '11px',
-                              fontWeight: 700,
-                            }}
-                          >
-                            ● Published
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              background: '#fef3c7',
-                              color: '#b45309',
-                              border: '1px solid #fde68a',
-                              padding: '2px 8px',
-                              borderRadius: '99px',
-                              fontSize: '11px',
-                              fontWeight: 700,
-                            }}
-                          >
-                            ○ Draft (Hidden)
-                          </span>
-                        )}
-
-                        <h4
-                          style={{
-                            fontSize: '15px',
-                            fontWeight: 700,
-                            color: 'var(--text-1)',
-                            margin: 0,
-                          }}
-                        >
-                          {p.title}
-                        </h4>
-                      </div>
-
-                      {/* Schedule & Location */}
-                      <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                        <span>
-                          📅 {schedules.map(s => formatDate(s.date) + (s.time ? ` (${s.time})` : '')).join(' · ')}
-                        </span>
-                        {p.location && <span>📍 {p.location}</span>}
-                        {p.hasGuests && p.guests && p.guests.length > 0 && (
-                          <span>👥 {p.guests.length} Guest(s)</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                    {/* Toggle Publish / Unpublish */}
-                    <button
-                      type="button"
-                      onClick={() => handleTogglePublishPost(p)}
-                      style={{
-                        background: isPublished ? '#f1f5f9' : '#16a34a',
-                        color: isPublished ? '#475569' : '#ffffff',
-                        border: isPublished ? '1px solid #cbd5e1' : 'none',
-                        padding: '6px 14px',
-                        borderRadius: '6px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                      title={isPublished ? 'Unpublish and hide from website' : 'Publish and display on website'}
-                    >
-                      {isPublished ? 'Unpublish' : 'Publish'}
-                    </button>
-
-                    {/* Edit Button */}
-                    <button
-                      type="button"
-                      onClick={() => handleEditEvent(p)}
-                      style={{
-                        background: 'rgba(59, 130, 246, 0.12)',
-                        color: '#3b82f6',
-                        border: '1px solid rgba(59, 130, 246, 0.3)',
-                        borderRadius: '6px',
-                        padding: '6px 14px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    {/* Delete Button */}
-                    <button
-                      type="button"
-                      className="admin-delete"
-                      onClick={() => handleDeletePost(p.id)}
-                      title="Delete Event"
-                      style={{ margin: 0 }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
       </div>
     </div>
   )

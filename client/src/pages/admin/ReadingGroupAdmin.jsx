@@ -61,7 +61,7 @@ export default function ReadingGroupAdmin({ onDataChange }) {
         onDataChange('reading-group', mats.length + facs.length + stus.length)
       }
     } catch {
-      setError('Could not connect to reading group database.')
+      setError('Could not fetch reading group data. Ensure server is running.')
     }
   }
 
@@ -357,30 +357,16 @@ export default function ReadingGroupAdmin({ onDataChange }) {
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px' }}>
             <div className="admin-field">
               <label className="admin-label">Image Upload (File or URL)</label>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="admin-input-upload-group">
                 <input
-                  className="admin-input"
+                  className="admin-input-upload-field"
                   type="text"
-                  placeholder="Image URL or upload ->"
+                  placeholder="Upload image or image URL"
                   value={facImage}
                   onChange={e => setFacImage(e.target.value)}
-                  style={{ flex: 1 }}
                 />
-                <label
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '8px 12px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    color: 'var(--text-primary)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  📁 Upload
+                <label className="admin-input-upload-btn">
+                  Upload
                   <input
                     type="file"
                     accept="image/*"
@@ -467,27 +453,24 @@ export default function ReadingGroupAdmin({ onDataChange }) {
                       </a>
                     )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleEditFaculty(f)}
-                    style={{
-                      background: 'rgba(59, 130, 246, 0.12)',
-                      color: '#3b82f6',
-                      border: '1px solid rgba(59, 130, 246, 0.3)',
-                      borderRadius: '4px',
-                      padding: '4px 10px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-delete"
-                    onClick={() => handleDeleteFaculty(f.id)}
-                    title="Delete"
-                  >×</button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    <button
+                      type="button"
+                      className="admin-btn-edit admin-btn-sm"
+                      onClick={() => handleEditFaculty(f)}
+                      title="Edit Faculty"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-btn-delete admin-btn-sm"
+                      onClick={() => handleDeleteFaculty(f.id)}
+                      title="Delete Faculty"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -556,30 +539,16 @@ export default function ReadingGroupAdmin({ onDataChange }) {
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px' }}>
             <div className="admin-field">
               <label className="admin-label">Image Upload (Optional)</label>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="admin-input-upload-group">
                 <input
-                  className="admin-input"
+                  className="admin-input-upload-field"
                   type="text"
-                  placeholder="Image URL or upload ->"
+                  placeholder="Upload image or image URL"
                   value={stuImage}
                   onChange={e => setStuImage(e.target.value)}
-                  style={{ flex: 1 }}
                 />
-                <label
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '8px 12px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    color: 'var(--text-primary)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  📁 Upload
+                <label className="admin-input-upload-btn">
+                  Upload
                   <input
                     type="file"
                     accept="image/*"
@@ -682,27 +651,24 @@ export default function ReadingGroupAdmin({ onDataChange }) {
                       </a>
                     )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleEditStudent(s)}
-                    style={{
-                      background: 'rgba(59, 130, 246, 0.12)',
-                      color: '#3b82f6',
-                      border: '1px solid rgba(59, 130, 246, 0.3)',
-                      borderRadius: '4px',
-                      padding: '4px 10px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-delete"
-                    onClick={() => handleDeleteStudent(s.id)}
-                    title="Delete"
-                  >×</button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    <button
+                      type="button"
+                      className="admin-btn-edit admin-btn-sm"
+                      onClick={() => handleEditStudent(s)}
+                      title="Edit Student"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-btn-delete admin-btn-sm"
+                      onClick={() => handleDeleteStudent(s.id)}
+                      title="Delete Student"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -827,27 +793,24 @@ export default function ReadingGroupAdmin({ onDataChange }) {
                       </a>
                     )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleEditReadingMat(m)}
-                    style={{
-                      background: 'rgba(59, 130, 246, 0.12)',
-                      color: '#3b82f6',
-                      border: '1px solid rgba(59, 130, 246, 0.3)',
-                      borderRadius: '4px',
-                      padding: '4px 10px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-delete"
-                    onClick={() => handleDeleteReadingMat(m.id)}
-                    title="Delete"
-                  >×</button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    <button
+                      type="button"
+                      className="admin-btn-edit admin-btn-sm"
+                      onClick={() => handleEditReadingMat(m)}
+                      title="Edit Material"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-btn-delete admin-btn-sm"
+                      onClick={() => handleDeleteReadingMat(m.id)}
+                      title="Delete Material"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
