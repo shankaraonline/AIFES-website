@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { POSTS_API, formatDate } from './adminUtils'
+import { POSTS_API, formatDate, authFetch } from './adminUtils'
 
 export default function NewsAdmin({ onDataChange }) {
   const [posts, setPosts] = useState([])
@@ -77,7 +77,7 @@ export default function NewsAdmin({ onDataChange }) {
 
     try {
       if (editingNewsId) {
-        const res = await fetch(`${POSTS_API}/${editingNewsId}`, {
+        const res = await authFetch(`${POSTS_API}/${editingNewsId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -90,7 +90,7 @@ export default function NewsAdmin({ onDataChange }) {
           `News "${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
         )
       } else {
-        const res = await fetch(POSTS_API, {
+        const res = await authFetch(POSTS_API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -115,7 +115,7 @@ export default function NewsAdmin({ onDataChange }) {
   const handleTogglePublishNews = async (item) => {
     try {
       const newStatus = !item.published
-      const res = await fetch(`${POSTS_API}/${item.id}`, {
+      const res = await authFetch(`${POSTS_API}/${item.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ published: newStatus }),
@@ -133,7 +133,7 @@ export default function NewsAdmin({ onDataChange }) {
   const handleDeletePost = async (id) => {
     if (!window.confirm('Delete this news post?')) return
     try {
-      await fetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
+      await authFetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
       notifySuccess('News item removed.')
       if (editingNewsId === id) handleCancelEditNews()
       await fetchNews()
@@ -210,9 +210,9 @@ export default function NewsAdmin({ onDataChange }) {
                       ) : (
                         <span
                           style={{
-                            background: '#fef3c7',
-                            color: '#b45309',
-                            border: '1px solid #fde68a',
+                            background: '#fce8ea',
+                            color: '#d41c30',
+                            border: '1px solid rgba(212, 28, 48, 0.3)',
                             padding: '2px 8px',
                             borderRadius: '99px',
                             fontSize: '11px',
@@ -419,7 +419,7 @@ export default function NewsAdmin({ onDataChange }) {
               onClick={() => handleSaveNews(true)}
               disabled={loading}
               style={{
-                background: 'var(--accent, #d97706)',
+                background: '#d41c30',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
@@ -430,7 +430,7 @@ export default function NewsAdmin({ onDataChange }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: '0 2px 8px rgba(217, 119, 6, 0.25)',
+                boxShadow: '0 2px 8px rgba(212, 28, 48, 0.25)',
               }}
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

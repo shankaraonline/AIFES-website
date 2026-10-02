@@ -348,7 +348,7 @@ export default function EducationAdmin({ onDataChange }) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontWeight: 600, fontSize: '15px' }}>{c.title}</span>
                     {c.courseId && (
-                      <span style={{ background: 'rgba(217,119,6,0.15)', color: 'var(--accent)', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 600 }}>
+                      <span style={{ background: 'rgba(212,28,48,0.12)', color: '#d41c30', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 600 }}>
                         {c.courseId}
                       </span>
                     )}
@@ -496,9 +496,9 @@ export default function EducationAdmin({ onDataChange }) {
                 type="button"
                 onClick={handleAddInstructor}
                 style={{
-                  background: 'rgba(217, 119, 6, 0.12)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(217, 119, 6, 0.3)',
+                  background: 'rgba(212, 28, 48, 0.12)',
+                  color: '#d41c30',
+                  border: '1px solid rgba(212, 28, 48, 0.3)',
                   borderRadius: '6px',
                   padding: '5px 12px',
                   fontSize: '13px',
@@ -727,9 +727,9 @@ export default function EducationAdmin({ onDataChange }) {
                 type="button"
                 onClick={handleAddMaterialRow}
                 style={{
-                  background: 'rgba(217, 119, 6, 0.12)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(217, 119, 6, 0.3)',
+                  background: 'rgba(212, 28, 48, 0.12)',
+                  color: '#d41c30',
+                  border: '1px solid rgba(212, 28, 48, 0.3)',
                   borderRadius: '6px',
                   padding: '5px 12px',
                   fontSize: '13px',
@@ -829,7 +829,7 @@ export default function EducationAdmin({ onDataChange }) {
                 type="button"
                 onClick={handleAddMaterialRow}
                 className="admin-submit"
-                style={{ background: 'transparent', border: '1px solid var(--accent)', color: 'var(--accent)' }}
+                style={{ background: 'transparent', border: '1px solid #d41c30', color: '#d41c30' }}
               >
                 Add More
               </button>

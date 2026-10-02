@@ -68,7 +68,7 @@ function formatTableDate(dateStr) {
 
 export default function Education() {
   const [courses, setCourses] = useState([DEFAULT_COURSE])
-  const [openCourseIds, setOpenCourseIds] = useState({ [DEFAULT_COURSE.id]: true })
+  const [openCourseIds, setOpenCourseIds] = useState({})
 
   useEffect(() => {
     fetch(COURSES_API)
@@ -79,8 +79,6 @@ export default function Education() {
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setCourses(data)
-          // Open the first course by default
-          setOpenCourseIds({ [data[0].id]: true })
         }
       })
       .catch(() => {

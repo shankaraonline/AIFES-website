@@ -3,7 +3,8 @@ import {
   POSTS_API,
   formatDate,
   readFileAsBase64,
-  LinkedInIcon
+  LinkedInIcon,
+  authFetch
 } from './adminUtils'
 
 export default function EventsAdmin({ onDataChange }) {
@@ -195,7 +196,7 @@ export default function EventsAdmin({ onDataChange }) {
 
     try {
       if (editingPostId) {
-        const res = await fetch(`${POSTS_API}/${editingPostId}`, {
+        const res = await authFetch(`${POSTS_API}/${editingPostId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -208,7 +209,7 @@ export default function EventsAdmin({ onDataChange }) {
           `Event "${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
         )
       } else {
-        const res = await fetch(POSTS_API, {
+        const res = await authFetch(POSTS_API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -233,7 +234,7 @@ export default function EventsAdmin({ onDataChange }) {
   const handleTogglePublishPost = async (item) => {
     try {
       const newStatus = !item.published
-      const res = await fetch(`${POSTS_API}/${item.id}`, {
+      const res = await authFetch(`${POSTS_API}/${item.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ published: newStatus }),
@@ -251,7 +252,7 @@ export default function EventsAdmin({ onDataChange }) {
   const handleDeletePost = async (id) => {
     if (!window.confirm('Delete this event?')) return
     try {
-      await fetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
+      await authFetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
       notifySuccess('Event removed.')
       if (editingPostId === id) handleCancelEditEvent()
       await fetchEvents()
@@ -367,9 +368,9 @@ export default function EventsAdmin({ onDataChange }) {
                         ) : (
                           <span
                             style={{
-                              background: '#fef3c7',
-                              color: '#b45309',
-                              border: '1px solid #fde68a',
+                              background: '#fce8ea',
+                              color: '#d41c30',
+                              border: '1px solid rgba(212, 28, 48, 0.3)',
                               padding: '2px 8px',
                               borderRadius: '99px',
                               fontSize: '11px',
@@ -498,9 +499,9 @@ export default function EventsAdmin({ onDataChange }) {
               <label className="admin-label" style={{ margin: 0 }}>Event Banner</label>
               <span
                 style={{
-                  background: 'rgba(217, 119, 6, 0.1)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(217, 119, 6, 0.25)',
+                  background: 'rgba(212, 28, 48, 0.1)',
+                  color: '#d41c30',
+                  border: '1px solid rgba(212, 28, 48, 0.25)',
                   padding: '2px 8px',
                   borderRadius: '4px',
                   fontSize: '11px',
@@ -947,7 +948,7 @@ export default function EventsAdmin({ onDataChange }) {
               onClick={() => handleSaveEvent(true)}
               disabled={loading}
               style={{
-                background: 'var(--accent, #d97706)',
+                background: '#d41c30',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
@@ -958,7 +959,7 @@ export default function EventsAdmin({ onDataChange }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                boxShadow: '0 2px 8px rgba(217, 119, 6, 0.25)',
+                boxShadow: '0 2px 8px rgba(212, 28, 48, 0.25)',
               }}
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

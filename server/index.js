@@ -15,7 +15,27 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 // ── Middleware ──────────────────────────────────────────────────
-app.use(cors({ origin: '*' }))
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',   // Vite dev server
+  'http://localhost:4173',   // Vite preview
+  'http://localhost:3000',   // fallback
+  // Add your production domain below, e.g.:
+  // 'https://aifes.iith.ac.in',
+  // 'https://your-vercel-app.vercel.app',
+]
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (curl, Postman, server-to-server)
+    // only in development; in production you may want to block these too.
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error(`CORS: origin ${origin} not allowed`))
+    }
+  },
+  credentials: true,
+}))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ limit: '10mb', extended: true }))
 
@@ -250,7 +270,19 @@ app.post('/api/auth/verify', (req, res) => {
 // 1. POSTS ROUTES (/api/posts)
 // ────────────────────────────────────────────────────────────────
 app.get('/api/posts', async (req, res) => {
-  const includeDrafts = req.query.includeDrafts === 'true'
+  // Only allow draft access if a valid auth token is provided
+  let isAdmin = false
+  try {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+    if (token) {
+      jwt.verify(token, JWT_SECRET)
+      isAdmin = true
+    }
+  } catch {
+    isAdmin = false
+  }
+  const includeDrafts = req.query.includeDrafts === 'true' && isAdmin
 
   if (isMongoConnected) {
     try {
