@@ -63,14 +63,7 @@ export default async function handler(req, res) {
     // ── GET all students ──
     if (req.method === 'GET') {
       if (isDbConnected) {
-        let items = await ReadingStudent.find({}).sort({ createdAt: 1 })
-        if (items.length === 0) {
-          try {
-            items = await ReadingStudent.insertMany(INITIAL_STUDENTS)
-          } catch (seedErr) {
-            console.error('Seeding students error:', seedErr)
-          }
-        }
+        const items = await ReadingStudent.find({}).sort({ createdAt: 1 })
         return res.status(200).json(
           items.map((s) => ({
             id: String(s._id),

@@ -89,7 +89,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
   )
 
   if (req.method === 'OPTIONS') {
@@ -103,14 +103,7 @@ export default async function handler(req, res) {
     // ── GET all courses ──
     if (req.method === 'GET') {
       if (isDbConnected) {
-        let courses = await Course.find({}).sort({ createdAt: -1 })
-        if (courses.length === 0) {
-          try {
-            courses = await Course.insertMany([DEFAULT_INITIAL_COURSE])
-          } catch (seedErr) {
-            console.error('Seeding course error:', seedErr)
-          }
-        }
+        const courses = await Course.find({}).sort({ createdAt: -1 })
         return res.status(200).json(
           courses.map((c) => ({
             id: String(c._id),

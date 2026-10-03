@@ -67,7 +67,8 @@ function formatTableDate(dateStr) {
 }
 
 export default function Education() {
-  const [courses, setCourses] = useState([DEFAULT_COURSE])
+  const [courses, setCourses] = useState([])
+  const [fetched, setFetched] = useState(false)
   const [openCourseIds, setOpenCourseIds] = useState({})
 
   useEffect(() => {
@@ -77,12 +78,16 @@ export default function Education() {
         return res.json()
       })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setCourses(data)
+        } else {
+          setCourses([DEFAULT_COURSE])
         }
+        setFetched(true)
       })
       .catch(() => {
-        // Fallback to default
+        setCourses([DEFAULT_COURSE])
+        setFetched(true)
       })
   }, [])
 
@@ -107,7 +112,12 @@ export default function Education() {
 
       <section id="education" className="education-content-section">
         <div className="section-inner" style={{ paddingTop: '56px', paddingBottom: '72px' }}>
-          {courses.map((course) => {
+          {!fetched ? (
+            <p className="en-loading" style={{ textAlign: 'center' }}>Loading courses…</p>
+          ) : courses.length === 0 ? (
+            <p className="en-empty" style={{ textAlign: 'center' }}>No courses currently published.</p>
+          ) : (
+            courses.map((course) => {
             const isOpen = !!openCourseIds[course.id]
 
             return (
@@ -254,7 +264,7 @@ export default function Education() {
                 )}
               </div>
             )
-          })}
+          }))}
         </div>
       </section>
     </div>

@@ -19,16 +19,16 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5173',   // Vite dev server
   'http://localhost:4173',   // Vite preview
   'http://localhost:3000',   // fallback
-  // Add your production domain below, e.g.:
-  // 'https://aifes.iith.ac.in',
-  // 'https://your-vercel-app.vercel.app',
 ]
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (curl, Postman, server-to-server)
-    // only in development; in production you may want to block these too.
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+    if (
+      !origin ||
+      ALLOWED_ORIGINS.includes(origin) ||
+      origin.endsWith('.vercel.app') ||
+      origin.includes('iith.ac.in')
+    ) {
       callback(null, true)
     } else {
       callback(new Error(`CORS: origin ${origin} not allowed`))

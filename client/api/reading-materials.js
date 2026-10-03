@@ -56,7 +56,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
   )
 
   if (req.method === 'OPTIONS') {
@@ -70,14 +70,7 @@ export default async function handler(req, res) {
     // ── GET all reading materials ──
     if (req.method === 'GET') {
       if (isDbConnected) {
-        let items = await ReadingMaterial.find({}).sort({ createdAt: 1 })
-        if (items.length === 0) {
-          try {
-            items = await ReadingMaterial.insertMany(INITIAL_MATERIALS)
-          } catch (seedErr) {
-            console.error('Seeding reading materials error:', seedErr)
-          }
-        }
+        const items = await ReadingMaterial.find({}).sort({ createdAt: 1 })
         return res.status(200).json(
           items.map((m) => ({
             id: String(m._id),

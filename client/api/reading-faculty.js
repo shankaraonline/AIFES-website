@@ -48,7 +48,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
   )
 
   if (req.method === 'OPTIONS') {
@@ -62,14 +62,7 @@ export default async function handler(req, res) {
     // ── GET all faculty ──
     if (req.method === 'GET') {
       if (isDbConnected) {
-        let items = await ReadingFaculty.find({}).sort({ createdAt: 1 })
-        if (items.length === 0) {
-          try {
-            items = await ReadingFaculty.insertMany(INITIAL_FACULTY)
-          } catch (seedErr) {
-            console.error('Seeding faculty error:', seedErr)
-          }
-        }
+        const items = await ReadingFaculty.find({}).sort({ createdAt: 1 })
         return res.status(200).json(
           items.map((f) => ({
             id: String(f._id),

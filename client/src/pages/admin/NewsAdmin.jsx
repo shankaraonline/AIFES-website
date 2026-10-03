@@ -20,7 +20,7 @@ export default function NewsAdmin({ onDataChange }) {
 
   const fetchNews = async () => {
     try {
-      const res = await fetch(`${POSTS_API}?includeDrafts=true`)
+      const res = await authFetch(`${POSTS_API}?includeDrafts=true`)
       const data = await res.json()
       if (Array.isArray(data)) {
         setPosts(data)

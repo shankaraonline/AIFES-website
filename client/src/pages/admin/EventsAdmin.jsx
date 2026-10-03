@@ -37,7 +37,7 @@ export default function EventsAdmin({ onDataChange }) {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch(`${POSTS_API}?includeDrafts=true`)
+      const res = await authFetch(`${POSTS_API}?includeDrafts=true`)
       const data = await res.json()
       if (Array.isArray(data)) {
         setPosts(data)
@@ -252,12 +252,16 @@ export default function EventsAdmin({ onDataChange }) {
   const handleDeletePost = async (id) => {
     if (!window.confirm('Delete this event?')) return
     try {
-      await authFetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
+      const res = await authFetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || 'Failed to delete event.')
+      }
       notifySuccess('Event removed.')
       if (editingPostId === id) handleCancelEditEvent()
       await fetchEvents()
-    } catch {
-      setError('Failed to delete event.')
+    } catch (err) {
+      setError(err.message || 'Failed to delete event.')
     }
   }
 
