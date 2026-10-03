@@ -102,7 +102,7 @@ export default function ReadingGroup() {
           </>
         )}
         bgImage="/reading_group_hero.jpg"
-        bgPosition="center 30%"
+        bgPosition="center 42%"
         titleId="reading-group-heading"
         className="reading-group-hero"
       />
