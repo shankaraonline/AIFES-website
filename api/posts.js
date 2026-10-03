@@ -121,14 +121,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       if (isDbConnected) {
         const query = includeDrafts ? {} : { published: { $ne: false } }
-        let posts = await Post.find(query).sort({ date: -1 })
-        if (posts.length === 0 && includeDrafts) {
-          try {
-            posts = await Post.insertMany(memoryPosts)
-          } catch (seedErr) {
-            console.error('Initial seed error:', seedErr)
-          }
-        }
+        const posts = await Post.find(query).sort({ date: -1 })
         return res.status(200).json(
           posts.map((p) => ({
             id: String(p._id),

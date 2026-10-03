@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { COURSES_API, readFileAsBase64 } from './adminUtils'
+import { COURSES_API, readFileAsBase64, authFetch } from './adminUtils'
 
 export default function EducationAdmin({ onDataChange }) {
   const [courses, setCourses] = useState([])
@@ -34,7 +34,7 @@ export default function EducationAdmin({ onDataChange }) {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch(COURSES_API)
+      const res = await authFetch(COURSES_API)
       const data = await res.json()
       if (Array.isArray(data)) {
         setCourses(data)
@@ -132,26 +132,24 @@ export default function EducationAdmin({ onDataChange }) {
     try {
       if (editingCourseId) {
         // Update existing course
-        const res = await fetch(`${COURSES_API}/${editingCourseId}`, {
+        const res = await authFetch(`${COURSES_API}/${editingCourseId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
         if (!res.ok) {
-          const d = await res.json()
+          const d = await res.json().catch(() => ({}))
           throw new Error(d.error || 'Failed to update course.')
         }
         notifySuccess(`Course "${payload.title}" updated successfully!`)
         handleCancelEditCourse()
       } else {
         // Create new course
-        const res = await fetch(COURSES_API, {
+        const res = await authFetch(COURSES_API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...payload, materials: [] }),
         })
         if (!res.ok) {
-          const d = await res.json()
+          const d = await res.json().catch(() => ({}))
           throw new Error(d.error || 'Failed to save course.')
         }
         const created = await res.json()
@@ -170,12 +168,16 @@ export default function EducationAdmin({ onDataChange }) {
   const handleDeleteCourse = async (courseId) => {
     if (!window.confirm('Are you sure you want to delete this course and all its materials?')) return
     try {
-      await fetch(`${COURSES_API}/${courseId}`, { method: 'DELETE' })
+      const res = await authFetch(`${COURSES_API}/${courseId}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || 'Failed to delete course.')
+      }
       notifySuccess('Course deleted successfully.')
       if (editingCourseId === courseId) handleCancelEditCourse()
       await fetchCourses()
-    } catch {
-      setError('Failed to delete course.')
+    } catch (err) {
+      setError(err.message || 'Failed to delete course.')
     }
   }
 
@@ -248,14 +250,13 @@ export default function EducationAdmin({ onDataChange }) {
           additionalInfo: row.additionalInfo.trim(),
         }
 
-        const res = await fetch(`${COURSES_API}/${selectedCourseId}`, {
+        const res = await authFetch(`${COURSES_API}/${selectedCourseId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ materials: updatedMaterials }),
         })
 
         if (!res.ok) {
-          const d = await res.json()
+          const d = await res.json().catch(() => ({}))
           throw new Error(d.error || 'Failed to update course material.')
         }
 
@@ -279,9 +280,8 @@ export default function EducationAdmin({ onDataChange }) {
       setError('')
 
       try {
-        const res = await fetch(COURSES_API, {
+        const res = await authFetch(COURSES_API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'add-materials',
             courseId: selectedCourseId,
@@ -290,7 +290,7 @@ export default function EducationAdmin({ onDataChange }) {
         })
 
         if (!res.ok) {
-          const d = await res.json()
+          const d = await res.json().catch(() => ({}))
           throw new Error(d.error || 'Failed to save course materials.')
         }
 
@@ -307,12 +307,16 @@ export default function EducationAdmin({ onDataChange }) {
 
   const handleDeleteMaterialFromCourse = async (courseId, matIdx) => {
     try {
-      await fetch(`${COURSES_API}/${courseId}?materialIndex=${matIdx}`, { method: 'DELETE' })
+      const res = await authFetch(`${COURSES_API}/${courseId}?materialIndex=${matIdx}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || 'Failed to delete material from course.')
+      }
       notifySuccess('Material deleted from course.')
       if (editingMaterialIdx === matIdx) handleCancelEditMaterial()
       await fetchCourses()
-    } catch {
-      setError('Failed to delete material from course.')
+    } catch (err) {
+      setError(err.message || 'Failed to delete material from course.')
     }
   }
 

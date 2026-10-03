@@ -3,6 +3,30 @@
   "outputDirectory": "client/dist",
   "rewrites": [
     {
+      "source": "/api/courses/:id",
+      "destination": "/api/courses.js?id=:id"
+    },
+    {
+      "source": "/api/posts/:id",
+      "destination": "/api/posts.js?id=:id"
+    },
+    {
+      "source": "/api/reading-faculty/:id",
+      "destination": "/api/reading-faculty.js?id=:id"
+    },
+    {
+      "source": "/api/reading-students/:id",
+      "destination": "/api/reading-students.js?id=:id"
+    },
+    {
+      "source": "/api/reading-materials/:id",
+      "destination": "/api/reading-materials.js?id=:id"
+    },
+    {
+      "source": "/api/education-resources/:id",
+      "destination": "/api/education-resources.js?id=:id"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

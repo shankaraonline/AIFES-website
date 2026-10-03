@@ -85,9 +85,9 @@ export default function Events() {
         return r.json()
       })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           const filtered = data.filter((p) => p.tag === 'event' && p.published !== false)
-          setEvents(filtered.length > 0 ? filtered : DEFAULT_EVENTS)
+          setEvents(filtered)
         } else {
           setEvents(DEFAULT_EVENTS)
         }

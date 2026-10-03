@@ -4,7 +4,8 @@ import {
   FACULTY_API,
   STUDENTS_API,
   readFileAsBase64,
-  LinkedInIcon
+  LinkedInIcon,
+  authFetch,
 } from './adminUtils'
 
 export default function ReadingGroupAdmin({ onDataChange }) {
@@ -44,9 +45,9 @@ export default function ReadingGroupAdmin({ onDataChange }) {
   const fetchReadingGroupData = async () => {
     try {
       const [resMat, resFaculty, resStudents] = await Promise.all([
-        fetch(READING_API).then(r => r.json()).catch(() => []),
-        fetch(FACULTY_API).then(r => r.json()).catch(() => []),
-        fetch(STUDENTS_API).then(r => r.json()).catch(() => []),
+        authFetch(READING_API).then(r => r.json()).catch(() => []),
+        authFetch(FACULTY_API).then(r => r.json()).catch(() => []),
+        authFetch(STUDENTS_API).then(r => r.json()).catch(() => []),
       ])
 
       const mats = Array.isArray(resMat) ? resMat : []
@@ -103,20 +104,24 @@ export default function ReadingGroupAdmin({ onDataChange }) {
 
     try {
       if (editingFacultyId) {
-        const res = await fetch(FACULTY_API, {
+        const res = await authFetch(FACULTY_API, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: editingFacultyId, ...payload }),
         })
-        if (!res.ok) throw new Error('Failed to update faculty member.')
+        if (!res.ok) {
+          const d = await res.json().catch(() => ({}))
+          throw new Error(d.error || 'Failed to update faculty member.')
+        }
         notifySuccess(`Faculty "${payload.name}" updated successfully!`)
       } else {
-        const res = await fetch(FACULTY_API, {
+        const res = await authFetch(FACULTY_API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-        if (!res.ok) throw new Error('Failed to save faculty member.')
+        if (!res.ok) {
+          const d = await res.json().catch(() => ({}))
+          throw new Error(d.error || 'Failed to save faculty member.')
+        }
         notifySuccess(`Faculty "${payload.name}" saved successfully!`)
       }
       handleCancelFacultyEdit()
@@ -131,12 +136,16 @@ export default function ReadingGroupAdmin({ onDataChange }) {
   const handleDeleteFaculty = async (id) => {
     if (!window.confirm('Delete this faculty member?')) return
     try {
-      await fetch(`${FACULTY_API}/${id}`, { method: 'DELETE' })
+      const res = await authFetch(`${FACULTY_API}/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || 'Failed to delete faculty member.')
+      }
       notifySuccess('Faculty member removed.')
       if (editingFacultyId === id) handleCancelFacultyEdit()
       await fetchReadingGroupData()
-    } catch {
-      setError('Failed to delete faculty member.')
+    } catch (err) {
+      setError(err.message || 'Failed to delete faculty member.')
     }
   }
 
@@ -175,20 +184,24 @@ export default function ReadingGroupAdmin({ onDataChange }) {
 
     try {
       if (editingStudentId) {
-        const res = await fetch(STUDENTS_API, {
+        const res = await authFetch(STUDENTS_API, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: editingStudentId, ...payload }),
         })
-        if (!res.ok) throw new Error('Failed to update student.')
+        if (!res.ok) {
+          const d = await res.json().catch(() => ({}))
+          throw new Error(d.error || 'Failed to update student.')
+        }
         notifySuccess(`Student "${payload.name}" updated successfully!`)
       } else {
-        const res = await fetch(STUDENTS_API, {
+        const res = await authFetch(STUDENTS_API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-        if (!res.ok) throw new Error('Failed to save student.')
+        if (!res.ok) {
+          const d = await res.json().catch(() => ({}))
+          throw new Error(d.error || 'Failed to save student.')
+        }
         notifySuccess(`Student "${payload.name}" saved successfully!`)
       }
       handleCancelStudentEdit()
@@ -203,12 +216,16 @@ export default function ReadingGroupAdmin({ onDataChange }) {
   const handleDeleteStudent = async (id) => {
     if (!window.confirm('Delete this student?')) return
     try {
-      await fetch(`${STUDENTS_API}/${id}`, { method: 'DELETE' })
+      const res = await authFetch(`${STUDENTS_API}/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || 'Failed to delete student.')
+      }
       notifySuccess('Student removed.')
       if (editingStudentId === id) handleCancelStudentEdit()
       await fetchReadingGroupData()
-    } catch {
-      setError('Failed to delete student.')
+    } catch (err) {
+      setError(err.message || 'Failed to delete student.')
     }
   }
 
@@ -245,20 +262,24 @@ export default function ReadingGroupAdmin({ onDataChange }) {
 
     try {
       if (editingReadingMatId) {
-        const res = await fetch(READING_API, {
+        const res = await authFetch(READING_API, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: editingReadingMatId, ...payload }),
         })
-        if (!res.ok) throw new Error('Failed to update reading material.')
+        if (!res.ok) {
+          const d = await res.json().catch(() => ({}))
+          throw new Error(d.error || 'Failed to update reading material.')
+        }
         notifySuccess(`Material "${payload.name}" updated successfully!`)
       } else {
-        const res = await fetch(READING_API, {
+        const res = await authFetch(READING_API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-        if (!res.ok) throw new Error('Failed to save reading material.')
+        if (!res.ok) {
+          const d = await res.json().catch(() => ({}))
+          throw new Error(d.error || 'Failed to save reading material.')
+        }
         notifySuccess(`Material "${payload.name}" saved successfully!`)
       }
       handleCancelReadingMatEdit()
@@ -273,12 +294,16 @@ export default function ReadingGroupAdmin({ onDataChange }) {
   const handleDeleteReadingMat = async (id) => {
     if (!window.confirm('Delete this reading material?')) return
     try {
-      await fetch(`${READING_API}/${id}`, { method: 'DELETE' })
+      const res = await authFetch(`${READING_API}/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}))
+        throw new Error(d.error || 'Failed to delete reading material.')
+      }
       notifySuccess('Reading material removed.')
       if (editingReadingMatId === id) handleCancelReadingMatEdit()
       await fetchReadingGroupData()
-    } catch {
-      setError('Failed to delete reading material.')
+    } catch (err) {
+      setError(err.message || 'Failed to delete reading material.')
     }
   }
 

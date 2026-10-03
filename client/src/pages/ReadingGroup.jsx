@@ -59,25 +59,34 @@ export default function ReadingGroup() {
   useEffect(() => {
     // 1. Fetch Faculty
     fetch(FACULTY_API)
-      .then((res) => (res.ok ? res.json() : []))
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load faculty')
+        return res.json()
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setFaculty(data)
+        if (Array.isArray(data)) setFaculty(data)
       })
       .catch(() => {})
 
     // 2. Fetch Students
     fetch(STUDENTS_API)
-      .then((res) => (res.ok ? res.json() : []))
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load students')
+        return res.json()
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setStudents(data)
+        if (Array.isArray(data)) setStudents(data)
       })
       .catch(() => {})
 
     // 3. Fetch Materials
     fetch(MATERIALS_API)
-      .then((res) => (res.ok ? res.json() : []))
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load materials')
+        return res.json()
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setMaterials(data)
+        if (Array.isArray(data)) setMaterials(data)
       })
       .catch(() => {})
   }, [])

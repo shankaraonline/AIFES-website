@@ -47,7 +47,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,DELETE')
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
   )
 
   if (req.method === 'OPTIONS') {
@@ -61,14 +61,7 @@ export default async function handler(req, res) {
     // ── GET all education resources ──
     if (req.method === 'GET') {
       if (isDbConnected) {
-        let items = await EducationResource.find({}).sort({ _id: 1 })
-        if (items.length === 0) {
-          try {
-            items = await EducationResource.insertMany(INITIAL_RESOURCES)
-          } catch (seedErr) {
-            console.error('Seeding education resources error:', seedErr)
-          }
-        }
+        const items = await EducationResource.find({}).sort({ _id: 1 })
         return res.status(200).json(
           items.map((r) => ({
             id: String(r._id),

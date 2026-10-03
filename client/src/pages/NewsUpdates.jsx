@@ -42,9 +42,9 @@ export default function NewsUpdates() {
         return r.json()
       })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           const filtered = data.filter((p) => p.tag === 'news' && p.published !== false)
-          setNews(filtered.length > 0 ? filtered : DEFAULT_NEWS)
+          setNews(filtered)
         } else {
           setNews(DEFAULT_NEWS)
         }

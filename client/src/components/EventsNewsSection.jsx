@@ -50,9 +50,9 @@ export default function EventsNewsSection({ isPage = false }) {
         return r.json()
       })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           const filtered = data.filter((p) => p.published !== false)
-          setPosts(filtered.length > 0 ? filtered : DEFAULT_POSTS)
+          setPosts(filtered)
         } else {
           setPosts(DEFAULT_POSTS)
         }
