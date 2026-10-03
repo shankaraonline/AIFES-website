@@ -73,10 +73,39 @@ function LinkedInIcon({ size = 15 }) {
   )
 }
 
+function truncateWords(text, limit = 20) {
+  if (!text) return { text: '', isTruncated: false }
+  const words = text.trim().split(/\s+/)
+  if (words.length <= limit) {
+    return { text, isTruncated: false }
+  }
+  return {
+    text: words.slice(0, limit).join(' ') + '…',
+    isTruncated: true,
+  }
+}
+
 export default function Events() {
-  const [events, setEvents] = useState([])
-  const [fetched, setFetched] = useState(false)
+  const [events, setEvents] = useState(() => {
+    try {
+      const cached = localStorage.getItem('aifes_cached_events')
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      }
+    } catch {}
+    return DEFAULT_EVENTS
+  })
+  const [fetched, setFetched] = useState(true)
+  const [expandedIds, setExpandedIds] = useState({})
   const location = useLocation()
+
+  const toggleEvent = (id) => {
+    setExpandedIds((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
+  }
 
   useEffect(() => {
     fetch(API)
@@ -88,28 +117,36 @@ export default function Events() {
         if (Array.isArray(data)) {
           const filtered = data.filter((p) => p.tag === 'event' && p.published !== false)
           setEvents(filtered)
-        } else {
-          setEvents(DEFAULT_EVENTS)
+          try {
+            localStorage.setItem('aifes_cached_events', JSON.stringify(filtered))
+          } catch {}
         }
         setFetched(true)
       })
       .catch(() => {
-        setEvents(DEFAULT_EVENTS)
         setFetched(true)
       })
   }, [])
 
   useEffect(() => {
     if (location.hash) {
-      const id = location.hash.replace('#', '')
-      const el = document.getElementById(id)
-      if (el) {
-        setTimeout(() => {
+      const rawId = location.hash.replace('#', '')
+      const eventId = rawId.startsWith('event-') ? rawId.replace('event-', '') : rawId
+      if (eventId) {
+        setExpandedIds((prev) => ({
+          ...prev,
+          [eventId]: true,
+        }))
+      }
+      const timer = setTimeout(() => {
+        const el = document.getElementById(rawId) || document.getElementById(`event-${eventId}`)
+        if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' })
           el.classList.add('highlight-item')
           setTimeout(() => el.classList.remove('highlight-item'), 2500)
-        }, 150)
-      }
+        }
+      }, 200)
+      return () => clearTimeout(timer)
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' })
     }
@@ -132,7 +169,7 @@ export default function Events() {
           <div className="outreach-listing-header">
             <p className="section-label" style={{ justifyContent: 'center' }}>Academic &amp; Industry</p>
             <h2 className="section-title" style={{ textAlign: 'center' }}>Upcoming &amp; Past Events</h2>
-            <p className="section-sub" style={{ textAlign: 'center', margin: '0 auto 40px' }}>
+            <p className="section-sub" style={{ textAlign: 'center', margin: '0 auto 40px', maxWidth: '960px' }}>
               Explore our scheduled symposia, specialized masterclasses, and interactive panel sessions.
             </p>
           </div>
@@ -148,6 +185,11 @@ export default function Events() {
                   ? item.schedules
                   : [{ date: item.date, time: '' }]
                 const guests = Array.isArray(item.guests) ? item.guests : []
+                const overviewText = item.overview || item.description || item.summary || ''
+                const truncatedOverview = truncateWords(overviewText, 20)
+                const isExpanded = !!expandedIds[item.id]
+                const hasOtherContent = Boolean(item.hosts || (item.hasGuests && guests.length > 0))
+                const needsToggle = truncatedOverview.isTruncated || hasOtherContent
 
                 return (
                   <article
@@ -231,111 +273,140 @@ export default function Events() {
                       </h3>
 
                       {/* Event Overview */}
-                      {(item.overview || item.description || item.summary) && (
-                        <div style={{ marginBottom: '20px' }}>
+                      {overviewText && (
+                        <div style={{ marginBottom: isExpanded ? '16px' : '4px' }}>
                           <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--gold)', fontWeight: 700, marginBottom: '6px' }}>
                             Event Overview
                           </h4>
                           <p style={{ color: 'var(--text-2)', fontSize: '0.96rem', lineHeight: '1.7', margin: 0, whiteSpace: 'pre-line' }}>
-                            {item.overview || item.description || item.summary}
+                            {isExpanded ? overviewText : truncatedOverview.text}
                           </p>
                         </div>
                       )}
 
-                      {/* About the event hosts */}
-                      {item.hosts && (
-                        <div style={{ marginBottom: '20px', padding: '14px 18px', background: '#f8fafc', border: '1px solid var(--border)', borderRadius: '10px' }}>
-                          <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-1)', fontWeight: 700, marginBottom: '4px' }}>
-                            About the Event Hosts
-                          </h4>
-                          <p style={{ color: 'var(--text-2)', fontSize: '0.92rem', lineHeight: '1.6', margin: 0, whiteSpace: 'pre-line' }}>
-                            {item.hosts}
-                          </p>
+                      {/* Know More / Show Less Toggle Button */}
+                      {needsToggle && (
+                        <div style={{ marginTop: '8px', marginBottom: isExpanded ? '20px' : '0' }}>
+                          <button
+                            type="button"
+                            className="card-toggle-btn"
+                            onClick={() => toggleEvent(item.id)}
+                            aria-expanded={isExpanded}
+                          >
+                            {isExpanded ? (
+                              <>
+                                <span>Show Less</span>
+                                <span aria-hidden="true">↑</span>
+                              </>
+                            ) : (
+                              <>
+                                <span>Know More</span>
+                                <span aria-hidden="true">→</span>
+                              </>
+                            )}
+                          </button>
                         </div>
                       )}
 
-                      {/* Event Guests */}
-                      {item.hasGuests && guests.length > 0 && (
-                        <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
-                          <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-1)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span>Event Guests &amp; Speakers</span>
-                            <span style={{ fontSize: '11px', background: 'rgba(217, 119, 6, 0.12)', color: 'var(--accent)', padding: '2px 8px', borderRadius: '99px' }}>
-                              {guests.length}
-                            </span>
-                          </h4>
+                      {/* Expanded Details: Hosts and Guests */}
+                      {isExpanded && (
+                        <>
+                          {/* About the event hosts */}
+                          {item.hosts && (
+                            <div style={{ marginBottom: '20px', padding: '14px 18px', background: '#f8fafc', border: '1px solid var(--border)', borderRadius: '10px' }}>
+                              <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-1)', fontWeight: 700, marginBottom: '4px' }}>
+                                About the Event Hosts
+                              </h4>
+                              <p style={{ color: 'var(--text-2)', fontSize: '0.92rem', lineHeight: '1.6', margin: 0, whiteSpace: 'pre-line' }}>
+                                {item.hosts}
+                              </p>
+                            </div>
+                          )}
 
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '14px' }}>
-                            {guests.map((g, gIdx) => (
-                              <div
-                                key={gIdx}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '12px',
-                                  padding: '12px',
-                                  background: '#fafafa',
-                                  border: '1px solid var(--border)',
-                                  borderRadius: '10px',
-                                }}
-                              >
-                                {g.image ? (
-                                  <img
-                                    src={g.image}
-                                    alt={g.name}
-                                    style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--border)' }}
-                                  />
-                                ) : (
+                          {/* Event Guests */}
+                          {item.hasGuests && guests.length > 0 && (
+                            <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+                              <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-1)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span>Event Guests &amp; Speakers</span>
+                                <span style={{ fontSize: '11px', background: 'rgba(217, 119, 6, 0.12)', color: 'var(--accent)', padding: '2px 8px', borderRadius: '99px' }}>
+                                  {guests.length}
+                                </span>
+                              </h4>
+
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '14px' }}>
+                                {guests.map((g, gIdx) => (
                                   <div
+                                    key={gIdx}
                                     style={{
-                                      width: '48px',
-                                      height: '48px',
-                                      borderRadius: '50%',
-                                      background: 'rgba(217, 119, 6, 0.1)',
-                                      color: 'var(--accent)',
                                       display: 'flex',
                                       alignItems: 'center',
-                                      justifyContent: 'center',
-                                      fontSize: '18px',
-                                      flexShrink: 0,
+                                      gap: '12px',
+                                      padding: '12px',
+                                      background: '#fafafa',
+                                      border: '1px solid var(--border)',
+                                      borderRadius: '10px',
                                     }}
                                   >
-                                    👤
-                                  </div>
-                                )}
+                                    {g.image ? (
+                                      <img
+                                        src={g.image}
+                                        alt={g.name}
+                                        style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--border)' }}
+                                      />
+                                    ) : (
+                                      <div
+                                        style={{
+                                          width: '48px',
+                                          height: '48px',
+                                          borderRadius: '50%',
+                                          background: 'rgba(217, 119, 6, 0.1)',
+                                          color: 'var(--accent)',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          fontSize: '18px',
+                                          flexShrink: 0,
+                                        }}
+                                      >
+                                        👤
+                                      </div>
+                                    )}
 
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-1)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    {g.name}
-                                  </div>
-                                  {g.designation && (
-                                    <div style={{ fontSize: '0.8rem', color: 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                      {g.designation}
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                      <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-1)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        {g.name}
+                                      </div>
+                                      {g.designation && (
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                          {g.designation}
+                                        </div>
+                                      )}
+                                      {g.linkedin && (
+                                        <a
+                                          href={g.linkedin}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: '4px',
+                                            color: '#0077b5',
+                                            fontSize: '0.78rem',
+                                            textDecoration: 'none',
+                                            marginTop: '4px',
+                                            fontWeight: 600,
+                                          }}
+                                        >
+                                          <LinkedInIcon size={13} /> LinkedIn
+                                        </a>
+                                      )}
                                     </div>
-                                  )}
-                                  {g.linkedin && (
-                                    <a
-                                      href={g.linkedin}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      style={{
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '4px',
-                                        color: '#0077b5',
-                                        fontSize: '0.78rem',
-                                        textDecoration: 'none',
-                                        marginTop: '4px',
-                                        fontWeight: 600,
-                                      }}
-                                    >
-                                      <LinkedInIcon size={13} /> LinkedIn
-                                    </a>
-                                  )}
-                                </div>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        </div>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   </article>

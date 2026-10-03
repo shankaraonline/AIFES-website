@@ -174,12 +174,24 @@ export default function ReadingGroup() {
                   {students.map((s, idx) => (
                     <tr key={s.id || s.name || idx}>
                       <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          {s.image ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          {s.image && s.image.trim() ? (
                             <img
                               src={s.image}
                               alt={s.name}
-                              style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border)' }}
+                              style={{
+                                width: '56px',
+                                height: '56px',
+                                minWidth: '56px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                border: '2px solid var(--border)',
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                                display: 'block',
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = 'none'
+                              }}
                             />
                           ) : null}
                           <span style={{ fontWeight: 500 }}>{s.name}</span>

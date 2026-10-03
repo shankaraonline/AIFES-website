@@ -45,6 +45,11 @@ export default function EventsAdmin({ onDataChange }) {
         if (typeof onDataChange === 'function') {
           onDataChange('events', evs.length)
         }
+        try {
+          const publishedEvs = data.filter(p => p.tag === 'event' && p.published !== false)
+          localStorage.setItem('aifes_cached_events', JSON.stringify(publishedEvs))
+          localStorage.removeItem('aifes_cached_posts')
+        } catch {}
       }
     } catch {
       setError('Could not fetch events. Ensure server is running.')

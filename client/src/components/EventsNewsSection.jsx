@@ -40,8 +40,17 @@ function formatDate(iso) {
 }
 
 export default function EventsNewsSection({ isPage = false }) {
-  const [posts, setPosts] = useState([])
-  const [fetched, setFetched] = useState(false)
+  const [posts, setPosts] = useState(() => {
+    try {
+      const cached = localStorage.getItem('aifes_cached_posts')
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      }
+    } catch {}
+    return DEFAULT_POSTS
+  })
+  const [fetched, setFetched] = useState(true)
 
   useEffect(() => {
     fetch(API)
@@ -53,13 +62,13 @@ export default function EventsNewsSection({ isPage = false }) {
         if (Array.isArray(data)) {
           const filtered = data.filter((p) => p.published !== false)
           setPosts(filtered)
-        } else {
-          setPosts(DEFAULT_POSTS)
+          try {
+            localStorage.setItem('aifes_cached_posts', JSON.stringify(filtered))
+          } catch {}
         }
         setFetched(true)
       })
       .catch(() => {
-        setPosts(DEFAULT_POSTS)
         setFetched(true)
       })
   }, [])

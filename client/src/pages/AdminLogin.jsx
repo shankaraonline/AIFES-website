@@ -58,7 +58,16 @@ export default function AdminLogin() {
         <div className="admin-login-logos">
           <img src="/iith_logo.png" alt="IIT Hyderabad" className="admin-login-logo-iith" />
           <div className="admin-login-logo-divider" />
-          <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="admin-login-logo-sp" />
+          <a
+            href="https://www.spglobal.com/en"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Visit S&P Global website"
+            aria-label="S&P Global website"
+            style={{ display: 'inline-flex', alignItems: 'center' }}
+          >
+            <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="admin-login-logo-sp" />
+          </a>
         </div>
 
         {/* Header */}

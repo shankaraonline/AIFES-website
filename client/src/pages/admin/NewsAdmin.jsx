@@ -28,6 +28,11 @@ export default function NewsAdmin({ onDataChange }) {
         if (typeof onDataChange === 'function') {
           onDataChange('news', newsItems.length)
         }
+        try {
+          const publishedNews = data.filter(p => p.tag === 'news' && p.published !== false)
+          localStorage.setItem('aifes_cached_news', JSON.stringify(publishedNews))
+          localStorage.removeItem('aifes_cached_posts')
+        } catch {}
       }
     } catch {
       setError('Could not fetch news. Ensure server is running.')

@@ -210,6 +210,12 @@ export default function EducationAdmin({ onDataChange }) {
       resources: material.resources || '',
       additionalInfo: material.additionalInfo || '',
     }])
+    setTimeout(() => {
+      const el = document.getElementById('lecture-material-form')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 100)
   }
 
   const handleCancelEditMaterial = () => {
@@ -721,7 +727,7 @@ export default function EducationAdmin({ onDataChange }) {
         )}
 
         {/* Form to Add / Edit Materials */}
-        <form onSubmit={handleSaveMaterials}>
+        <form id="lecture-material-form" onSubmit={handleSaveMaterials}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <p style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
               {editingMaterialIdx !== null ? `Editing Material #${editingMaterialIdx + 1}` : 'Add Lecture Rows'}

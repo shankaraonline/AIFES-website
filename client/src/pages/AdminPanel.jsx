@@ -101,9 +101,16 @@ export default function AdminPanel() {
               <span>Logout</span>
             </button>
             <div className="navbar-right-brand" style={{ margin: 0 }}>
-              <div className="navbar-sp-wrap">
+              <a
+                href="https://www.spglobal.com/en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="navbar-sp-wrap"
+                title="Visit S&P Global website"
+                aria-label="S&P Global website"
+              >
                 <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
-              </div>
+              </a>
             </div>
           </div>
         </div>

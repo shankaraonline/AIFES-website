@@ -153,7 +153,7 @@ export default function Home() {
       <section id="home-spglobal" aria-labelledby="home-spglobal-heading">
         <div className="section-inner">
           <p className="section-label">Industry Partner</p>
-          <h2 className="section-title" id="home-spglobal-heading">About S&amp;P Global</h2>
+          <h2 className="section-title" id="home-spglobal-heading">About <span className="sp-highlight-red" style={{ color: '#d41c30' }}>S&amp;P Global</span></h2>
 
           <div className="spglobal-split">
             {/* Left — Information */}
@@ -178,13 +178,20 @@ export default function Home() {
             </div>
 
             {/* Right — Image */}
-            <div className="spglobal-img-wrap">
+            <a
+              href="https://www.spglobal.com/en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="spglobal-img-wrap"
+              title="Visit S&P Global website"
+              aria-label="Visit S&P Global website"
+            >
               <img
                 src="/SP_Global_Logo.jpg"
                 alt="S&P Global Logo"
                 className="spglobal-img"
               />
-            </div>
+            </a>
           </div>
         </div>
       </section>

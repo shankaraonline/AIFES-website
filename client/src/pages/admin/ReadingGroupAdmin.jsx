@@ -79,6 +79,9 @@ export default function ReadingGroupAdmin({ onDataChange }) {
     setFacDesignation(item.designation || '')
     setFacImage(item.image || '')
     setFacLinkedin(item.linkedin || '')
+    setTimeout(() => {
+      document.getElementById('faculty-admin-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 
   const handleCancelFacultyEdit = () => {
@@ -158,6 +161,9 @@ export default function ReadingGroupAdmin({ onDataChange }) {
     setStuAcademicInfo(item.academicInfo || item.info || '')
     setStuImage(item.image || '')
     setStuLinkedin(item.linkedin || '')
+    setTimeout(() => {
+      document.getElementById('student-admin-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 
   const handleCancelStudentEdit = () => {
@@ -237,6 +243,9 @@ export default function ReadingGroupAdmin({ onDataChange }) {
     setReadingMatName(item.name || item.session || '')
     setReadingMatDesc(item.description || '')
     setReadingMatLink(item.material || item.slidesUrl || '')
+    setTimeout(() => {
+      document.getElementById('reading-material-admin-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 
   const handleCancelReadingMatEdit = () => {
@@ -323,7 +332,7 @@ export default function ReadingGroupAdmin({ onDataChange }) {
           SECTION 1: FACULTY GROUP
           Fields: Name, Designation, Image Upload, LinkedIn Profile Link, Save, Edit, Delete
       ────────────────────────────────────────────────────────────── */}
-      <div className="admin-card">
+      <div className="admin-card" id="faculty-admin-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <h3 className="admin-card-title" style={{ margin: 0 }}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -507,7 +516,7 @@ export default function ReadingGroupAdmin({ onDataChange }) {
           SECTION 2: ADD STUDENTS IN READING GROUPS
           Fields: Name, Academic Info, Image Upload (optional), LinkedIn Profile Link, Save, Edit, Delete
       ────────────────────────────────────────────────────────────── */}
-      <div className="admin-card" style={{ marginTop: '32px' }}>
+      <div className="admin-card" id="student-admin-card" style={{ marginTop: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <h3 className="admin-card-title" style={{ margin: 0 }}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -644,10 +653,10 @@ export default function ReadingGroupAdmin({ onDataChange }) {
                     <img
                       src={s.image}
                       alt={s.name}
-                      style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }}
+                      style={{ width: '44px', height: '44px', minWidth: '44px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.15)' }}
                     />
                   ) : (
-                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>
+                    <div style={{ width: '32px', height: '32px', minWidth: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>
                       🎓
                     </div>
                   )}
@@ -705,7 +714,7 @@ export default function ReadingGroupAdmin({ onDataChange }) {
           SECTION 3: ADD READING GROUP MATERIAL
           Fields: Name, Description (optional), Material (link), Save, Edit, Delete
       ────────────────────────────────────────────────────────────── */}
-      <div className="admin-card" style={{ marginTop: '32px' }}>
+      <div className="admin-card" id="reading-material-admin-card" style={{ marginTop: '32px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <h3 className="admin-card-title" style={{ margin: 0 }}>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
