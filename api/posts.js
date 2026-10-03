@@ -119,6 +119,9 @@ export default async function handler(req, res) {
 
     // ── GET: Return posts ──
     if (req.method === 'GET') {
+      if (!includeDrafts) {
+        res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=120')
+      }
       if (isDbConnected) {
         const query = includeDrafts ? {} : { published: { $ne: false } }
         const posts = await Post.find(query).sort({ date: -1 })

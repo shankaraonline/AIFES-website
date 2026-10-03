@@ -283,6 +283,9 @@ app.get('/api/posts', async (req, res) => {
     isAdmin = false
   }
   const includeDrafts = req.query.includeDrafts === 'true' && isAdmin
+  if (!includeDrafts) {
+    res.set('Cache-Control', 'public, max-age=30, stale-while-revalidate=120')
+  }
 
   if (isMongoConnected) {
     try {

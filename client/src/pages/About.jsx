@@ -201,7 +201,7 @@ export default function About() {
       <section id="about-spglobal" aria-labelledby="spglobal-heading">
         <div className="section-inner">
           <p className="section-label">Industry Collaboration</p>
-          <h2 className="section-title" id="spglobal-heading">S&amp;P Global &amp; IIT Hyderabad Partnership</h2>
+          <h2 className="section-title" id="spglobal-heading"><span className="sp-highlight-red" style={{ color: '#d41c30' }}>S&amp;P Global</span> &amp; IIT Hyderabad Partnership</h2>
 
           <div className="spglobal-split">
             {/* Left — Information */}
@@ -229,13 +229,20 @@ export default function About() {
             </div>
 
             {/* Right — Image */}
-            <div className="spglobal-img-wrap">
+            <a
+              href="https://www.spglobal.com/en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="spglobal-img-wrap"
+              title="Visit S&P Global website"
+              aria-label="Visit S&P Global website"
+            >
               <img
                 src="/SP_Global_Logo.jpg"
                 alt="S&P Global Logo"
                 className="spglobal-img"
               />
-            </div>
+            </a>
           </div>
         </div>
       </section>
