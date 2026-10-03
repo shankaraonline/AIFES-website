@@ -105,7 +105,7 @@ export default function Education() {
         title="AI for Finance Education Programme"
         subtitle="Modular, applied, and connected to Indian markets from BTech students to C-suite executives."
         bgImage="/education_hero.jpg"
-        bgPosition="center 30%"
+        bgPosition="center 40%"
         titleId="education-heading"
         className="education-hero"
       />

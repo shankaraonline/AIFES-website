@@ -116,7 +116,7 @@ export default function NewsUpdates() {
         title="News & Updates"
         subtitle="Research breakthroughs, announcements, media coverage, and lab achievements from AIFES."
         bgImage="/news_hero.jpg"
-        bgPosition="center 30%"
+        bgPosition="center 38%"
         titleId="news-heading"
         className="news-hero"
       />
