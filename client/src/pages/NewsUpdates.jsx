@@ -115,8 +115,8 @@ export default function NewsUpdates() {
         label="Outreach"
         title="News & Updates"
         subtitle="Research breakthroughs, announcements, media coverage, and lab achievements from AIFES."
-        bgImage="/news_hero.jpg"
-        bgPosition="center 38%"
+        bgImage="/news_hero_applied.jpg"
+        bgPosition="center"
         titleId="news-heading"
         className="news-hero"
       />

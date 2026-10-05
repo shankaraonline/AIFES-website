@@ -26,7 +26,7 @@ export default function Home() {
             Trustworthy AI for Finance, Economies &amp; Society
           </h4>
           <p className="hero-desc">
-            AIFES advances <strong>reproducible, responsible AI</strong> across algorithmic trading,
+            AI Innovation Lab advances <strong>reproducible, responsible AI</strong> across algorithmic trading,
             market microstructure, risk management, FinTech/DeFi, climate finance, RegTech, and
             computational game theory fusing market science with data-centric engineering.
           </p>
@@ -84,7 +84,7 @@ export default function Home() {
             <div className="about-info">
               <div className="about-info-body">
                 <p>
-                  <strong>AIFES</strong> is a research laboratory at <strong>IIT Hyderabad</strong> dedicated
+                  <strong>AI Innovation Lab</strong> is a research laboratory at <strong>IIT Hyderabad</strong> dedicated
                   to advancing <strong>trustworthy AI</strong> across finance, economies, and society.
                 </p>
                 <p>

@@ -172,6 +172,20 @@ const CourseSchema = new mongoose.Schema(
 )
 const Course = mongoose.models.Course || mongoose.model('Course', CourseSchema)
 
+// 5. Leadership & Advisory Panel (About page)
+const LeadershipSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    role: { type: String, default: '' },
+    desc: { type: String, default: '' },
+    img: { type: String, default: '' },
+    href: { type: String, default: '' },
+  },
+  { timestamps: true }
+)
+const Leadership =
+  mongoose.models.Leadership || mongoose.model('Leadership', LeadershipSchema)
+
 // In-memory fallbacks (used only if MongoDB is offline or unavailable)
 let memoryPosts = []
 let memoryFaculty = []
@@ -179,12 +193,14 @@ let memoryStudents = []
 let memoryMaterials = []
 let memoryResources = []
 let memoryCourses = []
+let memoryLeadership = []
 let nextPostId = 1
 let nextFacId = 1
 let nextStuId = 1
 let nextMatId = 1
 let nextResId = 1
 let nextCourseId = 1
+let nextLeadershipId = 1
 
 let isMongoConnected = false
 
@@ -1026,6 +1042,146 @@ app.delete('/api/courses/:id', requireAuth, async (req, res) => {
   }
 
   memoryCourses = memoryCourses.filter((x) => x.id !== String(id))
+  res.json({ success: true })
+})
+
+// ────────────────────────────────────────────────────────────────
+// 5. LEADERSHIP & ADVISORY ROUTES (/api/leadership)
+// ────────────────────────────────────────────────────────────────
+app.get('/api/leadership', async (req, res) => {
+  if (isMongoConnected) {
+    try {
+      const list = await Leadership.find().sort({ createdAt: 1 }).lean()
+      return res.json(
+        list.map((m) => ({
+          id: m._id.toString(),
+          name: m.name,
+          role: m.role || '',
+          desc: m.desc || '',
+          img: m.img || '',
+          href: m.href || '',
+        }))
+      )
+    } catch (err) {
+      console.error('Error querying leadership from MongoDB:', err)
+    }
+  }
+  res.json(memoryLeadership)
+})
+
+app.post('/api/leadership', requireAuth, async (req, res) => {
+  const { name, role = '', desc = '', img = '', href = '' } = req.body || {}
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: 'Name is required.' })
+  }
+
+  const data = {
+    name: name.trim(),
+    role: role.trim(),
+    desc: desc.trim(),
+    img: img.trim(),
+    href: href.trim(),
+  }
+
+  if (isMongoConnected) {
+    try {
+      const created = await Leadership.create(data)
+      return res.status(201).json({
+        id: created._id.toString(),
+        name: created.name,
+        role: created.role,
+        desc: created.desc,
+        img: created.img,
+        href: created.href,
+      })
+    } catch (err) {
+      console.error('Error creating leadership member in MongoDB:', err)
+      return res.status(500).json({ error: 'Failed to save leadership member.' })
+    }
+  }
+
+  const member = {
+    id: String(nextLeadershipId++),
+    ...data,
+  }
+  memoryLeadership.push(member)
+  res.status(201).json(member)
+})
+
+app.put('/api/leadership', requireAuth, async (req, res) => {
+  const { id, name, role = '', desc = '', img = '', href = '' } = req.body || {}
+  if (!id) return res.status(400).json({ error: 'Member ID is required.' })
+
+  const updateData = {
+    ...(name && { name: name.trim() }),
+    role: role.trim(),
+    desc: desc.trim(),
+    img: img.trim(),
+    href: href.trim(),
+  }
+
+  if (isMongoConnected) {
+    try {
+      const updated = await Leadership.findByIdAndUpdate(id, updateData, { new: true })
+      if (!updated) return res.status(404).json({ error: 'Member not found.' })
+      return res.json({ id: updated._id.toString(), ...updateData })
+    } catch (err) {
+      console.error('Error updating leadership in MongoDB:', err)
+      return res.status(500).json({ error: 'Failed to update member.' })
+    }
+  }
+
+  const idx = memoryLeadership.findIndex((m) => m.id === String(id))
+  if (idx === -1) return res.status(404).json({ error: 'Member not found.' })
+  memoryLeadership[idx] = { ...memoryLeadership[idx], ...updateData }
+  res.json(memoryLeadership[idx])
+})
+
+app.put('/api/leadership/:id', requireAuth, async (req, res) => {
+  const { id } = req.params
+  const { name, role = '', desc = '', img = '', href = '' } = req.body || {}
+
+  const updateData = {
+    ...(name && { name: name.trim() }),
+    role: role.trim(),
+    desc: desc.trim(),
+    img: img.trim(),
+    href: href.trim(),
+  }
+
+  if (isMongoConnected) {
+    try {
+      const updated = await Leadership.findByIdAndUpdate(id, updateData, { new: true })
+      if (!updated) return res.status(404).json({ error: 'Member not found.' })
+      return res.json({ id: updated._id.toString(), ...updateData })
+    } catch (err) {
+      console.error('Error updating leadership in MongoDB:', err)
+      return res.status(500).json({ error: 'Failed to update member.' })
+    }
+  }
+
+  const idx = memoryLeadership.findIndex((m) => m.id === String(id))
+  if (idx === -1) return res.status(404).json({ error: 'Member not found.' })
+  memoryLeadership[idx] = { ...memoryLeadership[idx], ...updateData }
+  res.json(memoryLeadership[idx])
+})
+
+app.delete('/api/leadership/:id', requireAuth, async (req, res) => {
+  const { id } = req.params
+  if (isMongoConnected) {
+    try {
+      const deleted = await Leadership.findByIdAndDelete(id)
+      if (!deleted) return res.status(404).json({ error: 'Member not found.' })
+      return res.json({ success: true })
+    } catch (err) {
+      console.error('Error deleting leadership member in MongoDB:', err)
+      return res.status(500).json({ error: 'Failed to delete member.' })
+    }
+  }
+
+  const before = memoryLeadership.length
+  memoryLeadership = memoryLeadership.filter((m) => m.id !== id)
+  if (memoryLeadership.length === before) return res.status(404).json({ error: 'Member not found.' })
   res.json({ success: true })
 })
 

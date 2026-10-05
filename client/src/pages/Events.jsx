@@ -158,8 +158,8 @@ export default function Events() {
         label="Outreach"
         title="Events & Workshops"
         subtitle="Symposia, seminars, industry panels, and academic workshops hosted by AIFES Lab at IIT Hyderabad."
-        bgImage="/events_hero.jpg"
-        bgPosition="center 35%"
+        bgImage="/events_hero_applied.jpg"
+        bgPosition="center"
         titleId="events-heading"
         className="events-hero"
       />

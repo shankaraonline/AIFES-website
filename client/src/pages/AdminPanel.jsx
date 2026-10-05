@@ -6,6 +6,7 @@ import {
   FACULTY_API,
   STUDENTS_API,
   COURSES_API,
+  LEADERSHIP_API,
   clearToken,
   authFetch,
 } from './admin/adminUtils'
@@ -14,25 +15,28 @@ import EducationAdmin from './admin/EducationAdmin'
 import ReadingGroupAdmin from './admin/ReadingGroupAdmin'
 import EventsAdmin from './admin/EventsAdmin'
 import NewsAdmin from './admin/NewsAdmin'
+import LeadershipAdmin from './admin/LeadershipAdmin'
 
 export default function AdminPanel() {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('education') // 'education' | 'reading-group' | 'events' | 'news'
+  const [activeTab, setActiveTab] = useState('education') // 'education' | 'reading-group' | 'events' | 'news' | 'leadership'
   const [counts, setCounts] = useState({
     education: 0,
     readingGroup: 0,
     events: 0,
     news: 0,
+    leadership: 0,
   })
 
   const fetchCounts = async () => {
     try {
-      const [resPosts, resMat, resCourses, resFaculty, resStudents] = await Promise.all([
+      const [resPosts, resMat, resCourses, resFaculty, resStudents, resLeadership] = await Promise.all([
         authFetch(`${POSTS_API}?includeDrafts=true`).then(r => r.json()).catch(() => []),
         authFetch(READING_API).then(r => r.json()).catch(() => []),
         authFetch(COURSES_API).then(r => r.json()).catch(() => []),
         authFetch(FACULTY_API).then(r => r.json()).catch(() => []),
         authFetch(STUDENTS_API).then(r => r.json()).catch(() => []),
+        authFetch(LEADERSHIP_API).then(r => r.json()).catch(() => []),
       ])
 
       const posts = Array.isArray(resPosts) ? resPosts : []
@@ -40,12 +44,14 @@ export default function AdminPanel() {
       const courses = Array.isArray(resCourses) ? resCourses : []
       const faculty = Array.isArray(resFaculty) ? resFaculty : []
       const students = Array.isArray(resStudents) ? resStudents : []
+      const leadership = Array.isArray(resLeadership) ? resLeadership : []
 
       setCounts({
         education: courses.length,
         readingGroup: mats.length + faculty.length + students.length,
         events: posts.filter(p => p.tag === 'event').length,
         news: posts.filter(p => p.tag === 'news').length,
+        leadership: leadership.length,
       })
     } catch {
       // Ignored - individual tabs handle error display
@@ -62,6 +68,7 @@ export default function AdminPanel() {
       if (section === 'reading-group') return { ...prev, readingGroup: newCount }
       if (section === 'events') return { ...prev, events: newCount }
       if (section === 'news') return { ...prev, news: newCount }
+      if (section === 'leadership') return { ...prev, leadership: newCount }
       return prev
     })
   }
@@ -193,6 +200,22 @@ export default function AdminPanel() {
                 <span>News &amp; Updates</span>
                 {counts.news > 0 && <span className="admin-nav-badge">{counts.news}</span>}
               </button>
+
+              {/* 5. People & Advisory */}
+              <button
+                type="button"
+                className={`admin-nav-btn ${activeTab === 'leadership' ? 'active' : ''}`}
+                onClick={() => setActiveTab('leadership')}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span>People</span>
+                {counts.leadership > 0 && <span className="admin-nav-badge">{counts.leadership}</span>}
+              </button>
             </nav>
           </div>
         </aside>
@@ -203,6 +226,7 @@ export default function AdminPanel() {
           {activeTab === 'reading-group' && <ReadingGroupAdmin onDataChange={handleDataChange} />}
           {activeTab === 'events' && <EventsAdmin onDataChange={handleDataChange} />}
           {activeTab === 'news' && <NewsAdmin onDataChange={handleDataChange} />}
+          {activeTab === 'leadership' && <LeadershipAdmin onDataChange={handleDataChange} />}
         </main>
       </div>
     </div>

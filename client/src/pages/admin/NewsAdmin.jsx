@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react'
-import { POSTS_API, formatDate, authFetch } from './adminUtils'
+import { POSTS_API, formatDate, authFetch, DateInput } from './adminUtils'
 
 export default function NewsAdmin({ onDataChange }) {
   const [posts, setPosts] = useState([])
-  const [editingNewsId, setEditingNewsId] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+
+  // ── Add Form State ──
   const [newsDate, setNewsDate] = useState(() => new Date().toISOString().split('T')[0])
   const [newsTitle, setNewsTitle] = useState('')
   const [newsDesc, setNewsDesc] = useState('')
   const [newsLink, setNewsLink] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+
+  // ── In-Place Edit Modal State ──
+  const [editingNewsItem, setEditingNewsItem] = useState(null)
+  const [editNewsDate, setEditNewsDate] = useState('')
+  const [editNewsTitle, setEditNewsTitle] = useState('')
+  const [editNewsDesc, setEditNewsDesc] = useState('')
+  const [editNewsLink, setEditNewsLink] = useState('')
 
   const notifySuccess = (msg) => {
     setSuccess(msg)
@@ -43,26 +51,8 @@ export default function NewsAdmin({ onDataChange }) {
     fetchNews()
   }, [])
 
-  const handleEditNews = (item) => {
-    setEditingNewsId(item.id)
-    setNewsDate(item.date || new Date().toISOString().split('T')[0])
-    setNewsTitle(item.title || '')
-    setNewsDesc(item.description || '')
-    setNewsLink(item.link || '')
-
-    const el = document.getElementById('news-admin-card')
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const handleCancelEditNews = () => {
-    setEditingNewsId(null)
-    setNewsDate(new Date().toISOString().split('T')[0])
-    setNewsTitle('')
-    setNewsDesc('')
-    setNewsLink('')
-  }
-
-  const handleSaveNews = async (shouldPublish) => {
+  // ── Add News Handler ──
+  const handleAddNews = async (shouldPublish) => {
     if (!newsTitle.trim()) {
       setError('News Heading is required.')
       return
@@ -81,34 +71,81 @@ export default function NewsAdmin({ onDataChange }) {
     }
 
     try {
-      if (editingNewsId) {
-        const res = await authFetch(`${POSTS_API}/${editingNewsId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) {
-          const d = await res.json()
-          throw new Error(d.error || 'Failed to update news post.')
-        }
-        notifySuccess(
-          `News "${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
-        )
-      } else {
-        const res = await authFetch(POSTS_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) {
-          const d = await res.json()
-          throw new Error(d.error || 'Failed to save news post.')
-        }
-        notifySuccess(
-          `News "${payload.title}" ${shouldPublish ? 'published on website' : 'saved as draft'} successfully!`
-        )
+      const res = await authFetch(POSTS_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) {
+        const d = await res.json()
+        throw new Error(d.error || 'Failed to save news post.')
       }
-      handleCancelEditNews()
+      notifySuccess(
+        `News "${payload.title}" ${shouldPublish ? 'published on website' : 'saved as draft'} successfully!`
+      )
+      setNewsDate(new Date().toISOString().split('T')[0])
+      setNewsTitle('')
+      setNewsDesc('')
+      setNewsLink('')
+      await fetchNews()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // ── Open Edit Modal ──
+  const handleOpenEditNews = (item) => {
+    setEditingNewsItem(item)
+    setEditNewsDate(item.date || new Date().toISOString().split('T')[0])
+    setEditNewsTitle(item.title || '')
+    setEditNewsDesc(item.description || '')
+    setEditNewsLink(item.link || '')
+    setError('')
+  }
+
+  const handleCloseEditNews = () => {
+    setEditingNewsItem(null)
+    setEditNewsDate('')
+    setEditNewsTitle('')
+    setEditNewsDesc('')
+    setEditNewsLink('')
+  }
+
+  // ── Save Edited News ──
+  const handleSaveEditNews = async (shouldPublish) => {
+    if (!editNewsTitle.trim()) {
+      setError('News Heading is required.')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    const payload = {
+      title: editNewsTitle.trim(),
+      tag: 'news',
+      date: editNewsDate || new Date().toISOString().split('T')[0],
+      description: editNewsDesc.trim(),
+      link: editNewsLink.trim(),
+      published: shouldPublish,
+    }
+
+    try {
+      const res = await authFetch(`${POSTS_API}/${editingNewsItem.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) {
+        const d = await res.json()
+        throw new Error(d.error || 'Failed to update news post.')
+      }
+      notifySuccess(
+        `News "${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
+      )
+      handleCloseEditNews()
       await fetchNews()
     } catch (err) {
       setError(err.message)
@@ -140,7 +177,7 @@ export default function NewsAdmin({ onDataChange }) {
     try {
       await authFetch(`${POSTS_API}/${id}`, { method: 'DELETE' })
       notifySuccess('News item removed.')
-      if (editingNewsId === id) handleCancelEditNews()
+      if (editingNewsItem?.id === id) handleCloseEditNews()
       await fetchNews()
     } catch {
       setError('Failed to delete item.')
@@ -178,6 +215,128 @@ export default function NewsAdmin({ onDataChange }) {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {news.map((item) => {
+              const isEditing = editingNewsItem?.id === item.id
+
+              if (isEditing) {
+                return (
+                  <div
+                    key={item.id}
+                    style={{
+                      background: 'var(--bg-card, #ffffff)',
+                      border: '2px solid #d41c30',
+                      borderRadius: '12px',
+                      padding: '20px',
+                      boxShadow: '0 4px 16px rgba(212, 28, 48, 0.08)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ background: '#d41c30', color: '#ffffff', borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 700 }}>
+                          EDITING NEWS
+                        </span>
+                        <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-1)' }}>{item.title}</h4>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCloseEditNews}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--muted)', fontSize: '18px', cursor: 'pointer', padding: '4px' }}
+                        title="Cancel editing"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    <form onSubmit={(e) => { e.preventDefault(); handleSaveEditNews(true); }}>
+                      <div className="admin-field">
+                        <label className="admin-label">Date (DD-MM-YYYY) *</label>
+                        <DateInput
+                          value={editNewsDate}
+                          onChange={(e) => setEditNewsDate(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">News Heading / Title *</label>
+                        <input
+                          className="admin-input"
+                          type="text"
+                          value={editNewsTitle}
+                          onChange={(e) => setEditNewsTitle(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">Summary / Description</label>
+                        <textarea
+                          className="admin-input admin-textarea"
+                          rows={4}
+                          value={editNewsDesc}
+                          onChange={(e) => setEditNewsDesc(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">Link (Optional)</label>
+                        <input
+                          className="admin-input"
+                          type="url"
+                          placeholder="https://..."
+                          value={editNewsLink}
+                          onChange={(e) => setEditNewsLink(e.target.value)}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
+                        <button
+                          type="button"
+                          onClick={handleCloseEditNews}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '99px',
+                            border: '1px solid var(--border)',
+                            background: '#ffffff',
+                            color: 'var(--text-2)',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSaveEditNews(false)}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '99px',
+                            border: '1px solid var(--border)',
+                            background: '#f8fafc',
+                            color: 'var(--text-1)',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                          }}
+                          disabled={loading}
+                        >
+                          Save as Draft
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSaveEditNews(true)}
+                          className="admin-submit"
+                          disabled={loading}
+                          style={{ margin: 0 }}
+                        >
+                          {loading ? 'Saving…' : 'Save & Publish'}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )
+              }
+
               const isPublished = item.published !== false
 
               return (
@@ -277,11 +436,11 @@ export default function NewsAdmin({ onDataChange }) {
                       {isPublished ? 'Unpublish' : 'Publish'}
                     </button>
 
-                    {/* Edit Button */}
+                    {/* Edit Button: Opens In-Place Modal */}
                     <button
                       type="button"
                       className="admin-btn-edit"
-                      onClick={() => handleEditNews(item)}
+                      onClick={() => handleOpenEditNews(item)}
                       title="Edit News Post"
                     >
                       Edit
@@ -304,41 +463,23 @@ export default function NewsAdmin({ onDataChange }) {
         )}
       </div>
 
-      {/* Form to Update the News and Announcements */}
-      <div className="admin-card" id="news-admin-card" style={{ marginTop: '32px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 className="admin-card-title" style={{ margin: 0 }}>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-            </svg>
-            {editingNewsId ? 'Edit News and Announcements' : 'Form to Update the News and Announcements'}
-          </h3>
-          {editingNewsId && (
-            <button
-              type="button"
-              onClick={handleCancelEditNews}
-              style={{
-                background: 'transparent',
-                border: '1px solid var(--border)',
-                color: 'var(--muted)',
-                padding: '4px 12px',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '13px',
-              }}
-            >
-              Cancel Edit
-            </button>
-          )}
-        </div>
 
-        <form className="admin-form" onSubmit={(e) => { e.preventDefault(); handleSaveNews(true); }}>
+
+      {/* Form to Add News and Announcements (Always Clean and Ready) */}
+      <div className="admin-card" id="news-admin-card" style={{ marginTop: '32px' }}>
+        <h3 className="admin-card-title" style={{ marginBottom: '16px' }}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Add News and Announcements
+        </h3>
+
+        <form className="admin-form" onSubmit={(e) => { e.preventDefault(); handleAddNews(true); }}>
           {/* Date */}
           <div className="admin-field">
-            <label className="admin-label">Date *</label>
-            <input
-              className="admin-input"
-              type="date"
+            <label className="admin-label">Date (DD-MM-YYYY) *</label>
+            <DateInput
               value={newsDate}
               onChange={(e) => setNewsDate(e.target.value)}
               required
@@ -395,7 +536,7 @@ export default function NewsAdmin({ onDataChange }) {
           >
             <button
               type="button"
-              onClick={() => handleSaveNews(false)}
+              onClick={() => handleAddNews(false)}
               disabled={loading}
               style={{
                 background: '#f1f5f9',
@@ -421,7 +562,7 @@ export default function NewsAdmin({ onDataChange }) {
 
             <button
               type="button"
-              onClick={() => handleSaveNews(true)}
+              onClick={() => handleAddNews(true)}
               disabled={loading}
               style={{
                 background: '#d41c30',
@@ -442,26 +583,8 @@ export default function NewsAdmin({ onDataChange }) {
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 14 14" />
               </svg>
-              {loading ? 'Publishing…' : (editingNewsId ? 'Save & Publish' : 'Publish')}
+              {loading ? 'Publishing…' : 'Publish'}
             </button>
-
-            {editingNewsId && (
-              <button
-                type="button"
-                onClick={handleCancelEditNews}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid var(--border)',
-                  color: 'var(--muted)',
-                  borderRadius: '8px',
-                  padding: '10px 18px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                }}
-              >
-                Cancel Edit
-              </button>
-            )}
           </div>
         </form>
       </div>

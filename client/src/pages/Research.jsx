@@ -32,8 +32,8 @@ export default function Research() {
         label="Research Themes"
         title="Four Interlocking Research Pillars"
         subtitle="Each theme stands alone but amplifies the others. Finance informs Economy models, and Economy models shape Society impact analysis."
-        bgImage="/research_hero.jpg"
-        bgPosition="center 38%"
+        bgImage="/research_hero_applied.jpg"
+        bgPosition="center"
         titleId="research-heading"
         className="research-hero"
       />

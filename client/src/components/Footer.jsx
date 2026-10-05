@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <div className="footer-brand">AIFES Lab · IIT Hyderabad</div>
+        <div className="footer-brand">AI Innovation Lab - IIT Hyderabad</div>
         <ul className="footer-links">
           <li><Link to="/">Home</Link></li>
           <li><Link to="/research">Research</Link></li>
@@ -15,7 +15,7 @@ export default function Footer() {
           <li><Link to="/about">About Us</Link></li>
           <li><Link to="/contact">Contact</Link></li>
         </ul>
-        <div className="footer-copy">© {new Date().getFullYear()} AIFES · AI for Finance, Economies &amp; Society</div>
+        <div className="footer-copy">© {new Date().getFullYear()} AI Innovation Lab - AI for Finance, Economies &amp; Society</div>
       </div>
     </footer>
   )
