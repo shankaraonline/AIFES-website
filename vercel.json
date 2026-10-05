@@ -27,6 +27,10 @@
       "destination": "/api/education-resources.js?id=:id"
     },
     {
+      "source": "/api/leadership/:id",
+      "destination": "/api/leadership.js?id=:id"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
