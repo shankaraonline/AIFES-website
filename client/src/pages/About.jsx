@@ -90,7 +90,7 @@ export default function About() {
 
       {/* ── 1st Section: Hero Banner with Untitled-design-17.jpg Background ── */}
       <PageHero
-        label="About the Lab"
+        label="AI Innovation Lab"
         title="A New Kind of Finance Research Lab"
         subtitle="Where rigorous academic research meets deployable applied technology, built at IIT Hyderabad."
         bgImage="/Untitled-design-17.jpg"
@@ -279,7 +279,7 @@ export default function About() {
       <section id="about-outputs">
         <div className="section-inner">
           <p className="section-label">Flagship Outputs</p>
-          <h2 className="section-title">What AIFES Delivers</h2>
+          <h2 className="section-title">What AI Innovation Lab Delivers</h2>
           <p className="section-sub">
             Every output is designed for real-world use open, reproducible, and deployable.
           </p>

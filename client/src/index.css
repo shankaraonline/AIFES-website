@@ -926,6 +926,22 @@ ul {
   border: 1.5px solid rgba(255, 255, 255, 0.25);
 }
 
+#hero .btn-primary:hover {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+#hero .btn-outline:hover {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.4);
+  transform: translateY(-1px);
+}
+
 .hero-stat-bar {
   display: flex;
   gap: 2.5rem;
