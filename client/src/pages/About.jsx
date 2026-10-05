@@ -1,26 +1,13 @@
+import { useState, useEffect } from 'react'
 import PageHero from '../components/PageHero'
+
+const BASE_API = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL.replace(/\/posts\/?$/, '')
+  : '/api'
+const LEADERSHIP_API = `${BASE_API}/leadership`
 
 /* ── Data ───────────────────────────────────────────────────────── */
 const BASE = 'https://ai-iith-web.github.io/AIFES'
-
-const people = [
-  {
-    name: 'Prof Ganesh Ghalme',
-    role: 'Co-Director',
-    href: 'https://sites.google.com/view/ganeshghalme/home?authuser=',
-    img: `${BASE}/assets/img/Ganesh-IITH.jpg`,
-    alt: 'Prof Ganesh Ghalme',
-    desc: 'Joint academic lead. Responsible for lab strategy, research direction, and external partnerships.',
-  },
-  {
-    name: 'Prof V L Raju Chinthalapati',
-    role: 'Co-Director',
-    href: 'https://www.gold.ac.uk/computing/people/chinthalapati-raju/',
-    img: `${BASE}/assets/img/V-L-Raju.png`,
-    alt: 'Prof V L Raju Chinthalapati',
-    desc: 'Joint academic lead. Responsible for curriculum, faculty development, and institutional governance.',
-  },
-]
 
 
 const outputs = [
@@ -85,6 +72,24 @@ const objectives = [
 
 /* ── Component ──────────────────────────────────────────────────── */
 export default function About() {
+  const [people, setPeople] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(LEADERSHIP_API)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load leadership')
+        return res.json()
+      })
+      .then((data) => {
+        if (Array.isArray(data)) setPeople(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
+  }, [])
+
   return (
     <div className="page-offset">
 
@@ -255,22 +260,45 @@ export default function About() {
           <p className="section-sub">
             Balanced representation from academia, industry, and regulators with clear terms and engagement cadence.
           </p>
-          <div className="people-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 460px))', justifyContent: 'center' }}>
-            {people.map(({ name, role, href, img, alt, desc }) => (
-              <div className="person-card" key={name}>
-                <div className="person-avatar">
-                  <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div className="person-name">
-                  <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {name}
-                  </a>
-                </div>
-                <div className="person-role">{role}</div>
-                <div className="person-desc">{desc}</div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <p style={{ textAlign: 'center', color: 'var(--text-3)', padding: '2rem 0' }}>Loading leadership panel…</p>
+          ) : people.length === 0 ? (
+            <p style={{ textAlign: 'center', color: 'var(--text-3)', padding: '2rem 0' }}>No members added yet.</p>
+          ) : (
+            <div className="people-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 460px))', justifyContent: 'center' }}>
+              {people.map((person) => {
+                const name = person.name
+                const role = person.role || person.designation || ''
+                const href = person.href || person.linkedin || ''
+                const img = person.img || person.image || ''
+                const desc = person.desc || person.description || ''
+                return (
+                  <div className="person-card" key={person.id || name}>
+                    <div className="person-avatar">
+                      {img ? (
+                        <img src={img} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a', color: '#fff', fontSize: '1.6rem', fontWeight: 'bold' }}>
+                          {name ? name.charAt(0) : '?'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="person-name">
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                          {name}
+                        </a>
+                      ) : (
+                        name
+                      )}
+                    </div>
+                    {role && <div className="person-role">{role}</div>}
+                    {desc && <div className="person-desc">{desc}</div>}
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 

@@ -4,19 +4,19 @@ import {
   formatDate,
   readFileAsBase64,
   LinkedInIcon,
-  authFetch
+  authFetch,
+  DateInput
 } from './adminUtils'
 
 export default function EventsAdmin({ onDataChange }) {
   const [posts, setPosts] = useState([])
-  const [editingPostId, setEditingPostId] = useState(null)
-  const [postTitle, setPostTitle] = useState('')
-  const [postLink, setPostLink] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  // Rich Event fields
+  // ── Add Form State ──
+  const [postTitle, setPostTitle] = useState('')
+  const [postLink, setPostLink] = useState('')
   const [eventBanner, setEventBanner] = useState('')
   const [eventSchedules, setEventSchedules] = useState([
     { date: new Date().toISOString().split('T')[0], time: '' }
@@ -26,6 +26,22 @@ export default function EventsAdmin({ onDataChange }) {
   const [eventHosts, setEventHosts] = useState('')
   const [eventHasGuests, setEventHasGuests] = useState(false)
   const [eventGuests, setEventGuests] = useState([
+    { name: '', designation: '', image: '', linkedin: '' }
+  ])
+
+  // ── In-Place Edit Modal State ──
+  const [editingEvent, setEditingEvent] = useState(null)
+  const [editEventTitle, setEditEventTitle] = useState('')
+  const [editEventLink, setEditEventLink] = useState('')
+  const [editEventBanner, setEditEventBanner] = useState('')
+  const [editEventSchedules, setEditEventSchedules] = useState([
+    { date: '', time: '' }
+  ])
+  const [editEventLocation, setEditEventLocation] = useState('')
+  const [editEventOverview, setEditEventOverview] = useState('')
+  const [editEventHosts, setEditEventHosts] = useState('')
+  const [editEventHasGuests, setEditEventHasGuests] = useState(false)
+  const [editEventGuests, setEditEventGuests] = useState([
     { name: '', designation: '', image: '', linkedin: '' }
   ])
 
@@ -49,7 +65,7 @@ export default function EventsAdmin({ onDataChange }) {
           const publishedEvs = data.filter(p => p.tag === 'event' && p.published !== false)
           localStorage.setItem('aifes_cached_events', JSON.stringify(publishedEvs))
           localStorage.removeItem('aifes_cached_posts')
-        } catch {}
+        } catch { }
       }
     } catch {
       setError('Could not fetch events. Ensure server is running.')
@@ -61,7 +77,7 @@ export default function EventsAdmin({ onDataChange }) {
   }, [])
 
   // ─────────────────────────────────────────────────────────────
-  // EVENT HELPERS
+  // ADD FORM HELPERS
   // ─────────────────────────────────────────────────────────────
   const handleAddSchedule = () => {
     setEventSchedules([
@@ -123,49 +139,7 @@ export default function EventsAdmin({ onDataChange }) {
     setEventBanner('')
   }
 
-  const handleEditEvent = (ev) => {
-    setEditingPostId(ev.id)
-    setPostTitle(ev.title || '')
-    setEventBanner(ev.banner || '')
-    setEventSchedules(
-      Array.isArray(ev.schedules) && ev.schedules.length > 0
-        ? ev.schedules.map(s => ({ date: s.date || '', time: s.time || '' }))
-        : [{ date: ev.date || '', time: '' }]
-    )
-    setEventLocation(ev.location || '')
-    setEventOverview(ev.overview || ev.description || '')
-    setEventHosts(ev.hosts || '')
-    setEventHasGuests(!!ev.hasGuests)
-    setEventGuests(
-      Array.isArray(ev.guests) && ev.guests.length > 0
-        ? ev.guests.map(g => ({
-            name: g.name || '',
-            designation: g.designation || '',
-            image: g.image || '',
-            linkedin: g.linkedin || '',
-          }))
-        : [{ name: '', designation: '', image: '', linkedin: '' }]
-    )
-    setPostLink(ev.link || '')
-
-    const formEl = document.getElementById('event-admin-card')
-    if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const handleCancelEditEvent = () => {
-    setEditingPostId(null)
-    setPostTitle('')
-    setEventBanner('')
-    setEventSchedules([{ date: new Date().toISOString().split('T')[0], time: '' }])
-    setEventLocation('')
-    setEventOverview('')
-    setEventHosts('')
-    setEventHasGuests(false)
-    setEventGuests([{ name: '', designation: '', image: '', linkedin: '' }])
-    setPostLink('')
-  }
-
-  const handleSaveEvent = async (shouldPublish) => {
+  const handleAddEvent = async (shouldPublish) => {
     if (!postTitle.trim()) {
       setError('Event Name is required.')
       return
@@ -200,34 +174,29 @@ export default function EventsAdmin({ onDataChange }) {
     }
 
     try {
-      if (editingPostId) {
-        const res = await authFetch(`${POSTS_API}/${editingPostId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) {
-          const d = await res.json()
-          throw new Error(d.error || 'Failed to update event.')
-        }
-        notifySuccess(
-          `Event "${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
-        )
-      } else {
-        const res = await authFetch(POSTS_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) {
-          const d = await res.json()
-          throw new Error(d.error || 'Failed to save event.')
-        }
-        notifySuccess(
-          `Event "${payload.title}" ${shouldPublish ? 'published on website' : 'saved as draft'} successfully!`
-        )
+      const res = await authFetch(POSTS_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) {
+        const d = await res.json()
+        throw new Error(d.error || 'Failed to save event.')
       }
-      handleCancelEditEvent()
+      notifySuccess(
+        `"${payload.title}" ${shouldPublish ? 'published on website' : 'saved as draft'} successfully!`
+      )
+
+      // Reset add form
+      setPostTitle('')
+      setEventBanner('')
+      setEventSchedules([{ date: new Date().toISOString().split('T')[0], time: '' }])
+      setEventLocation('')
+      setEventOverview('')
+      setEventHosts('')
+      setEventHasGuests(false)
+      setEventGuests([{ name: '', designation: '', image: '', linkedin: '' }])
+      setPostLink('')
       await fetchEvents()
     } catch (err) {
       setError(err.message)
@@ -236,6 +205,164 @@ export default function EventsAdmin({ onDataChange }) {
     }
   }
 
+  // ─────────────────────────────────────────────────────────────
+  // IN-PLACE EDIT MODAL HELPERS
+  // ─────────────────────────────────────────────────────────────
+  const handleOpenEditEvent = (ev) => {
+    setEditingEvent(ev)
+    setEditEventTitle(ev.title || '')
+    setEditEventBanner(ev.banner || '')
+    setEditEventSchedules(
+      Array.isArray(ev.schedules) && ev.schedules.length > 0
+        ? ev.schedules.map(s => ({ date: s.date || '', time: s.time || '' }))
+        : [{ date: ev.date || '', time: '' }]
+    )
+    setEditEventLocation(ev.location || '')
+    setEditEventOverview(ev.overview || ev.description || '')
+    setEditEventHosts(ev.hosts || '')
+    setEditEventHasGuests(!!ev.hasGuests)
+    setEditEventGuests(
+      Array.isArray(ev.guests) && ev.guests.length > 0
+        ? ev.guests.map(g => ({
+          name: g.name || '',
+          designation: g.designation || '',
+          image: g.image || '',
+          linkedin: g.linkedin || '',
+        }))
+        : [{ name: '', designation: '', image: '', linkedin: '' }]
+    )
+    setEditEventLink(ev.link || '')
+    setError('')
+  }
+
+  const handleCloseEditEvent = () => {
+    setEditingEvent(null)
+    setEditEventTitle('')
+    setEditEventBanner('')
+    setEditEventSchedules([{ date: '', time: '' }])
+    setEditEventLocation('')
+    setEditEventOverview('')
+    setEditEventHosts('')
+    setEditEventHasGuests(false)
+    setEditEventGuests([{ name: '', designation: '', image: '', linkedin: '' }])
+    setEditEventLink('')
+  }
+
+  const handleEditAddSchedule = () => {
+    setEditEventSchedules([
+      ...editEventSchedules,
+      { date: new Date().toISOString().split('T')[0], time: '' },
+    ])
+  }
+
+  const handleEditRemoveSchedule = (idx) => {
+    if (editEventSchedules.length <= 1) return
+    setEditEventSchedules(editEventSchedules.filter((_, i) => i !== idx))
+  }
+
+  const handleEditScheduleChange = (idx, field, value) => {
+    const updated = [...editEventSchedules]
+    updated[idx][field] = value
+    setEditEventSchedules(updated)
+  }
+
+  const handleEditAddGuest = () => {
+    setEditEventGuests([
+      ...editEventGuests,
+      { name: '', designation: '', image: '', linkedin: '' },
+    ])
+  }
+
+  const handleEditRemoveGuest = (idx) => {
+    if (editEventGuests.length <= 1) return
+    setEditEventGuests(editEventGuests.filter((_, i) => i !== idx))
+  }
+
+  const handleEditGuestChange = (idx, field, value) => {
+    const updated = [...editEventGuests]
+    updated[idx][field] = value
+    setEditEventGuests(updated)
+  }
+
+  const handleEditGuestImageUpload = async (idx, file) => {
+    if (!file) return
+    try {
+      const base64 = await readFileAsBase64(file)
+      handleEditGuestChange(idx, 'image', base64)
+    } catch {
+      setError('Failed to read guest image file.')
+    }
+  }
+
+  const handleEditBannerUpload = async (file) => {
+    if (!file) return
+    try {
+      const base64 = await readFileAsBase64(file)
+      setEditEventBanner(base64)
+    } catch {
+      setError('Failed to read banner image.')
+    }
+  }
+
+  const handleSaveEditEvent = async (shouldPublish) => {
+    if (!editEventTitle.trim()) {
+      setError('Event Name is required.')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    const validSchedules = editEventSchedules.filter(s => s.date || s.time)
+    const finalSchedules = validSchedules.length > 0
+      ? validSchedules
+      : [{ date: new Date().toISOString().split('T')[0], time: '' }]
+
+    const validGuests = editEventHasGuests
+      ? editEventGuests.filter(g => g.name && g.name.trim())
+      : []
+
+    const payload = {
+      title: editEventTitle.trim(),
+      tag: 'event',
+      date: finalSchedules[0]?.date || new Date().toISOString().split('T')[0],
+      banner: editEventBanner.trim(),
+      schedules: finalSchedules,
+      location: editEventLocation.trim(),
+      overview: editEventOverview.trim(),
+      description: editEventOverview.trim(),
+      hosts: editEventHosts.trim(),
+      hasGuests: editEventHasGuests,
+      guests: validGuests,
+      link: editEventLink.trim(),
+      published: shouldPublish,
+    }
+
+    try {
+      const res = await authFetch(`${POSTS_API}/${editingEvent.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) {
+        const d = await res.json()
+        throw new Error(d.error || 'Failed to update event.')
+      }
+      notifySuccess(
+        `"${payload.title}" updated and ${shouldPublish ? 'published on website' : 'saved as draft'}!`
+      )
+      handleCloseEditEvent()
+      await fetchEvents()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // PUBLISH TOGGLE & DELETE
+  // ─────────────────────────────────────────────────────────────
   const handleTogglePublishPost = async (item) => {
     try {
       const newStatus = !item.published
@@ -263,7 +390,7 @@ export default function EventsAdmin({ onDataChange }) {
         throw new Error(d.error || 'Failed to delete event.')
       }
       notifySuccess('Event removed.')
-      if (editingPostId === id) handleCancelEditEvent()
+      if (editingEvent?.id === id) handleCloseEditEvent()
       await fetchEvents()
     } catch (err) {
       setError(err.message || 'Failed to delete event.')
@@ -280,12 +407,14 @@ export default function EventsAdmin({ onDataChange }) {
       <div className="admin-header" style={{ marginBottom: '1.5rem' }}>
         <h2 className="admin-title">Events Management</h2>
         <p className="admin-subtitle">
-          Form to List Events and publish upcoming symposia, workshops, and academic panels.
+          Manage upcoming symposia, workshops, and academic panels with in-place edit modals.
         </p>
       </div>
 
-      {/* LIST OF EVENTS (Top Section) */}
-      <div className="admin-card">
+      {/* ─────────────────────────────────────────────────────────────
+          LIST OF EVENTS (Top Section)
+      ────────────────────────────────────────────────────────────── */}
+      <div className="admin-card" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 className="admin-card-title" style={{ margin: 0 }}>
             <span>Listed Events</span>
@@ -301,6 +430,388 @@ export default function EventsAdmin({ onDataChange }) {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {events.map((p) => {
+              const isEditing = editingEvent?.id === p.id
+
+              if (isEditing) {
+                return (
+                  <div
+                    key={p.id}
+                    style={{
+                      background: 'var(--bg-card, #ffffff)',
+                      border: '2px solid #d41c30',
+                      borderRadius: '12px',
+                      padding: '20px',
+                      boxShadow: '0 4px 16px rgba(212, 28, 48, 0.08)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ background: '#d41c30', color: '#ffffff', borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 700 }}>
+                          EDITING EVENT
+                        </span>
+                        <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-1)' }}>{p.title}</h4>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCloseEditEvent}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--muted)', fontSize: '18px', cursor: 'pointer', padding: '4px' }}
+                        title="Cancel editing"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    <form onSubmit={(e) => { e.preventDefault(); handleSaveEditEvent(true); }}>
+                      {/* 1. Banner */}
+                      <div className="admin-field">
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
+                          <label className="admin-label" style={{ margin: 0 }}>Event Banner</label>
+                          <span style={{ fontSize: '11px', color: 'var(--muted)' }}>Recommended: 1920 x 1080 px</span>
+                        </div>
+
+                        <div className="admin-input-upload-group">
+                          <input
+                            className="admin-input-upload-field"
+                            type="text"
+                            placeholder="Upload banner image or paste image URL"
+                            value={editEventBanner}
+                            onChange={(e) => setEditEventBanner(e.target.value)}
+                          />
+                          <label className="admin-input-upload-btn">
+                            Upload
+                            <input
+                              type="file"
+                              accept="image/*"
+                              style={{ display: 'none' }}
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleEditBannerUpload(e.target.files[0])
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+
+                        {editEventBanner && (
+                          <div style={{ marginTop: '8px', position: 'relative', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)', maxHeight: '160px', background: '#0f172a' }}>
+                            <img src={editEventBanner} alt="Preview" style={{ width: '100%', maxHeight: '160px', objectFit: 'cover', display: 'block' }} />
+                            <button
+                              type="button"
+                              onClick={() => setEditEventBanner('')}
+                              style={{
+                                position: 'absolute',
+                                top: '6px',
+                                right: '6px',
+                                background: 'rgba(0, 0, 0, 0.7)',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: '4px',
+                                padding: '3px 8px',
+                                fontSize: '11px',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 2. Event Name */}
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">Event Name *</label>
+                        <input
+                          className="admin-input"
+                          type="text"
+                          value={editEventTitle}
+                          onChange={(e) => setEditEventTitle(e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      {/* 3. Schedules */}
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <label className="admin-label" style={{ margin: 0 }}>Date &amp; Time Slots (DD-MM-YYYY)</label>
+                          <button
+                            type="button"
+                            onClick={handleEditAddSchedule}
+                            style={{
+                              background: 'transparent',
+                              border: '1px solid var(--accent)',
+                              color: 'var(--accent)',
+                              borderRadius: '6px',
+                              padding: '3px 8px',
+                              fontSize: '11px',
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            + Add Slot
+                          </button>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px' }}>
+                          {editEventSchedules.map((sch, sIdx) => (
+                            <div
+                              key={sIdx}
+                              style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'minmax(140px, 1fr) 2fr auto',
+                                gap: '8px',
+                                alignItems: 'center',
+                                background: '#f8fafc',
+                                padding: '8px 10px',
+                                borderRadius: '8px',
+                                border: '1px solid var(--border)',
+                              }}
+                            >
+                              <div>
+                                <label style={{ display: 'block', fontSize: '10px', color: 'var(--muted)', marginBottom: '2px' }}>Date (DD-MM-YYYY) #{sIdx + 1}</label>
+                                <DateInput
+                                  value={sch.date}
+                                  onChange={(e) => handleEditScheduleChange(sIdx, 'date', e.target.value)}
+                                  required={sIdx === 0}
+                                />
+                              </div>
+                              <div>
+                                <label style={{ display: 'block', fontSize: '10px', color: 'var(--muted)', marginBottom: '2px' }}>Time (optional)</label>
+                                <input
+                                  className="admin-input"
+                                  type="text"
+                                  placeholder="e.g. 10:00 AM - 05:00 PM IST"
+                                  value={sch.time}
+                                  onChange={(e) => handleEditScheduleChange(sIdx, 'time', e.target.value)}
+                                />
+                              </div>
+                              {editEventSchedules.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleEditRemoveSchedule(sIdx)}
+                                  className="admin-delete"
+                                  title="Remove slot"
+                                  style={{ marginTop: '14px' }}
+                                >
+                                  ×
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 4. Location */}
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">Location</label>
+                        <input
+                          className="admin-input"
+                          type="text"
+                          value={editEventLocation}
+                          onChange={(e) => setEditEventLocation(e.target.value)}
+                        />
+                      </div>
+
+                      {/* 5. Overview */}
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">Event Overview</label>
+                        <textarea
+                          className="admin-input admin-textarea"
+                          rows={4}
+                          value={editEventOverview}
+                          onChange={(e) => setEditEventOverview(e.target.value)}
+                        />
+                      </div>
+
+                      {/* 6. Hosts */}
+                      <div className="admin-field" style={{ marginTop: '14px' }}>
+                        <label className="admin-label">About the event hosts</label>
+                        <textarea
+                          className="admin-input admin-textarea"
+                          rows={3}
+                          value={editEventHosts}
+                          onChange={(e) => setEditEventHosts(e.target.value)}
+                        />
+                      </div>
+
+                      {/* 7. Guests Checkbox and List */}
+                      <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
+                        <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 700, color: 'var(--text-1)' }}>
+                          <input
+                            type="checkbox"
+                            style={{ width: '16px', height: '16px', accentColor: 'var(--accent)', cursor: 'pointer' }}
+                            checked={editEventHasGuests}
+                            onChange={(e) => setEditEventHasGuests(e.target.checked)}
+                          />
+                          <span>Event Guests (optional Check Box)</span>
+                        </label>
+
+                        {editEventHasGuests && (
+                          <div style={{ marginTop: '12px', padding: '12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                              <span style={{ fontSize: '12px', fontWeight: 600 }}>Guest Speakers ({editEventGuests.length})</span>
+                              <button
+                                type="button"
+                                onClick={handleEditAddGuest}
+                                style={{
+                                  background: 'transparent',
+                                  border: '1px solid var(--accent)',
+                                  color: 'var(--accent)',
+                                  borderRadius: '4px',
+                                  padding: '2px 8px',
+                                  fontSize: '11px',
+                                  fontWeight: 600,
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                + Add Guest
+                              </button>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              {editEventGuests.map((guest, gIdx) => (
+                                <div key={gIdx} style={{ background: '#ffffff', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--gold)' }}>Guest #{gIdx + 1}</span>
+                                    {editEventGuests.length > 1 && (
+                                      <button type="button" onClick={() => handleEditRemoveGuest(gIdx)} className="admin-delete" title="Remove guest">×</button>
+                                    )}
+                                  </div>
+
+                                  <div style={{ display: 'grid', gridTemplateColumns: 'minmax(180px, 1fr) 1fr', gap: '10px' }}>
+                                    <div>
+                                      <label style={{ display: 'block', fontSize: '10px', color: 'var(--muted)', marginBottom: '2px' }}>Guest Image (optional)</label>
+                                      <div className="admin-input-upload-group">
+                                        <input
+                                          className="admin-input-upload-field"
+                                          type="text"
+                                          placeholder="Upload or URL"
+                                          value={guest.image}
+                                          onChange={(e) => handleEditGuestChange(gIdx, 'image', e.target.value)}
+                                        />
+                                        <label className="admin-input-upload-btn">
+                                          Upload
+                                          <input
+                                            type="file"
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => {
+                                              if (e.target.files && e.target.files[0]) {
+                                                handleEditGuestImageUpload(gIdx, e.target.files[0])
+                                              }
+                                            }}
+                                          />
+                                        </label>
+                                      </div>
+                                      {guest.image && (
+                                        <div style={{ marginTop: '3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                          <img src={guest.image} alt="Guest" style={{ width: '22px', height: '22px', borderRadius: '50%', objectFit: 'cover' }} />
+                                          <button type="button" onClick={() => handleEditGuestChange(gIdx, 'image', '')} style={{ background: 'none', border: 'none', color: '#dc2626', fontSize: '0.7rem', cursor: 'pointer' }}>Remove</button>
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    <div>
+                                      <label style={{ display: 'block', fontSize: '10px', color: 'var(--muted)', marginBottom: '2px' }}>Name *</label>
+                                      <input
+                                        className="admin-input"
+                                        type="text"
+                                        placeholder="e.g. Dr. Rajesh Kumar"
+                                        value={guest.name}
+                                        onChange={(e) => handleEditGuestChange(gIdx, 'name', e.target.value)}
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                    <div>
+                                      <label style={{ display: 'block', fontSize: '10px', color: 'var(--muted)', marginBottom: '2px' }}>Designation</label>
+                                      <input
+                                        className="admin-input"
+                                        type="text"
+                                        placeholder="e.g. Lead AI Researcher"
+                                        value={guest.designation}
+                                        onChange={(e) => handleEditGuestChange(gIdx, 'designation', e.target.value)}
+                                      />
+                                    </div>
+                                    <div>
+                                      <label style={{ display: 'block', fontSize: '10px', color: 'var(--muted)', marginBottom: '2px' }}>LinkedIn URL</label>
+                                      <input
+                                        className="admin-input"
+                                        type="text"
+                                        placeholder="https://linkedin.com/in/..."
+                                        value={guest.linkedin}
+                                        onChange={(e) => handleEditGuestChange(gIdx, 'linkedin', e.target.value)}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 8. Registration Link */}
+                      <div className="admin-field" style={{ marginTop: '16px' }}>
+                        <label className="admin-label">Registration / Meeting Link (Optional)</label>
+                        <input
+                          className="admin-input"
+                          type="text"
+                          placeholder="https://..."
+                          value={editEventLink}
+                          onChange={(e) => setEditEventLink(e.target.value)}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
+                        <button
+                          type="button"
+                          onClick={handleCloseEditEvent}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '99px',
+                            border: '1px solid var(--border)',
+                            background: '#ffffff',
+                            color: 'var(--text-2)',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSaveEditEvent(false)}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '99px',
+                            border: '1px solid var(--border)',
+                            background: '#f8fafc',
+                            color: 'var(--text-1)',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                          }}
+                          disabled={loading}
+                        >
+                          Save as Draft
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSaveEditEvent(true)}
+                          className="admin-submit"
+                          disabled={loading}
+                          style={{ margin: 0 }}
+                        >
+                          {loading ? 'Saving…' : 'Save & Publish'}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )
+              }
+
               const isPublished = p.published !== false
               const schedules = Array.isArray(p.schedules) && p.schedules.length > 0
                 ? p.schedules
@@ -357,9 +868,8 @@ export default function EventsAdmin({ onDataChange }) {
                       </div>
                     )}
 
-                    <div style={{ minWidth: 0 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
-                        {/* Status Badge */}
                         {isPublished ? (
                           <span
                             style={{
@@ -390,28 +900,37 @@ export default function EventsAdmin({ onDataChange }) {
                           </span>
                         )}
 
-                        <h4
-                          style={{
-                            fontSize: '15px',
-                            fontWeight: 700,
-                            color: 'var(--text-1)',
-                            margin: 0,
-                          }}
-                        >
+                        <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-1)', margin: 0 }}>
                           {p.title}
                         </h4>
                       </div>
 
-                      {/* Schedule & Location */}
-                      <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                        <span>
-                          📅 {schedules.map(s => formatDate(s.date) + (s.time ? ` (${s.time})` : '')).join(' · ')}
-                        </span>
-                        {p.location && <span>📍 {p.location}</span>}
-                        {p.hasGuests && p.guests && p.guests.length > 0 && (
-                          <span>👥 {p.guests.length} Guest(s)</span>
-                        )}
+                      {/* Schedules Display */}
+                      <div style={{ fontSize: '12px', color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
+                        {schedules.map((s, idx) => (
+                          <span key={idx} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '1px 6px' }}>
+                            📅 {formatDate(s.date)}{s.time ? ` (${s.time})` : ''}
+                          </span>
+                        ))}
                       </div>
+
+                      {p.location && (
+                        <div style={{ fontSize: '12px', color: 'var(--text-2)', marginBottom: '2px' }}>
+                          📍 <strong>Location:</strong> {p.location}
+                        </div>
+                      )}
+
+                      {p.hosts && (
+                        <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
+                          🏛️ <strong>Hosts:</strong> {p.hosts}
+                        </div>
+                      )}
+
+                      {p.hasGuests && Array.isArray(p.guests) && p.guests.length > 0 && (
+                        <div style={{ fontSize: '11px', color: 'var(--accent)', marginTop: '3px' }}>
+                          👥 {p.guests.length} Guest Speaker{p.guests.length > 1 ? 's' : ''} listed
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -437,12 +956,12 @@ export default function EventsAdmin({ onDataChange }) {
                       {isPublished ? 'Unpublish' : 'Publish'}
                     </button>
 
-                    {/* Edit Button */}
+                    {/* Edit Button: Opens In-Place Modal */}
                     <button
                       type="button"
                       className="admin-btn-edit"
-                      onClick={() => handleEditEvent(p)}
-                      title="Edit Event"
+                      onClick={() => handleOpenEditEvent(p)}
+                      title="Edit Event Details"
                     >
                       Edit
                     </button>
@@ -464,47 +983,22 @@ export default function EventsAdmin({ onDataChange }) {
         )}
       </div>
 
-      {/* FORM TO LIST EVENTS */}
-      <div className="admin-card" id="event-admin-card" style={{ marginTop: '32px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <div>
-            <h3 className="admin-card-title" style={{ margin: 0 }}>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              {editingPostId ? 'Edit Event' : 'Form to List Events'}
-            </h3>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '4px 0 0' }}>
-              Fill in the details below. Click <strong>Publish</strong> to show immediately on the website, or <strong>Save as Draft</strong> to keep hidden.
-            </p>
-          </div>
+      {/* ─────────────────────────────────────────────────────────────
+          FORM TO CREATE & LIST NEW EVENT (Always Clean and Ready)
+      ────────────────────────────────────────────────────────────── */}
+      <div className="admin-card" id="event-admin-card">
+        <h3 className="admin-card-title" style={{ marginBottom: '16px' }}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Create &amp; List New Event
+        </h3>
 
-          {editingPostId && (
-            <button
-              type="button"
-              onClick={handleCancelEditEvent}
-              style={{
-                background: 'transparent',
-                border: '1px solid var(--border)',
-                color: 'var(--muted)',
-                padding: '5px 14px',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '13px',
-              }}
-            >
-              Cancel Edit
-            </button>
-          )}
-        </div>
-
-        <form className="admin-form" onSubmit={(e) => { e.preventDefault(); handleSaveEvent(true); }}>
+        <form className="admin-form" onSubmit={(e) => { e.preventDefault(); handleAddEvent(true); }}>
           {/* 1. Event Banner */}
           <div className="admin-field">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
               <label className="admin-label" style={{ margin: 0 }}>Event Banner</label>
               <span
                 style={{
@@ -521,12 +1015,19 @@ export default function EventsAdmin({ onDataChange }) {
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(220px, 1fr) 2fr', gap: '14px', alignItems: 'center' }}>
-              <div>
+            <div className="admin-input-upload-group">
+              <input
+                className="admin-input-upload-field"
+                type="text"
+                placeholder="Upload banner image or paste image URL"
+                value={eventBanner}
+                onChange={(e) => setEventBanner(e.target.value)}
+              />
+              <label className="admin-input-upload-btn">
+                Upload
                 <input
                   type="file"
                   accept="image/*"
-                  id="event-banner-upload"
                   style={{ display: 'none' }}
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
@@ -534,40 +1035,7 @@ export default function EventsAdmin({ onDataChange }) {
                     }
                   }}
                 />
-                <label
-                  htmlFor="event-banner-upload"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    width: '100%',
-                    padding: '10px 14px',
-                    background: '#f8fafc',
-                    border: '1px dashed #cbd5e1',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    color: 'var(--text-1)',
-                  }}
-                >
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <polyline points="21 15 16 10 5 21" />
-                  </svg>
-                  Upload Banner Image
-                </label>
-              </div>
-
-              <input
-                className="admin-input"
-                type="text"
-                placeholder="Or paste banner image URL (https://...)"
-                value={eventBanner}
-                onChange={(e) => setEventBanner(e.target.value)}
-              />
+              </label>
             </div>
 
             {/* Banner Preview */}
@@ -617,7 +1085,7 @@ export default function EventsAdmin({ onDataChange }) {
           <div className="admin-field">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label className="admin-label" style={{ margin: 0 }}>
-                Event Date + Event Time (Can add multiple dates and time)
+                Event Date + Event Time (DD-MM-YYYY, can add multiple dates and time)
               </label>
               <button
                 type="button"
@@ -654,11 +1122,9 @@ export default function EventsAdmin({ onDataChange }) {
                 >
                   <div>
                     <label style={{ display: 'block', fontSize: '11px', color: 'var(--muted)', marginBottom: '2px' }}>
-                      Date #{sIdx + 1}
+                      Date (DD-MM-YYYY) #{sIdx + 1}
                     </label>
-                    <input
-                      className="admin-input"
-                      type="date"
+                    <DateInput
                       value={sch.date}
                       onChange={(e) => handleScheduleChange(sIdx, 'date', e.target.value)}
                       required={sIdx === 0}
@@ -713,7 +1179,7 @@ export default function EventsAdmin({ onDataChange }) {
             />
           </div>
 
-          {/* 5. Event Overview (Description box) */}
+          {/* 5. Event Overview */}
           <div className="admin-field">
             <label className="admin-label">Event Overview (Description box)</label>
             <textarea
@@ -725,7 +1191,7 @@ export default function EventsAdmin({ onDataChange }) {
             />
           </div>
 
-          {/* 6. About the event hosts (Description box) */}
+          {/* 6. About the event hosts */}
           <div className="admin-field">
             <label className="admin-label">About the event hosts (Description box)</label>
             <textarea
@@ -830,7 +1296,7 @@ export default function EventsAdmin({ onDataChange }) {
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(200px, 1fr) 1fr', gap: '12px' }}>
-                        {/* Image */}
+                        {/* Image Upload */}
                         <div>
                           <label style={{ display: 'block', fontSize: '11px', color: 'var(--muted)', marginBottom: '3px' }}>
                             Guest Image (optional)
@@ -857,6 +1323,13 @@ export default function EventsAdmin({ onDataChange }) {
                               />
                             </label>
                           </div>
+                          {guest.image && (
+                            <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <img src={guest.image} alt="Guest" style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }} />
+                              <span style={{ fontSize: '0.72rem', color: 'var(--text-3)' }}>Preview</span>
+                              <button type="button" onClick={() => handleGuestChange(gIdx, 'image', '')} style={{ background: 'none', border: 'none', color: '#dc2626', fontSize: '0.72rem', cursor: 'pointer' }}>Remove</button>
+                            </div>
+                          )}
                         </div>
 
                         {/* Name */}
@@ -913,7 +1386,19 @@ export default function EventsAdmin({ onDataChange }) {
             )}
           </div>
 
-          {/* Action Buttons: <Save> (Draft) and <Publish> */}
+          {/* 8. Registration / Event Link */}
+          <div className="admin-field" style={{ marginTop: '16px' }}>
+            <label className="admin-label">Registration / Meeting Link (Optional)</label>
+            <input
+              className="admin-input"
+              type="text"
+              placeholder="e.g. https://forms.gle/... or meeting link"
+              value={postLink}
+              onChange={(e) => setPostLink(e.target.value)}
+            />
+          </div>
+
+          {/* Action Buttons: <Save as Draft> and <Publish> */}
           <div
             style={{
               display: 'flex',
@@ -924,10 +1409,9 @@ export default function EventsAdmin({ onDataChange }) {
               borderTop: '1px solid var(--border)',
             }}
           >
-            {/* <Save> Button */}
             <button
               type="button"
-              onClick={() => handleSaveEvent(false)}
+              onClick={() => handleAddEvent(false)}
               disabled={loading}
               style={{
                 background: '#f1f5f9',
@@ -951,10 +1435,9 @@ export default function EventsAdmin({ onDataChange }) {
               {loading ? 'Saving…' : 'Save as Draft'}
             </button>
 
-            {/* Publish Button */}
             <button
               type="button"
-              onClick={() => handleSaveEvent(true)}
+              onClick={() => handleAddEvent(true)}
               disabled={loading}
               style={{
                 background: '#d41c30',
@@ -975,29 +1458,12 @@ export default function EventsAdmin({ onDataChange }) {
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 14 14" />
               </svg>
-              {loading ? 'Publishing…' : (editingPostId ? 'Save & Publish' : 'Publish')}
+              {loading ? 'Publishing…' : 'Publish Event'}
             </button>
-
-            {editingPostId && (
-              <button
-                type="button"
-                onClick={handleCancelEditEvent}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid var(--border)',
-                  color: 'var(--muted)',
-                  borderRadius: '8px',
-                  padding: '10px 18px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                }}
-              >
-                Cancel Edit
-              </button>
-            )}
           </div>
         </form>
       </div>
+
     </div>
   )
 }

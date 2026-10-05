@@ -104,8 +104,8 @@ export default function Education() {
         label="Education & Skilling"
         title="AI for Finance Education Programme"
         subtitle="Modular, applied, and connected to Indian markets from BTech students to C-suite executives."
-        bgImage="/education_hero.jpg"
-        bgPosition="center 40%"
+        bgImage="/education_hero_applied.jpg"
+        bgPosition="center"
         titleId="education-heading"
         className="education-hero"
       />

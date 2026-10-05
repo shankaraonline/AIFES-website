@@ -101,8 +101,8 @@ export default function ReadingGroup() {
             A collaborative forum where faculty and students explore the mathematical foundations and research directions in AI for Finance, Economies, and Society.
           </>
         )}
-        bgImage="/reading_group_hero.jpg"
-        bgPosition="center 42%"
+        bgImage="/reading_group_hero_applied.jpg"
+        bgPosition="center"
         titleId="reading-group-heading"
         className="reading-group-hero"
       />
