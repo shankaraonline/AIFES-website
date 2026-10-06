@@ -70,7 +70,7 @@ export default function Contact() {
               </div>
               <h3 className="contact-card-title">Join the Community</h3>
               <p className="contact-card-desc">
-                Participate in weekly Reading Group discussions, monthly AIFES Dialogues, or enroll in our academic courses.
+                Participate in weekly Reading Group discussions, monthly AI Innovation Lab Dialogues, or enroll in our academic courses.
               </p>
               <Link to="/reading-group" className="contact-card-link">
                 Reading Group &rarr;
@@ -80,7 +80,7 @@ export default function Contact() {
 
           {/* Action Banner */}
           <div className="contact-banner">
-            <h2 className="contact-banner-title">Ready to Collaborate with AIFES?</h2>
+            <h2 className="contact-banner-title">Ready to Collaborate with AI Innovation Lab?</h2>
             <p className="contact-banner-sub">
               We partner with financial institutions, regulatory bodies, and academic institutions to develop deployable, trustworthy AI systems.
             </p>

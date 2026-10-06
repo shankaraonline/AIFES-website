@@ -112,7 +112,7 @@ export default function ReadingGroup() {
           {/* Centered Second Definition / Lead Intro */}
           <div className="reading-group-intro">
             <p className="reading-group-intro-text">
-              The AIFES Reading Group brings together faculty members and students interested in research
+              The AI Innovation Lab Reading Group brings together faculty members and students interested in research
               at the intersection of artificial intelligence, financial markets, economic systems, and
               societal impact.
             </p>
