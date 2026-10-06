@@ -219,16 +219,16 @@ export default function About() {
 
               <div className="dept-block">
                 <p className="dept-block-text">
-                  From helping our customers assess new investments across the capital and commodities markets to navigating the energy expansion, acceleration of artificial intelligence, and evolution of public and private markets, we enable the world’s leading organizations to unlock opportunities, solve challenges, and plan for tomorrow – today. Learn more at{' '}
-                  <a
-                    href="https://www.spglobal.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#000000', fontWeight: 600, textDecoration: 'underline' }}
-                  >
-                    www.spglobal.com
-                  </a>
-                  .
+                  From helping our customers assess new investments across the capital and commodities markets to navigating the energy expansion, acceleration of artificial intelligence, and evolution of public and private markets, we enable the world’s leading organizations to unlock opportunities, solve challenges, and plan for tomorrow – today.<br /> Learn more at{' '}
+                    <a
+                      href="https://www.spglobal.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#000000', fontWeight: 600, textDecoration: 'underline' }}
+                    >
+                      www.spglobal.com
+                    </a>
+                    .
                 </p>
               </div>
             </div>

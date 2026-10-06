@@ -104,7 +104,7 @@ export default function OpeningCeremony() {
           inset: 0;
           width: 100vw;
           height: 100vh;
-          background: radial-gradient(circle at 50% 20%, #0f172a 0%, #020617 75%);
+          background: #000000;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -119,14 +119,7 @@ export default function OpeningCeremony() {
 
         /* Ambient spotlight */
         .ceremony-spotlight {
-          position: absolute;
-          top: -20%;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 900px;
-          height: 900px;
-          background: radial-gradient(circle, rgba(245, 158, 11, 0.14) 0%, rgba(0, 0, 0, 0) 70%);
-          pointer-events: none;
+          display: none;
         }
 
         /* Header */
