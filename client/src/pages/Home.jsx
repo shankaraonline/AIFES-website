@@ -169,46 +169,6 @@ export default function Home() {
                   From helping our customers assess new investments across the capital and commodities markets to navigating the energy expansion, acceleration of artificial intelligence, and evolution of public and private markets, we enable the world’s leading organizations to unlock opportunities, solve challenges, and plan for tomorrow – today.
                 </p>
               </div>
-
-              <div className="dept-block" style={{ marginTop: '0.5rem' }}>
-                <h3 className="dept-block-heading">
-                  <span style={{ color: '#d41c30' }}>S&amp;P Global</span> Foundation
-                </h3>
-                <p className="dept-block-text" style={{ marginTop: '0.4rem' }}>
-                  The <strong>S&amp;P Global Foundation</strong>, the keystone of S&amp;P Global's philanthropic efforts, supports the building of resilient communities. At the Foundation, we focus our program efforts where we can have an impact in the communities where we live and work.
-                </p>
-              </div>
-
-              <div className="dept-block">
-                <p className="dept-block-text">
-                  The S&amp;P Global Foundation focuses its efforts where we can make a real difference: <strong>Technology &amp; Data</strong> and <strong>Environmental Resilience</strong>.
-                </p>
-              </div>
-
-              <div className="dept-block">
-                <p className="dept-block-text" style={{ marginBottom: '1rem' }}>
-                  Visit the{' '}
-                  <a
-                    href="https://www.spglobal.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#d41c30', fontWeight: 600, textDecoration: 'underline' }}
-                  >
-                    S&amp;P Global Foundation website
-                  </a>{' '}
-                  for more information.
-                </p>
-                <a
-                  href="https://www.spglobal.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="sp-learn-more-btn"
-                  title="Visit S&P Global website"
-                >
-                  <span>Learn More</span>
-                  <span>&rarr;</span>
-                </a>
-              </div>
             </div>
 
             {/* Right — Image */}
@@ -226,6 +186,49 @@ export default function Home() {
                 className="spglobal-img"
               />
             </a>
+          </div>
+
+          {/* Downside — Full-Width Foundation Section */}
+          <div className="spglobal-foundation-section">
+            <div className="dept-block">
+              <h3 className="dept-block-heading" style={{ fontSize: '1.3rem' }}>
+                <span style={{ color: '#d41c30' }}>S&amp;P Global</span> Foundation
+              </h3>
+              <p className="dept-block-text" style={{ marginTop: '0.4rem' }}>
+                The <strong>S&amp;P Global Foundation</strong>, the keystone of S&amp;P Global's philanthropic efforts, supports the building of resilient communities. At the Foundation, we focus our program efforts where we can have an impact in the communities where we live and work.
+              </p>
+            </div>
+
+            <div className="dept-block">
+              <p className="dept-block-text">
+                The S&amp;P Global Foundation focuses its efforts where we can make a real difference: <strong>Technology &amp; Data</strong> and <strong>Environmental Resilience</strong>.
+              </p>
+            </div>
+
+            <div className="dept-block">
+              <p className="dept-block-text" style={{ marginBottom: '1rem' }}>
+                Visit the{' '}
+                <a
+                  href="https://www.spglobal.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#d41c30', fontWeight: 600, textDecoration: 'underline' }}
+                >
+                  S&amp;P Global Foundation website
+                </a>{' '}
+                for more information.
+              </p>
+              <a
+                href="https://www.spglobal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sp-learn-more-btn"
+                title="Visit S&P Global website"
+              >
+                <span>Learn More</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
