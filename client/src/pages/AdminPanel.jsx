@@ -78,6 +78,14 @@ export default function AdminPanel() {
     navigate('/admin-login', { replace: true })
   }
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    const container = document.querySelector('.admin-dashboard-container')
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [activeTab])
+
   return (
     <div className="admin-dashboard-container">
       {/* ── Admin Top Navigation Bar ─────────────────────────────── */}
@@ -87,7 +95,7 @@ export default function AdminPanel() {
             <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
           </Link>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div className="admin-nav-actions">
             <Link to="/" className="admin-nav-site-link">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -107,7 +115,7 @@ export default function AdminPanel() {
               </svg>
               <span>Logout</span>
             </button>
-            <div className="navbar-right-brand" style={{ margin: 0 }}>
+            <div className="navbar-right-brand admin-nav-sp" style={{ margin: 0 }}>
               <a
                 href="https://www.spglobal.com/en"
                 target="_blank"

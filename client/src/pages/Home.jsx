@@ -160,26 +160,20 @@ export default function Home() {
             <div className="spglobal-info">
               <div className="dept-block">
                 <p className="dept-block-text">
-                  <strong>S&amp;P Global</strong> is a premier worldwide provider of transparent and independent financial ratings, iconic market benchmarks, financial data, and research across capital, commodity, and automotive markets.
+                  <strong>S&amp;P Global (NYSE: SPGI)</strong> enables businesses, governments, and individuals with trusted data, expertise and technology to make decisions with conviction. We are Advancing Essential Intelligence through world-leading benchmarks, data, and insights that customers need in order to plan confidently, act decisively, and thrive in a rapidly changing global landscape.
                 </p>
               </div>
 
               <div className="dept-block">
                 <p className="dept-block-text">
-                  Known globally for foundational financial infrastructure such as the <strong>S&amp;P 500®</strong>, S&amp;P Global provides essential intelligence, credit ratings, risk solutions, and sustainable finance insights that empower companies, governments, and individuals to make decisions with conviction.
-                </p>
-              </div>
-
-              <div className="dept-block">
-                <p className="dept-block-text">
-                  With major technological hubs and dedicated divisions in data science and artificial intelligence, S&amp;P Global continually pioneers data-centric engineering, market analytics, and next-generation FinTech innovation worldwide.
+                  From helping our customers assess new investments across the capital and commodities markets to navigating the energy expansion, acceleration of artificial intelligence, and evolution of public and private markets, we enable the world’s leading organizations to unlock opportunities, solve challenges, and plan for tomorrow – today.
                 </p>
               </div>
             </div>
 
             {/* Right — Image */}
             <a
-              href="https://www.spglobal.com/en"
+              href="https://www.spglobal.com"
               target="_blank"
               rel="noopener noreferrer"
               className="spglobal-img-wrap"
@@ -192,6 +186,49 @@ export default function Home() {
                 className="spglobal-img"
               />
             </a>
+          </div>
+
+          {/* Downside — Full-Width Foundation Section */}
+          <div className="spglobal-foundation-section">
+            <div className="dept-block">
+              <h3 className="dept-block-heading" style={{ fontSize: '1.3rem' }}>
+                <span style={{ color: '#d41c30' }}>S&amp;P Global</span> Foundation
+              </h3>
+              <p className="dept-block-text" style={{ marginTop: '0.4rem' }}>
+                The <strong>S&amp;P Global Foundation</strong>, the keystone of S&amp;P Global's philanthropic efforts, supports the building of resilient communities. At the Foundation, we focus our program efforts where we can have an impact in the communities where we live and work.
+              </p>
+            </div>
+
+            <div className="dept-block">
+              <p className="dept-block-text">
+                The S&amp;P Global Foundation focuses its efforts where we can make a real difference: <strong>Technology &amp; Data</strong> and <strong>Environmental Resilience</strong>.
+              </p>
+            </div>
+
+            <div className="dept-block">
+              <p className="dept-block-text" style={{ marginBottom: '1rem' }}>
+                Visit the{' '}
+                <a
+                  href="https://www.spglobal.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#d41c30', fontWeight: 600, textDecoration: 'underline' }}
+                >
+                  S&amp;P Global Foundation website
+                </a>{' '}
+                for more information.
+              </p>
+              <a
+                href="https://www.spglobal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sp-learn-more-btn"
+                title="Visit S&P Global website"
+              >
+                <span>Learn More</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

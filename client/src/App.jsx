@@ -12,16 +12,20 @@ import Contact from './pages/Contact'
 import AdminPanel from './pages/AdminPanel'
 import AdminLogin from './pages/AdminLogin'
 import ProtectedRoute from './pages/ProtectedRoute'
+import OpeningCeremony from './pages/OpeningCeremony'
 
 export default function App() {
   const location = useLocation()
   const isAdmin = location.pathname.startsWith('/admin')
+  const isLaunch = location.pathname === '/launch' || location.pathname === '/home'
 
   return (
     <>
-      {!isAdmin && <Navbar />}
+      {!isAdmin && !isLaunch && <Navbar />}
       <main>
         <Routes>
+          <Route path="/launch" element={<OpeningCeremony />} />
+          <Route path="/home" element={<Navigate to="/launch" replace />} />
           <Route path="/" element={<Home />} />
           <Route path="/research" element={<Research />} />
           <Route path="/education" element={<Education />} />
@@ -48,7 +52,7 @@ export default function App() {
           <Route path="/roadmap" element={<Navigate to="/about" replace />} />
         </Routes>
       </main>
-      {!isAdmin && <Footer />}
+      {!isAdmin && !isLaunch && <Footer />}
     </>
   )
 }

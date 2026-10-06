@@ -111,7 +111,7 @@ export default function About() {
             <div className="about-info">
               <div className="about-info-body">
                 <p>
-                  <strong>AIFES</strong> is a research laboratory at <strong>IIT Hyderabad</strong> dedicated
+                  <strong>AI Innovation Lab</strong> is a research laboratory at <strong>IIT Hyderabad</strong> dedicated
                   to advancing <strong>trustworthy AI</strong> across finance, economies, and society.
                 </p>
                 <p>
@@ -205,37 +205,28 @@ export default function About() {
       {/* ── 4th Section: S&P Global Partnership (Left: Information, Right: Image) ── */}
       <section id="about-spglobal" aria-labelledby="spglobal-heading">
         <div className="section-inner">
-          <p className="section-label">Industry Collaboration</p>
-          <h2 className="section-title" id="spglobal-heading"><span className="sp-highlight-red" style={{ color: '#d41c30' }}>S&amp;P Global</span> &amp; IIT Hyderabad Partnership</h2>
+          <p className="section-label">Industry Partner</p>
+          <h2 className="section-title" id="spglobal-heading">About <span className="sp-highlight-red" style={{ color: '#d41c30' }}>S&amp;P Global</span></h2>
 
           <div className="spglobal-split">
             {/* Left — Information */}
             <div className="spglobal-info">
               <div className="dept-block">
                 <p className="dept-block-text">
-                  <strong>S&amp;P Global</strong> is a premier worldwide provider of financial data, independent credit ratings, and iconic market benchmarks like the <strong>S&amp;P 500</strong>. The company formed a strategic tie-up with the <strong>Indian Institute of Technology, Hyderabad</strong> to bridge the gap between academic learning and financial technology industry needs.
+                  <strong>S&amp;P Global (NYSE: SPGI)</strong> enables businesses, governments, and individuals with trusted data, expertise and technology to make decisions with conviction. We are Advancing Essential Intelligence through world-leading benchmarks, data, and insights that customers need in order to plan confidently, act decisively, and thrive in a rapidly changing global landscape.
                 </p>
               </div>
 
               <div className="dept-block">
-                <h3 className="dept-block-heading">StepForward Initiative</h3>
-                <div className="dept-mission-box">
-                  <p className="dept-mission-text">
-                    This partnership is powered by <strong>S&amp;P Global’s StepForward Initiative</strong>, a major global corporate social responsibility framework focused on workforce readiness.
-                  </p>
-                </div>
-              </div>
-
-              <div className="dept-block">
                 <p className="dept-block-text">
-                  The collaboration specifically delivers specialised training to students in <strong>Artificial Intelligence, Machine Learning, and advanced digital skills</strong>. The initiative leverages S&amp;P Global’s massive technology hub in Hyderabad to help transform the region into a core center for global data operations.
+                  From helping our customers assess new investments across the capital and commodities markets to navigating the energy expansion, acceleration of artificial intelligence, and evolution of public and private markets, we enable the world’s leading organizations to unlock opportunities, solve challenges, and plan for tomorrow – today.
                 </p>
               </div>
             </div>
 
             {/* Right — Image */}
             <a
-              href="https://www.spglobal.com/en"
+              href="https://www.spglobal.com"
               target="_blank"
               rel="noopener noreferrer"
               className="spglobal-img-wrap"
@@ -248,6 +239,49 @@ export default function About() {
                 className="spglobal-img"
               />
             </a>
+          </div>
+
+          {/* Downside — Full-Width Foundation Section */}
+          <div className="spglobal-foundation-section">
+            <div className="dept-block">
+              <h3 className="dept-block-heading" style={{ fontSize: '1.3rem' }}>
+                <span style={{ color: '#d41c30' }}>S&amp;P Global</span> Foundation
+              </h3>
+              <p className="dept-block-text" style={{ marginTop: '0.4rem' }}>
+                The <strong>S&amp;P Global Foundation</strong>, the keystone of S&amp;P Global's philanthropic efforts, supports the building of resilient communities. At the Foundation, we focus our program efforts where we can have an impact in the communities where we live and work.
+              </p>
+            </div>
+
+            <div className="dept-block">
+              <p className="dept-block-text">
+                The S&amp;P Global Foundation focuses its efforts where we can make a real difference: <strong>Technology &amp; Data</strong> and <strong>Environmental Resilience</strong>.
+              </p>
+            </div>
+
+            <div className="dept-block">
+              <p className="dept-block-text" style={{ marginBottom: '1rem' }}>
+                Visit the{' '}
+                <a
+                  href="https://www.spglobal.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#d41c30', fontWeight: 600, textDecoration: 'underline' }}
+                >
+                  S&amp;P Global Foundation website
+                </a>{' '}
+                for more information.
+              </p>
+              <a
+                href="https://www.spglobal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sp-learn-more-btn"
+                title="Visit S&P Global website"
+              >
+                <span>Learn More</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

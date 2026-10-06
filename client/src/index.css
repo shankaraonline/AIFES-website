@@ -2476,6 +2476,12 @@ ul {
   align-items: center;
 }
 
+.admin-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .admin-nav-site-link {
   display: inline-flex;
   align-items: center;
@@ -2677,31 +2683,111 @@ ul {
 }
 
 @media (max-width: 860px) {
-  .admin-body {
-    flex-direction: column;
+  /* Allow whole admin container to scroll naturally on mobile */
+  .admin-dashboard-container {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
+  /* Admin Header on mobile: keep ONLY IITH logo and Logout button */
+  .admin-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 70px;
+  }
+
+  .admin-navbar .navbar-inner {
+    padding: 0 14px;
+    gap: 12px;
+    height: 100%;
+  }
+
+  .admin-navbar .navbar-brand {
+    flex-shrink: 0;
+    max-width: calc(100% - 110px);
+  }
+
+  .admin-navbar .navbar-iith-logo {
+    height: 48px;
+    max-width: 220px;
+    width: auto;
+  }
+
+  .admin-navbar .admin-nav-actions {
+    gap: 0;
+  }
+
+  /* Hide 'Back to Website' and S&P Global logo ONLY in mobile view for admin section */
+  .admin-navbar .admin-nav-site-link,
+  .admin-navbar .admin-nav-sp {
+    display: none !important;
+  }
+
+  .admin-navbar .admin-logout-btn {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Admin Body */
+  .admin-body {
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    flex: 1 0 auto;
+  }
+
+  /* Sidebar resets from 100% height to auto so it does not block the content */
   .admin-sidebar {
     width: 100%;
+    height: auto;
+    position: static;
+    overflow: visible;
     border-right: none;
     border-bottom: 1px solid var(--border);
-    padding: 1.25rem;
+    padding: 1rem 1rem 1.25rem;
+    align-self: stretch;
+  }
+
+  .admin-sidebar-heading {
+    margin-bottom: 0.6rem;
+    font-size: 0.78rem;
   }
 
   .admin-sidebar-nav {
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .admin-nav-btn {
     width: auto;
-    flex: 1;
-    min-width: 140px;
-    justify-content: center;
+    flex: 1 1 calc(50% - 8px);
+    min-width: 130px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    justify-content: flex-start;
   }
 
+  /* Admin Main Content is visible and scrolls */
   .admin-main {
-    padding: 1.5rem 1.25rem;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    padding: 1.25rem 1rem 3.5rem;
+    max-width: 100%;
+  }
+
+  .admin-card {
+    padding: 1.25rem 1rem;
+    margin-bottom: 1.25rem;
   }
 }
 
@@ -3968,6 +4054,38 @@ ul {
   height: auto;
   object-fit: contain;
   display: block;
+}
+
+.sp-learn-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #d41c30;
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(212, 28, 48, 0.25);
+  width: fit-content;
+}
+
+.sp-learn-more-btn:hover {
+  background: #b91526;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 28, 48, 0.35);
+}
+
+.spglobal-foundation-section {
+  margin-top: 2.75rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 @media (max-width: 992px) {

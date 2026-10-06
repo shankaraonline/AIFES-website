@@ -50,7 +50,7 @@ export default function NewsUpdates() {
         const parsed = JSON.parse(cached)
         if (Array.isArray(parsed) && parsed.length > 0) return parsed
       }
-    } catch {}
+    } catch { }
     return DEFAULT_NEWS
   })
   const [fetched, setFetched] = useState(true)
@@ -76,7 +76,7 @@ export default function NewsUpdates() {
           setNews(filtered)
           try {
             localStorage.setItem('aifes_cached_news', JSON.stringify(filtered))
-          } catch {}
+          } catch { }
         }
         setFetched(true)
       })
@@ -114,7 +114,7 @@ export default function NewsUpdates() {
       <PageHero
         label="Outreach"
         title="News & Updates"
-        subtitle="Research breakthroughs, announcements, media coverage, and lab achievements from AIFES."
+        subtitle="Research breakthroughs, announcements, media coverage, and lab achievements from AI Innovation Lab."
         bgImage="/news_hero_applied.jpg"
         bgPosition="center"
         titleId="news-heading"
