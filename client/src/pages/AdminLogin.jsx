@@ -46,12 +46,7 @@ export default function AdminLogin() {
 
   return (
     <div className="admin-login-page">
-      {/* Animated background */}
-      <div className="admin-login-bg">
-        <div className="admin-login-bg-orb orb-1" />
-        <div className="admin-login-bg-orb orb-2" />
-        <div className="admin-login-bg-orb orb-3" />
-      </div>
+
 
       <div className="admin-login-card">
         {/* Logos */}
