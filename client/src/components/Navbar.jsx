@@ -55,7 +55,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar-inner">
           <NavLink to="/" className="navbar-brand" onClick={() => setOpen(false)}>
-            <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
+            <img src="/spg_IITHyderabad_horizontal_pos_rgb.png" alt="S&P Global | IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
           </NavLink>
 
           <ul className="navbar-links">
@@ -204,18 +204,6 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="navbar-right-brand">
-            <a
-              href="https://www.spglobal.com/en"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="navbar-sp-wrap"
-              title="Visit S&P Global website"
-              aria-label="S&P Global website"
-            >
-              <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
-            </a>
-          </div>
 
           <button
             className={`navbar-hamburger${open ? ' open' : ''}`}

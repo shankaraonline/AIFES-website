@@ -92,7 +92,7 @@ export default function AdminPanel() {
       <header className="admin-navbar">
         <div className="navbar-inner">
           <Link to="/" className="navbar-brand">
-            <img src="/iith_logo.png" alt="IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
+            <img src="/spg_IITHyderabad_horizontal_pos_rgb.png" alt="S&P Global | IIT Hyderabad" className="navbar-logo navbar-iith-logo" />
           </Link>
 
           <div className="admin-nav-actions">
@@ -115,18 +115,7 @@ export default function AdminPanel() {
               </svg>
               <span>Logout</span>
             </button>
-            <div className="navbar-right-brand admin-nav-sp" style={{ margin: 0 }}>
-              <a
-                href="https://www.spglobal.com/en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="navbar-sp-wrap"
-                title="Visit S&P Global website"
-                aria-label="S&P Global website"
-              >
-                <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="navbar-sp-logo" />
-              </a>
-            </div>
+
           </div>
         </div>
       </header>

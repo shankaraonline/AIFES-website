@@ -119,9 +119,9 @@ ul {
   display: flex;
   align-items: center;
   padding: 0;
-  background: #000000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: none;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   transition: background var(--transition), border-color var(--transition);
 }
 
@@ -139,34 +139,31 @@ ul {
 .navbar-brand {
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: #000000;
   flex-shrink: 0;
   text-decoration: none;
 }
 
 .navbar-logo {
-  height: 68px;
+  height: 75px;
   width: auto;
-  max-width: 360px;
+  max-width: 460px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
-  transition: filter var(--transition), transform var(--transition);
+  transition: transform var(--transition);
 }
 
 .navbar-iith-logo {
-  height: 68px;
+  height: 75px;
   width: auto;
-  max-width: 360px;
+  max-width: 460px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .navbar-brand:hover .navbar-iith-logo {
   transform: scale(1.02);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.45));
 }
 
 .navbar-right-brand {
@@ -207,17 +204,13 @@ ul {
 
 @media (max-width: 1024px) {
   :root {
-    --nav-h: 96px;
-  }
-  .navbar-right-brand {
-    margin-left: auto;
-    margin-right: 14px;
+    --nav-h: 88px;
   }
 }
 
 @media (max-width: 768px) {
   :root {
-    --nav-h: 98px;
+    --nav-h: 80px;
   }
   .navbar-inner {
     padding: 0 14px;
@@ -228,22 +221,8 @@ ul {
     min-width: 0;
   }
   .navbar-iith-logo {
-    height: 64px;
-    max-width: 250px;
-    width: auto;
-  }
-  .navbar-right-brand {
-    margin-left: auto;
-    margin-right: 10px;
-    flex-shrink: 0;
-  }
-  .navbar-sp-wrap {
-    padding: 6px 14px;
-    border-radius: 8px;
-  }
-  .navbar-sp-logo {
-    height: 30px;
-    max-width: 110px;
+    height: 60px;
+    max-width: 340px;
     width: auto;
   }
   .navbar-hamburger {
@@ -254,7 +233,7 @@ ul {
 
 @media (max-width: 480px) {
   :root {
-    --nav-h: 96px;
+    --nav-h: 74px;
   }
   .navbar-inner {
     padding: 0 10px;
@@ -265,48 +244,27 @@ ul {
     min-width: 0;
   }
   .navbar-iith-logo {
-    height: 58px;
-    max-width: 215px;
-    width: auto;
-  }
-  .navbar-right-brand {
-    margin-right: 6px;
-    flex-shrink: 0;
-  }
-  .navbar-sp-wrap {
-    padding: 5px 12px;
-    border-radius: 7px;
-  }
-  .navbar-sp-logo {
-    height: 28px;
-    max-width: 95px;
+    height: 52px;
+    max-width: 280px;
     width: auto;
   }
 }
 
 @media (max-width: 360px) {
   :root {
-    --nav-h: 90px;
+    --nav-h: 68px;
   }
   .navbar-inner {
     padding: 0 8px;
     gap: 6px;
   }
+  .navbar-brand {
+    flex-shrink: 1;
+    min-width: 0;
+  }
   .navbar-iith-logo {
-    height: 48px;
-    max-width: 175px;
-    width: auto;
-  }
-  .navbar-right-brand {
-    margin-right: 4px;
-  }
-  .navbar-sp-wrap {
-    padding: 4px 10px;
-    border-radius: 6px;
-  }
-  .navbar-sp-logo {
-    height: 24px;
-    max-width: 82px;
+    height: 44px;
+    max-width: 230px;
     width: auto;
   }
 }
@@ -359,8 +317,8 @@ ul {
   display: block;
   padding: 8px clamp(8px, 0.85vw, 14px);
   font-size: 0.92rem;
-  font-weight: 500;
-  color: #ffffff;
+  font-weight: 600;
+  color: #000000;
   border-radius: 0;
   position: relative;
   transition: color 0.2s ease;
@@ -415,7 +373,7 @@ ul {
 .nav-dropdown-caret {
   display: inline-block;
   transition: transform 0.22s ease, color 0.22s ease;
-  color: #ffffff;
+  color: #000000;
   margin-top: 1px;
 }
 
@@ -431,10 +389,10 @@ ul {
   top: 100%;
   left: 0;
   min-width: 210px;
-  background: #0d0d0d;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #ffffff;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 6px;
   opacity: 0;
   visibility: hidden;
@@ -477,7 +435,7 @@ ul {
   border-radius: 8px !important;
   font-size: 0.9rem !important;
   font-weight: 500 !important;
-  color: #ffffff !important;
+  color: #000000 !important;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease !important;
   white-space: nowrap;
@@ -488,7 +446,7 @@ ul {
 }
 
 .nav-dropdown-item:hover {
-  background: rgba(212, 28, 48, 0.15) !important;
+  background: rgba(212, 28, 48, 0.08) !important;
   color: #d41c30 !important;
   font-weight: 600 !important;
   transform: translateX(3px);
@@ -509,7 +467,7 @@ ul {
   display: block;
   width: 22px;
   height: 2px;
-  background: #ffffff;
+  background: #000000;
   border-radius: 2px;
   transition: transform 0.3s ease, opacity 0.3s ease, background 0.2s ease;
 }
@@ -541,10 +499,9 @@ ul {
   max-height: calc(100vh - var(--nav-h));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: rgba(0, 0, 0, 0.98);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 1rem 1.25rem 2.5rem;
   z-index: 99;
   flex-direction: column;
@@ -556,10 +513,11 @@ ul {
 }
 
 .navbar-mobile a {
-  font-size: 0.9rem;
-  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #000000;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   transition: color 0.2s ease;
 }
 
@@ -580,7 +538,7 @@ ul {
 .navbar-mobile-item-group {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .navbar-mobile-row {
@@ -598,7 +556,7 @@ ul {
   background: none;
   border: none;
   padding: 8px 12px;
-  color: #ffffff;
+  color: #000000;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -628,7 +586,7 @@ ul {
   gap: 8px;
   padding: 8px 10px !important;
   font-size: 0.85rem !important;
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: #1e293b !important;
   border-bottom: none !important;
   border-radius: 6px;
   text-decoration: none;
@@ -636,7 +594,7 @@ ul {
 }
 
 .navbar-mobile-subitem:hover {
-  background: rgba(212, 28, 48, 0.15);
+  background: rgba(212, 28, 48, 0.08);
   color: #d41c30 !important;
 }
 
@@ -746,9 +704,7 @@ ul {
   display: flex;
   align-items: center;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 85% 65% at 50% 45%, rgba(14, 30, 60, 0.45) 0%, rgba(2, 7, 19, 0.95) 75%, #020713 100%),
-    #020713;
+  background: #000000;
 }
 
 #hero::before {
@@ -756,8 +712,8 @@ ul {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, rgba(56, 189, 248, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 64px 64px;
   pointer-events: none;
   z-index: 0;
@@ -767,8 +723,8 @@ ul {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 75% 65% at 50% 50%, rgba(2, 7, 19, 0.58) 0%, rgba(2, 7, 19, 0.82) 100%),
-    linear-gradient(180deg, rgba(2, 7, 19, 0.65) 0%, rgba(2, 7, 19, 0.35) 45%, rgba(2, 7, 19, 0.65) 75%, rgba(2, 7, 19, 0.96) 100%);
+    radial-gradient(ellipse 75% 65% at 50% 50%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.88) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.75) 75%, #000000 100%);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
@@ -884,7 +840,7 @@ ul {
 }
 
 .brand-sp {
-  color: #d41c30;
+  color: #ffffff;
 }
 
 .brand-iit {
@@ -923,22 +879,34 @@ ul {
 }
 
 #hero .btn-primary {
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition);
 }
 
 #hero .btn-primary:hover {
   background: #ffffff;
-  color: #0f172a;
-  border-color: #cbd5e1;
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+  color: #000000;
+  border: 1px solid #ffffff;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
 
+#hero .btn-outline {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+  transition: all var(--transition);
+}
+
 #hero .btn-outline:hover {
-  background: #0f172a;
+  background: #000000;
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.4);
+  border: 1px solid #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   transform: translateY(-1px);
 }
 
@@ -2469,9 +2437,9 @@ ul {
   top: 0;
   z-index: 100;
   height: var(--nav-h);
-  background: #000000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
 }
@@ -2487,21 +2455,22 @@ ul {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 1px solid var(--border);
   border-radius: 99px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #000000;
   text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all var(--transition);
 }
 
 .admin-nav-site-link:hover {
-  background: rgba(255, 255, 255, 0.16);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  color: #d41c30;
+  border-color: rgba(212, 28, 48, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Admin Body (Sidebar + Main) */
@@ -2692,12 +2661,14 @@ ul {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Admin Header on mobile: keep ONLY IITH logo and Logout button */
+  /* Admin Header on mobile: keep ONLY logo and Logout button */
   .admin-navbar {
     position: sticky;
     top: 0;
     z-index: 100;
     height: 70px;
+    background: #f1f5f9;
+    border-bottom: 1px solid var(--border);
   }
 
   .admin-navbar .navbar-inner {
@@ -2712,8 +2683,8 @@ ul {
   }
 
   .admin-navbar .navbar-iith-logo {
-    height: 48px;
-    max-width: 220px;
+    height: 50px;
+    max-width: 280px;
     width: auto;
   }
 
@@ -2721,9 +2692,8 @@ ul {
     gap: 0;
   }
 
-  /* Hide 'Back to Website' and S&P Global logo ONLY in mobile view for admin section */
-  .admin-navbar .admin-nav-site-link,
-  .admin-navbar .admin-nav-sp {
+  /* Hide 'Back to Website' ONLY in mobile view for admin section */
+  .admin-navbar .admin-nav-site-link {
     display: none !important;
   }
 
@@ -3351,8 +3321,8 @@ ul {
   .hero-overlay,
   .page-hero-overlay {
     background:
-      radial-gradient(ellipse 90% 80% at 50% 50%, rgba(2, 7, 19, 0.68) 0%, rgba(2, 7, 19, 0.88) 100%),
-      linear-gradient(180deg, rgba(2, 7, 19, 0.75) 0%, rgba(2, 7, 19, 0.5) 45%, rgba(2, 7, 19, 0.78) 75%, rgba(2, 7, 19, 0.98) 100%);
+      radial-gradient(ellipse 90% 80% at 50% 50%, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.9) 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.82) 75%, rgba(0, 0, 0, 0.98) 100%);
     backdrop-filter: blur(2.5px);
     -webkit-backdrop-filter: blur(2.5px);
   }
@@ -3487,6 +3457,7 @@ ul {
   padding: 90px 24px 85px;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
+  background-color: #000000;
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -3498,8 +3469,8 @@ ul {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 75% 65% at 50% 50%, rgba(2, 7, 19, 0.58) 0%, rgba(2, 7, 19, 0.82) 100%),
-    linear-gradient(180deg, rgba(2, 7, 19, 0.65) 0%, rgba(2, 7, 19, 0.35) 45%, rgba(2, 7, 19, 0.65) 75%, rgba(2, 7, 19, 0.96) 100%);
+    radial-gradient(ellipse 75% 65% at 50% 50%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.88) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.75) 75%, rgba(0, 0, 0, 0.98) 100%);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
@@ -4004,7 +3975,12 @@ ul {
 }
 
 /* ── About & Home: S&P Global Partnership Section ───────────────────── */
-#about-spglobal,
+#about-spglobal {
+  background: var(--bg-1);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
 #home-spglobal {
   background: #ffffff;
   border-top: 1px solid var(--border);
@@ -4039,7 +4015,7 @@ ul {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   text-decoration: none;
-  cursor: pointer;
+  cursor: default;
 }
 
 .spglobal-img-wrap:hover {
@@ -4311,28 +4287,26 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.admin-login-logo-iith {
-  height: 44px;
-  width: auto;
-  object-fit: contain;
-  filter: brightness(1.15);
+.admin-login-logo-badge {
+  background: #ffffff;
+  padding: 8px 18px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  max-width: 100%;
 }
 
-.admin-login-logo-sp {
-  height: 32px;
+.admin-login-logo {
+  height: 48px;
   width: auto;
+  max-width: 290px;
   object-fit: contain;
-  border-radius: 6px;
-}
-
-.admin-login-logo-divider {
-  width: 1px;
-  height: 36px;
-  background: rgba(255,255,255,0.2);
+  display: block;
 }
 
 .admin-login-header {
@@ -4520,7 +4494,7 @@ ul {
   background: rgba(239,68,68,0.1);
   border: 1px solid rgba(239,68,68,0.3);
   border-radius: 8px;
-  color: #fca5a5;
+  color: #dc2626;
   font-size: 0.82rem;
   font-weight: 600;
   font-family: inherit;
@@ -4530,9 +4504,9 @@ ul {
 }
 
 .admin-logout-btn:hover {
-  background: rgba(239,68,68,0.2);
-  border-color: rgba(239,68,68,0.5);
-  color: #f87171;
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
   transform: translateY(-1px);
 }
 
