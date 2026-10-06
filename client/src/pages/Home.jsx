@@ -19,8 +19,7 @@ export default function Home() {
         <div className="hero-inner hero-centered">
           <p className="hero-tag">AI Innovation Lab</p>
           <h1 className="hero-title">
-            <span className="brand-sp">S&amp;P Global</span>{' '}
-            <span className="brand-iit">&amp; IIT Hyderabad</span>
+            S&amp;P Global &amp; IIT Hyderabad
           </h1>
           <h4 className="hero-sub-title">
             Trustworthy AI for Finance, Economies &amp; Society
@@ -152,82 +151,41 @@ export default function Home() {
       {/* ── About S&P Global Section ── */}
       <section id="home-spglobal" aria-labelledby="home-spglobal-heading">
         <div className="section-inner">
-          <p className="section-label">Industry Partner</p>
-          <h2 className="section-title" id="home-spglobal-heading">About <span className="sp-highlight-red" style={{ color: '#d41c30' }}>S&amp;P Global</span></h2>
+          <p className="section-label">Industry Collaboration</p>
+          <h2 className="section-title" id="home-spglobal-heading">S&P Global & IIT Hyderabad Collaboration</h2>
 
           <div className="spglobal-split">
             {/* Left — Information */}
             <div className="spglobal-info">
               <div className="dept-block">
                 <p className="dept-block-text">
-                  <strong>S&amp;P Global (NYSE: SPGI)</strong> enables businesses, governments, and individuals with trusted data, expertise and technology to make decisions with conviction. We are Advancing Essential Intelligence through world-leading benchmarks, data, and insights that customers need in order to plan confidently, act decisively, and thrive in a rapidly changing global landscape.
+                  With support from S&amp;P Global, IIT Hyderabad's AI Innovation Lab expands opportunities for students to build practical AI skills through hands-on learning, experimentation, and innovation. The AI Innovation Lab reflects a shared commitment to equipping the next generation with the skills and experience to thrive in an AI-enabled future.
                 </p>
               </div>
 
               <div className="dept-block">
                 <p className="dept-block-text">
-                  From helping our customers assess new investments across the capital and commodities markets to navigating the energy expansion, acceleration of artificial intelligence, and evolution of public and private markets, we enable the world’s leading organizations to unlock opportunities, solve challenges, and plan for tomorrow – today.
+                  This collaboration is part of IIT Hyderabad’s role as a Strategic Collaborator for{' '}
+                  <a
+                    href="https://www.spglobal.com/en/who-we-are/corporate-responsibility/stepforward"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#000000', fontWeight: 600, textDecoration: 'underline' }}
+                  >
+                    StepForward
+                  </a>
+                  , an initiative of S&amp;P Global and the S&amp;P Global Foundation backed by a $10 million, three-year commitment to workforce readiness and AI education.
                 </p>
               </div>
             </div>
 
             {/* Right — Image */}
-            <a
-              href="https://www.spglobal.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="spglobal-img-wrap"
-              title="Visit S&P Global website"
-              aria-label="Visit S&P Global website"
-            >
+            <div className="spglobal-img-wrap">
               <img
                 src="/SP_Global_Logo.jpg"
                 alt="S&P Global Logo"
                 className="spglobal-img"
               />
-            </a>
-          </div>
-
-          {/* Downside — Full-Width Foundation Section */}
-          <div className="spglobal-foundation-section">
-            <div className="dept-block">
-              <h3 className="dept-block-heading" style={{ fontSize: '1.3rem' }}>
-                <span style={{ color: '#d41c30' }}>S&amp;P Global</span> Foundation
-              </h3>
-              <p className="dept-block-text" style={{ marginTop: '0.4rem' }}>
-                The <strong>S&amp;P Global Foundation</strong>, the keystone of S&amp;P Global's philanthropic efforts, supports the building of resilient communities. At the Foundation, we focus our program efforts where we can have an impact in the communities where we live and work.
-              </p>
-            </div>
-
-            <div className="dept-block">
-              <p className="dept-block-text">
-                The S&amp;P Global Foundation focuses its efforts where we can make a real difference: <strong>Technology &amp; Data</strong> and <strong>Environmental Resilience</strong>.
-              </p>
-            </div>
-
-            <div className="dept-block">
-              <p className="dept-block-text" style={{ marginBottom: '1rem' }}>
-                Visit the{' '}
-                <a
-                  href="https://www.spglobal.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: '#d41c30', fontWeight: 600, textDecoration: 'underline' }}
-                >
-                  S&amp;P Global Foundation website
-                </a>{' '}
-                for more information.
-              </p>
-              <a
-                href="https://www.spglobal.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sp-learn-more-btn"
-                title="Visit S&P Global website"
-              >
-                <span>Learn More</span>
-                <span>&rarr;</span>
-              </a>
             </div>
           </div>
         </div>

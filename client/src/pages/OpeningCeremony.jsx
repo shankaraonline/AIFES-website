@@ -145,39 +145,20 @@ export default function OpeningCeremony() {
         .ceremony-logos {
           display: flex;
           align-items: center;
-          gap: 1.5rem;
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          padding: 0.85rem 1.75rem;
-          border-radius: 99px;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-
-        .ceremony-iith-logo {
-          height: 52px;
-          width: auto;
-          filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.25));
-        }
-
-        .ceremony-logo-divider {
-          width: 1px;
-          height: 36px;
-          background: rgba(255, 255, 255, 0.2);
-        }
-
-        .ceremony-sp-badge {
+          justify-content: center;
           background: #ffffff;
-          padding: 5px 12px;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
+          padding: 0.75rem 2rem;
+          border-radius: 99px;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
         }
 
-        .ceremony-sp-logo {
-          height: 24px;
+        .ceremony-main-logo {
+          height: 60px;
           width: auto;
+          max-width: 420px;
+          object-fit: contain;
+          display: block;
         }
 
         .ceremony-title {
@@ -306,11 +287,11 @@ export default function OpeningCeremony() {
             top: 50%;
           }
           .ceremony-logos {
-            padding: 0.6rem 1.2rem;
-            gap: 1rem;
+            padding: 0.5rem 1.2rem;
           }
-          .ceremony-iith-logo {
-            height: 40px;
+          .ceremony-main-logo {
+            height: 42px;
+            max-width: 260px;
           }
           .ribbon-half {
             height: 42px;
@@ -331,11 +312,11 @@ export default function OpeningCeremony() {
       {/* Header with Logos */}
       <header className="ceremony-header">
         <div className="ceremony-logos">
-          <img src="/iith_logo.png" alt="IIT Hyderabad" className="ceremony-iith-logo" />
-          <div className="ceremony-logo-divider" />
-          <div className="ceremony-sp-badge">
-            <img src="/SP_Global_Logo.jpg" alt="S&P Global" className="ceremony-sp-logo" />
-          </div>
+          <img
+            src="/spg_IITHyderabad_horizontal_pos_rgb.png"
+            alt="S&P Global | IIT Hyderabad"
+            className="ceremony-main-logo"
+          />
         </div>
 
         <h1 className="ceremony-title">AI Innovation Lab</h1>

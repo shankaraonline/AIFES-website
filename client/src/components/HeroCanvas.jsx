@@ -88,14 +88,12 @@ export default function HeroCanvas() {
         nodePos[idx + 1] = (Math.random() - 0.5) * 90
         nodePos[idx + 2] = (Math.random() - 0.5) * 80
 
-        // AI Cyan (75%), S&P Red (15%), Star White (10%)
+        // Star White / Silver (80%), S&P Red (20%)
         const rand = Math.random()
-        if (rand < 0.75) {
-          nodeColors[idx] = 0.22; nodeColors[idx + 1] = 0.74; nodeColors[idx + 2] = 0.97
-        } else if (rand < 0.9) {
-          nodeColors[idx] = 0.85; nodeColors[idx + 1] = 0.12; nodeColors[idx + 2] = 0.2
+        if (rand < 0.8) {
+          nodeColors[idx] = 0.92; nodeColors[idx + 1] = 0.94; nodeColors[idx + 2] = 0.98
         } else {
-          nodeColors[idx] = 1.0; nodeColors[idx + 1] = 1.0; nodeColors[idx + 2] = 1.0
+          nodeColors[idx] = 0.85; nodeColors[idx + 1] = 0.12; nodeColors[idx + 2] = 0.2
         }
 
         velocities.push({
@@ -197,9 +195,9 @@ export default function HeroCanvas() {
               lPos[segIdx]     = x1; lPos[segIdx + 1] = y1; lPos[segIdx + 2] = z1
               lPos[segIdx + 3] = x2; lPos[segIdx + 4] = y2; lPos[segIdx + 5] = z2
 
-              // Subtle glowing cyan lines
-              lCol[segIdx]     = 0.22 * alpha; lCol[segIdx + 1] = 0.74 * alpha; lCol[segIdx + 2] = 0.97 * alpha
-              lCol[segIdx + 3] = 0.22 * alpha; lCol[segIdx + 4] = 0.74 * alpha; lCol[segIdx + 5] = 0.97 * alpha
+              // Subtle glowing silver-white lines
+              lCol[segIdx]     = 0.85 * alpha; lCol[segIdx + 1] = 0.85 * alpha; lCol[segIdx + 2] = 0.9 * alpha
+              lCol[segIdx + 3] = 0.85 * alpha; lCol[segIdx + 4] = 0.85 * alpha; lCol[segIdx + 5] = 0.9 * alpha
 
               lineIdx++
             }
@@ -252,7 +250,7 @@ export default function HeroCanvas() {
           vx: (Math.random() - 0.5) * 0.7,
           vy: (Math.random() - 0.5) * 0.7,
           radius: Math.random() * 2.2 + 1.2,
-          color: isRed ? '212, 28, 48' : isWhite ? '255, 255, 255' : '56, 189, 248',
+          color: isRed ? '212, 28, 48' : '230, 235, 245',
         })
       }
 
@@ -285,7 +283,7 @@ export default function HeroCanvas() {
               fallbackCtx.beginPath()
               fallbackCtx.moveTo(n1.x, n1.y)
               fallbackCtx.lineTo(n2.x, n2.y)
-              fallbackCtx.strokeStyle = `rgba(56, 189, 248, ${alpha})`
+              fallbackCtx.strokeStyle = `rgba(220, 225, 235, ${alpha})`
               fallbackCtx.lineWidth = 0.9
               fallbackCtx.stroke()
             }
